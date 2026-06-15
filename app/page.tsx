@@ -40,6 +40,7 @@ export default function Home() {
             href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Deploy Now (opens in a new tab)"
           >
             <Image
               className="dark:invert"
@@ -55,6 +56,7 @@ export default function Home() {
             href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Documentation (opens in a new tab)"
           >
             Documentation
           </a>
