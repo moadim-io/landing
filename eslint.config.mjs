@@ -13,6 +13,13 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    rules: {
+      // Keep stray debug logging out of the shipped landing page.
+      // console.warn/console.error remain allowed for intentional diagnostics.
+      "no-console": ["error", { allow: ["warn", "error"] }],
+    },
+  },
 ]);
 
 export default eslintConfig;
