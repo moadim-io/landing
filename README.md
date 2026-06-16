@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Moadim — Landing Site
 
-## Getting Started
+The marketing/landing site for **Moadim**, an open-source MCP and REST server for
+scheduling and managing cron jobs — built for AI agents and developers.
 
-First, run the development server:
+- **Live site:** https://moadim.io
+- **Product source:** https://github.com/moadim-io/daemon
+
+Built with [Next.js](https://nextjs.org) (App Router) and [Tailwind CSS](https://tailwindcss.com).
+The site is a fully static export (`output: "export"`), so it builds to plain HTML/CSS/JS
+and can be served from any static host or CDN.
+
+## Getting started
+
+Install dependencies and start the dev server:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser. The page hot-reloads as
+you edit files under `app/`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the local dev server with hot reload. |
+| `npm run build` | Produce the static export in `out/`. |
+| `npm run start` | Serve the production build locally. |
+| `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript rules). |
 
-## Learn More
+## Project structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/
+  layout.tsx    Root layout, fonts, and site metadata (SEO / Open Graph).
+  page.tsx      Landing page content.
+  globals.css   Global styles and Tailwind theme tokens.
+public/         Static assets served at the site root.
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploying
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`npm run build` emits a static site to `out/`. Deploy that directory to any static host
+(e.g. Vercel, Netlify, Cloudflare Pages, GitHub Pages, or an S3 bucket behind a CDN).
