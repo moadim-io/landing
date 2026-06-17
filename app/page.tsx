@@ -1,3 +1,5 @@
+import { InstallCommand } from "./install-command";
+
 const features = [
   {
     title: "MCP-native",
@@ -36,9 +38,7 @@ export default function Home() {
           <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
             Install
           </span>
-          <code className="w-fit rounded-lg border border-black/[.08] bg-white px-4 py-3 font-mono text-sm text-zinc-800 dark:border-white/[.145] dark:bg-zinc-950 dark:text-zinc-200">
-            cargo install moadim
-          </code>
+          <InstallCommand />
         </div>
 
         <div className="flex flex-col gap-4 sm:flex-row">
