@@ -20,6 +20,9 @@ export const metadata: Metadata = {
   },
   description:
     "Moadim is an open-source MCP and REST server for scheduling and managing cron jobs — built for AI agents and developers.",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Moadim — Cron jobs over MCP & REST",
     description:
