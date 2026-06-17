@@ -18,6 +18,10 @@ const eslintConfig = defineConfig([
       // Keep stray debug logging out of the shipped landing page.
       // console.warn/console.error remain allowed for intentional diagnostics.
       "no-console": ["error", { allow: ["warn", "error"] }],
+      // Require strict equality (=== / !==) to avoid surprising type
+      // coercion from loose == / != comparisons. `null` checks are exempt
+      // so `x == null` (matches null and undefined) stays allowed.
+      eqeqeq: ["error", "always", { null: "ignore" }],
     },
   },
 ]);
