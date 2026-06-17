@@ -43,7 +43,7 @@ export default function Home() {
 
         <div className="flex flex-col gap-4 sm:flex-row">
           <a
-            className="flex h-12 items-center justify-center gap-2 rounded-full bg-foreground px-6 text-sm font-medium text-background transition-colors hover:bg-zinc-700 dark:hover:bg-zinc-200"
+            className="flex h-12 items-center justify-center gap-2 rounded-full bg-foreground px-6 text-sm font-medium text-background transition-colors hover:bg-zinc-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50 dark:hover:bg-zinc-200 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-black"
             href="https://github.com/moadim-io/daemon"
             target="_blank"
             rel="noopener noreferrer"
@@ -54,7 +54,7 @@ export default function Home() {
             <span className="sr-only">(opens in a new tab)</span>
           </a>
           <a
-            className="flex h-12 items-center justify-center gap-2 rounded-full border border-solid border-black/[.08] px-6 text-sm font-medium text-zinc-800 transition-colors hover:bg-black/[.04] dark:border-white/[.145] dark:text-zinc-200 dark:hover:bg-white/[.06]"
+            className="flex h-12 items-center justify-center gap-2 rounded-full border border-solid border-black/[.08] px-6 text-sm font-medium text-zinc-800 transition-colors hover:bg-black/[.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50 dark:border-white/[.145] dark:text-zinc-200 dark:hover:bg-white/[.06] dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-black"
             href="https://crates.io/crates/moadim"
             target="_blank"
             rel="noopener noreferrer"
