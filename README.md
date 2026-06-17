@@ -45,3 +45,7 @@ public/         Static assets served at the site root.
 
 `npm run build` emits a static site to `out/`. Deploy that directory to any static host
 (e.g. Vercel, Netlify, Cloudflare Pages, GitHub Pages, or an S3 bucket behind a CDN).
+
+## License
+
+Released under the [MIT License](./LICENSE).
