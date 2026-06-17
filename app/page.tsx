@@ -66,18 +66,26 @@ export default function Home() {
           </a>
         </div>
 
-        <ul className="grid gap-8 border-t border-black/[.06] pt-12 sm:grid-cols-3 dark:border-white/[.1]">
-          {features.map((feature) => (
-            <li key={feature.title} className="flex flex-col gap-2">
-              <h2 className="text-base font-semibold text-black dark:text-zinc-50">
-                {feature.title}
-              </h2>
-              <p className="text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-                {feature.body}
-              </p>
-            </li>
-          ))}
-        </ul>
+        <section
+          aria-labelledby="features-heading"
+          className="border-t border-black/[.06] pt-12 dark:border-white/[.1]"
+        >
+          <h2 id="features-heading" className="sr-only">
+            Features
+          </h2>
+          <ul className="grid gap-8 sm:grid-cols-3">
+            {features.map((feature) => (
+              <li key={feature.title} className="flex flex-col gap-2">
+                <h3 className="text-base font-semibold text-black dark:text-zinc-50">
+                  {feature.title}
+                </h3>
+                <p className="text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+                  {feature.body}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
       </main>
     </div>
   );
