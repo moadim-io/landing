@@ -31,6 +31,9 @@ you edit files under `app/`.
 | `npm run start` | Serve the production build locally. |
 | `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript rules). |
 
+`npm run lint` and `npm run build` also run automatically in CI
+(`.github/workflows/ci.yml`) on every pull request and on pushes to `main`.
+
 ## Project structure
 
 ```
