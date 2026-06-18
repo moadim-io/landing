@@ -45,3 +45,11 @@ public/         Static assets served at the site root.
 
 `npm run build` emits a static site to `out/`. Deploy that directory to any static host
 (e.g. Vercel, Netlify, Cloudflare Pages, GitHub Pages, or an S3 bucket behind a CDN).
+
+## Security
+
+To report a vulnerability in the site or the daemon, see the machine-readable
+disclosure policy served at
+[`/.well-known/security.txt`](https://moadim.io/.well-known/security.txt)
+(RFC 9116). The preferred channel is a private
+[GitHub security advisory](https://github.com/moadim-io/daemon/security/advisories/new).

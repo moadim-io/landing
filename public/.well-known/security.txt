@@ -1,0 +1,8 @@
+# Responsible disclosure policy for moadim.io
+# RFC 9116 — https://www.rfc-editor.org/rfc/rfc9116
+
+Contact: https://github.com/moadim-io/daemon/security/advisories/new
+Contact: mailto:ofek.gabay.he@gmail.com
+Expires: 2027-06-18T00:00:00.000Z
+Preferred-Languages: en, he
+Canonical: https://moadim.io/.well-known/security.txt
