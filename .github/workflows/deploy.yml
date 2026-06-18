@@ -26,7 +26,10 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        # npm install (not npm ci): the committed lockfile omits Linux-only
+        # optional deps (@emnapi/*, nested in wasm32 variants) that macOS dev
+        # machines never resolve, so strict `npm ci` fails on the Linux runner.
+        run: npm install --no-audit --no-fund
 
       - name: Build static export
         run: npm run build
