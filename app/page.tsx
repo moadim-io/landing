@@ -37,7 +37,25 @@ export default function Home() {
             Install
           </span>
           <code className="w-fit rounded-lg border border-black/[.08] bg-white px-4 py-3 font-mono text-sm text-zinc-800 dark:border-white/[.145] dark:bg-zinc-950 dark:text-zinc-200">
-            cargo install moadim
+            cargo install moadim &amp;&amp; moadim
+          </code>
+          <p className="text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+            Requires the{" "}
+            <a
+              className="underline underline-offset-2 hover:text-black dark:hover:text-zinc-50"
+              href="https://www.rust-lang.org/tools/install"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Rust toolchain
+            </a>
+            . No Rust yet? This one line bootstraps it, installs moadim, and runs
+            it:
+          </p>
+          <code className="w-fit max-w-full overflow-x-auto rounded-lg border border-black/[.08] bg-white px-4 py-3 font-mono text-sm text-zinc-800 dark:border-white/[.145] dark:bg-zinc-950 dark:text-zinc-200">
+            curl --proto &apos;=https&apos; --tlsv1.2 -sSf https://sh.rustup.rs |
+            sh -s -- -y &amp;&amp; . &quot;$HOME/.cargo/env&quot; &amp;&amp; cargo
+            install moadim &amp;&amp; moadim
           </code>
         </div>
 
