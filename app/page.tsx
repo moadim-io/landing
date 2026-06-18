@@ -47,7 +47,6 @@ export default function Home() {
             href="https://github.com/moadim-io/daemon"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Deploy Now (opens in a new tab)"
           >
             View on GitHub
             <span aria-hidden="true">↗</span>
@@ -58,7 +57,6 @@ export default function Home() {
             href="https://crates.io/crates/moadim"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Documentation (opens in a new tab)"
           >
             crates.io
             <span aria-hidden="true">↗</span>
