@@ -36,3 +36,19 @@ body::before {
   z-index: -1;
   pointer-events: none;
 }
+
+/*
+ * Respect the OS "reduce motion" setting (WCAG 2.3.3). The hero CTAs and the
+ * loop-engineering links animate on hover/active via transition-* utilities;
+ * users who opt out of motion get the instant, non-animated state instead.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
