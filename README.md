@@ -1,7 +1,8 @@
 # Moadim — Landing Site
 
-The marketing/landing site for **Moadim**, an open-source MCP and REST server for
-scheduling and managing cron jobs — built for AI agents and developers.
+The marketing/landing site for **Moadim**, an open-source loop engine for AI agents.
+Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes
+against your repo on every tick, over MCP and REST.
 
 - **Live site:** https://moadim.io
 - **Product source:** https://github.com/moadim-io/daemon
