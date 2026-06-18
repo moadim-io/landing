@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "./site";
 
 export const dynamic = "force-static";
 
@@ -8,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://moadim.io/sitemap.xml",
+    sitemap: new URL("/sitemap.xml", SITE_URL).toString(),
   };
 }
