@@ -18,6 +18,11 @@ const eslintConfig = defineConfig([
       // Keep stray debug logging out of the shipped landing page.
       // console.warn/console.error remain allowed for intentional diagnostics.
       "no-console": ["error", { allow: ["warn", "error"] }],
+      // Ban explicit `any`: it opts a value out of type checking entirely and
+      // the unsafety silently spreads to everything it touches. Forces `unknown`
+      // + narrowing (or a precise type) at boundaries instead. The codebase has
+      // zero violations today, so this only guards future code.
+      "@typescript-eslint/no-explicit-any": "error",
     },
   },
 ]);
