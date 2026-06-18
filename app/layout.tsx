@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { SITE_URL } from "./site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://moadim.io"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Moadim — Cron jobs over MCP & REST",
     template: "%s — Moadim",
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
     title: "Moadim — Cron jobs over MCP & REST",
     description:
       "Moadim is an open-source MCP and REST server for scheduling and managing cron jobs — built for AI agents and developers.",
-    url: "https://moadim.io",
+    url: SITE_URL,
     siteName: "Moadim",
     type: "website",
   },
@@ -40,7 +41,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name: "Moadim",
-  url: "https://moadim.io",
+  url: SITE_URL,
   applicationCategory: "DeveloperApplication",
   operatingSystem: "Linux, macOS, Windows",
   description:
