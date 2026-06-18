@@ -72,19 +72,12 @@ export default function Home() {
             href={`https://github.com/${REPO}`}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`Star moadim on GitHub${
-              stars !== null ? ` (${stars} stars)` : ""
-            } (opens in a new tab)`}
+            aria-label="Star moadim on GitHub (opens in a new tab)"
           >
             <span aria-hidden="true" className="text-lg leading-none">
               ★
             </span>
             Star on GitHub
-            {stars !== null && (
-              <span className="border-2 border-black bg-white px-2 py-0.5 font-mono text-sm tabular-nums">
-                {formatStars(stars)}
-              </span>
-            )}
             <span className="sr-only">(opens in a new tab)</span>
           </a>
           <a
