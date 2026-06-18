@@ -46,6 +46,14 @@ const jsonLd = {
   description:
     "Moadim is an open-source MCP and REST server for scheduling and managing cron jobs — built for AI agents and developers.",
   license: "https://opensource.org/licenses/MIT",
+  // TODO(#44): reuse a single base-URL source once base-URL centralization lands.
+  image: "https://moadim.io/opengraph-image.png",
+  sameAs: [
+    "https://github.com/moadim-io/daemon",
+    "https://crates.io/crates/moadim",
+  ],
+  codeRepository: "https://github.com/moadim-io/daemon",
+  downloadUrl: "https://crates.io/crates/moadim",
   offers: {
     "@type": "Offer",
     price: "0",
