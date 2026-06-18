@@ -1,64 +1,121 @@
+const REPO = "moadim-io/daemon";
+
 const features = [
   {
-    title: "MCP-native",
-    body: "Expose cron jobs and routines as tools your AI agents can call directly over the Model Context Protocol.",
+    tag: "01",
+    title: "A loop runs an agent",
+    body: "A loop pairs a prompt, a schedule, and an agent — Claude, Codex, or Hermes. Each tick launches it in a fresh, isolated workbench, kills hung runs, and reaps the session when it's done.",
   },
   {
-    title: "REST + OpenAPI",
-    body: "Every operation is also a documented HTTP endpoint, with a Swagger UI baked into the daemon.",
+    tag: "02",
+    title: "Runs locally, survives reboot",
+    body: "Loops fire from your own OS crontab — no hidden queue, no cloud. One install command registers a launchd / systemd service so they keep running across logins and reboots.",
   },
   {
-    title: "Real cron, on your machine",
-    body: "Schedules run against your OS crontab — no hidden queue, no vendor lock-in, fully open source.",
+    tag: "03",
+    title: "MCP · REST · OpenAPI",
+    body: "Every loop is an MCP tool and a documented HTTP endpoint — Swagger UI, an iCal feed, and a web UI baked into the daemon.",
   },
 ];
 
-export default function Home() {
+const loopEngineeringReads = [
+  {
+    source: "MindStudio",
+    title: "What Is Loop Engineering? The New Meta for AI Coding Agents",
+    href: "https://www.mindstudio.ai/blog/what-is-loop-engineering-ai-coding-agents",
+  },
+  {
+    source: "Shaam",
+    title: "Why the Best AI Agents in 2026 Are Built as Loops, Not Prompts",
+    href: "https://shaam.blog/articles/loop-engineering-ai-agents",
+  },
+  {
+    source: "explainx.ai",
+    title: "Loop Engineering: Beyond Prompt Engineering in 2026",
+    href: "https://explainx.ai/blog/what-is-loop-engineering-ai-agents-2026",
+  },
+];
+
+async function getStarCount(): Promise<number | null> {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${REPO}`, {
+      headers: { Accept: "application/vnd.github+json" },
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { stargazers_count?: number };
+    return typeof data.stargazers_count === "number"
+      ? data.stargazers_count
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+function formatStars(count: number): string {
+  if (count >= 1000) return `${(count / 1000).toFixed(1)}k`;
+  return String(count);
+}
+
+export default async function Home() {
+  const stars = await getStarCount();
+
   return (
-    <div className="flex flex-1 flex-col items-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex w-full max-w-3xl flex-1 flex-col justify-center gap-12 px-6 py-24 sm:px-10">
-        <header className="flex flex-col gap-6">
-          <p className="text-sm font-medium uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
-            Open source · MCP &amp; REST
+    <div className="flex flex-1 flex-col items-center px-4 py-10 sm:px-8 sm:py-16">
+      <main className="flex w-full max-w-4xl flex-1 flex-col gap-10">
+        <header className="border-4 border-black bg-white p-6 shadow-[10px_10px_0_0_#000] sm:p-10">
+          <p className="mb-6 inline-block border-2 border-black bg-accent px-3 py-1 text-xs font-bold uppercase tracking-[0.2em]">
+            Open source · Loop engine
           </p>
-          <h1 className="text-4xl font-semibold leading-tight tracking-tight text-black sm:text-5xl dark:text-zinc-50">
-            Cron jobs your agents can actually schedule.
+          <h1 className="text-4xl font-black uppercase leading-[0.95] tracking-tight sm:text-6xl">
+            Put your
+            <br />
+            <span className="bg-accent box-decoration-clone px-1">agents</span>{" "}
+            on a loop.
           </h1>
-          <p className="max-w-2xl text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Moadim is a single daemon that manages cron jobs and recurring
-            routines over both the Model Context Protocol and a REST API — so AI
-            agents and developers share one source of truth for what runs, and
-            when.
+          <p className="mt-6 max-w-2xl text-lg font-medium leading-7 sm:text-xl">
+            Moadim is a loop engine for AI agents. Define a loop — a prompt, a
+            schedule, an agent — and it runs Claude, Codex, or Hermes against
+            your repo on every tick, in an isolated workbench, with a watchdog on
+            every run. Loop engineering, not prompting by hand.
           </p>
         </header>
 
-        <div className="flex flex-col gap-3">
-          <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
-            Install
-          </span>
-          <code className="w-fit rounded-lg border border-black/[.08] bg-white px-4 py-3 font-mono text-sm text-zinc-800 dark:border-white/[.145] dark:bg-zinc-950 dark:text-zinc-200">
-            cargo install moadim
-          </code>
-        </div>
-
-        <div className="flex flex-col gap-4 sm:flex-row">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-stretch">
+          <div className="flex flex-1 flex-col gap-2 border-4 border-black bg-black p-5 shadow-[6px_6px_0_0_#000]">
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+              Install
+            </span>
+            <code className="font-mono text-base text-white sm:text-lg">
+              <span className="text-accent">$</span> cargo install moadim
+            </code>
+          </div>
           <a
-            className="flex h-12 items-center justify-center gap-2 rounded-full bg-foreground px-6 text-sm font-medium text-background transition-colors hover:bg-zinc-700 dark:hover:bg-zinc-200"
-            href="https://github.com/moadim-io/daemon"
+            className="group flex items-center justify-center gap-3 border-4 border-black bg-accent px-8 py-4 text-base font-black uppercase tracking-wide shadow-[6px_6px_0_0_#000] transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#000]"
+            href={`https://github.com/${REPO}`}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Deploy Now (opens in a new tab)"
+            aria-label={`Star moadim on GitHub${
+              stars !== null ? ` (${stars} stars)` : ""
+            } (opens in a new tab)`}
           >
-            View on GitHub
-            <span aria-hidden="true">↗</span>
+            <span aria-hidden="true" className="text-lg leading-none">
+              ★
+            </span>
+            Star on GitHub
+            {stars !== null && (
+              <span className="border-2 border-black bg-white px-2 py-0.5 font-mono text-sm tabular-nums">
+                {formatStars(stars)}
+              </span>
+            )}
             <span className="sr-only">(opens in a new tab)</span>
           </a>
           <a
-            className="flex h-12 items-center justify-center gap-2 rounded-full border border-solid border-black/[.08] px-6 text-sm font-medium text-zinc-800 transition-colors hover:bg-black/[.04] dark:border-white/[.145] dark:text-zinc-200 dark:hover:bg-white/[.06]"
+            className="flex items-center justify-center gap-2 border-4 border-black bg-white px-8 py-4 text-base font-black uppercase tracking-wide shadow-[6px_6px_0_0_#000] transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#000]"
             href="https://crates.io/crates/moadim"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Documentation (opens in a new tab)"
+            aria-label="crates.io (opens in a new tab)"
           >
             crates.io
             <span aria-hidden="true">↗</span>
@@ -66,18 +123,62 @@ export default function Home() {
           </a>
         </div>
 
-        <ul className="grid gap-8 border-t border-black/[.06] pt-12 sm:grid-cols-3 dark:border-white/[.1]">
-          {features.map((feature) => (
-            <li key={feature.title} className="flex flex-col gap-2">
-              <h2 className="text-base font-semibold text-black dark:text-zinc-50">
+        <ul className="grid gap-0 border-4 border-black bg-white shadow-[10px_10px_0_0_#000] sm:grid-cols-3">
+          {features.map((feature, i) => (
+            <li
+              key={feature.title}
+              className={`flex flex-col gap-3 p-6 ${
+                i < features.length - 1
+                  ? "border-b-4 border-black sm:border-b-0 sm:border-r-4"
+                  : ""
+              }`}
+            >
+              <span className="font-mono text-3xl font-black text-accent [-webkit-text-stroke:1px_#000]">
+                {feature.tag}
+              </span>
+              <h2 className="text-lg font-black uppercase leading-tight">
                 {feature.title}
               </h2>
-              <p className="text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-                {feature.body}
-              </p>
+              <p className="text-sm font-medium leading-6">{feature.body}</p>
             </li>
           ))}
         </ul>
+
+        <section className="border-4 border-black bg-white shadow-[10px_10px_0_0_#000]">
+          <h2 className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent">
+            On loop engineering
+          </h2>
+          <ul className="flex flex-col">
+            {loopEngineeringReads.map((read, i) => (
+              <li
+                key={read.href}
+                className={
+                  i < loopEngineeringReads.length - 1
+                    ? "border-b-2 border-black/15"
+                    : ""
+                }
+              >
+                <a
+                  className="group flex items-baseline gap-4 px-6 py-4 transition-colors hover:bg-accent"
+                  href={read.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span className="shrink-0 font-mono text-xs font-bold uppercase tracking-widest text-black/50 group-hover:text-black">
+                    {read.source}
+                  </span>
+                  <span className="font-medium leading-6">
+                    {read.title}
+                    <span aria-hidden="true" className="ml-2 font-black">
+                      ↗
+                    </span>
+                  </span>
+                  <span className="sr-only">(opens in a new tab)</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
       </main>
     </div>
   );
