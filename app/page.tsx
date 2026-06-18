@@ -16,7 +16,10 @@ const features = [
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col items-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex w-full max-w-3xl flex-1 flex-col justify-center gap-12 px-6 py-24 sm:px-10">
+      <main
+        id="main-content"
+        className="flex w-full max-w-3xl flex-1 flex-col justify-center gap-12 px-6 py-24 sm:px-10"
+      >
         <header className="flex flex-col gap-6">
           <p className="text-sm font-medium uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
             Open source · MCP &amp; REST
