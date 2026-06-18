@@ -36,30 +36,7 @@ const loopEngineeringReads = [
   },
 ];
 
-async function getStarCount(): Promise<number | null> {
-  try {
-    const res = await fetch(`https://api.github.com/repos/${REPO}`, {
-      headers: { Accept: "application/vnd.github+json" },
-      next: { revalidate: 3600 },
-    });
-    if (!res.ok) return null;
-    const data = (await res.json()) as { stargazers_count?: number };
-    return typeof data.stargazers_count === "number"
-      ? data.stargazers_count
-      : null;
-  } catch {
-    return null;
-  }
-}
-
-function formatStars(count: number): string {
-  if (count >= 1000) return `${(count / 1000).toFixed(1)}k`;
-  return String(count);
-}
-
-export default async function Home() {
-  const stars = await getStarCount();
-
+export default function Home() {
   return (
     <div className="flex flex-1 flex-col items-center px-4 py-10 sm:px-8 sm:py-16">
       <main className="flex w-full max-w-4xl flex-1 flex-col gap-10">
