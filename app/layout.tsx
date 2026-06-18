@@ -12,27 +12,27 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const description =
+  "Moadim is an open-source loop engine for AI agents. Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes against your repo on every tick, over MCP and REST.";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://moadim.io"),
   title: {
-    default: "Moadim — Cron jobs over MCP & REST",
+    default: "Moadim — Put your agents on a loop",
     template: "%s — Moadim",
   },
-  description:
-    "Moadim is an open-source MCP and REST server for scheduling and managing cron jobs — built for AI agents and developers.",
+  description,
   openGraph: {
-    title: "Moadim — Cron jobs over MCP & REST",
-    description:
-      "Moadim is an open-source MCP and REST server for scheduling and managing cron jobs — built for AI agents and developers.",
+    title: "Moadim — Put your agents on a loop",
+    description,
     url: "https://moadim.io",
     siteName: "Moadim",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Moadim — Cron jobs over MCP & REST",
-    description:
-      "Moadim is an open-source MCP and REST server for scheduling and managing cron jobs — built for AI agents and developers.",
+    title: "Moadim — Put your agents on a loop",
+    description,
   },
 };
 
@@ -43,8 +43,7 @@ const jsonLd = {
   url: "https://moadim.io",
   applicationCategory: "DeveloperApplication",
   operatingSystem: "Linux, macOS, Windows",
-  description:
-    "Moadim is an open-source MCP and REST server for scheduling and managing cron jobs — built for AI agents and developers.",
+  description,
   license: "https://opensource.org/licenses/MIT",
   offers: {
     "@type": "Offer",
