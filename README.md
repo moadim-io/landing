@@ -45,3 +45,12 @@ public/         Static assets served at the site root.
 
 `npm run build` emits a static site to `out/`. Deploy that directory to any static host
 (e.g. Vercel, Netlify, Cloudflare Pages, GitHub Pages, or an S3 bucket behind a CDN).
+
+### Security headers
+
+`public/_headers` declares HTTP security response headers (`X-Content-Type-Options`,
+`X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-Security`)
+and is copied into `out/` by the static export. This file is **host-specific**: Netlify and
+Cloudflare Pages read it from the deploy root and apply it to every path automatically. Other
+hosts (GitHub Pages, plain S3 + CDN) ignore it — configure the equivalent headers at the
+CDN/edge layer there instead.
