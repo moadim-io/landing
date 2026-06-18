@@ -1,0 +1,30 @@
+# HTTP security response headers for the static export.
+#
+# This file is host-specific: Netlify and Cloudflare Pages read `_headers` from
+# the deploy root and apply it to every served path. With `output: "export"`,
+# everything under `public/` is copied verbatim into `out/`, so this file lands
+# at the export root and is picked up automatically — no dashboard config needed.
+# Other hosts (GitHub Pages, plain S3+CDN) ignore this file; configure the
+# equivalent headers there through the CDN/edge instead.
+
+/*
+  # Block MIME-type sniffing.
+  X-Content-Type-Options: nosniff
+  # The landing page is never meant to be embedded in a frame.
+  X-Frame-Options: DENY
+  # Send the full URL same-origin, only the origin cross-origin, never over HTTP.
+  Referrer-Policy: strict-origin-when-cross-origin
+  # Disable browser features this site does not use.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  # Force HTTPS for two years, including subdomains. Hosts that already inject
+  # HSTS will simply override this with an equivalent value.
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+
+  # Content-Security-Policy is intentionally omitted for now.
+  #
+  # Next.js' static export emits inline bootstrap/hydration <script> blocks, and
+  # a static host has no request-time nonce to authorize them. A strict
+  # `script-src 'self'` would therefore break hydration, while falling back to
+  # `script-src 'unsafe-inline'` would negate most of CSP's value. Adopting a CSP
+  # here needs per-build script hashing (or a move off `unsafe-inline`) validated
+  # against a real deploy before it can be enforced safely — tracked separately.
