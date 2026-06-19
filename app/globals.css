@@ -36,3 +36,22 @@ body::before {
   z-index: -1;
   pointer-events: none;
 }
+
+/*
+ * Visible keyboard focus indicator (WCAG 2.4.7 Focus Visible / 2.4.11 Focus
+ * Appearance). The hero CTAs and the reading-list links otherwise rely on the
+ * UA default outline, which hugs the bounding box and reads poorly against the
+ * accent/dark fills. A solid `outline` (not box-shadow) leaves the neobrutalist
+ * hard drop shadows untouched, and `outline-offset` exposes a gap of the page
+ * background so the ring never merges with an element's own 4px border.
+ *
+ * The ring is drawn in `--foreground` against an offset of the page
+ * `--background`, so it keeps >=3:1 non-text contrast in both color schemes
+ * (a dark ring on the light theme, and a light ring were the tokens inverted).
+ * Scoped to `:focus-visible` so it appears on keyboard focus only, never on a
+ * mouse click.
+ */
+:focus-visible {
+  outline: 3px solid var(--foreground);
+  outline-offset: 3px;
+}
