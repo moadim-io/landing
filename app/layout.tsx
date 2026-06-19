@@ -23,6 +23,13 @@ export const metadata: Metadata = {
     template: "%s — Moadim",
   },
   description,
+  // Emit a document-level <meta name="referrer">. The page links out to
+  // GitHub, crates.io, and several third-party blogs; the default browser
+  // policy leaks the full referrer URL on those cross-origin clicks. Pinning
+  // the value keeps it deterministic across browsers and ensures only the
+  // origin (never the path/query) is sent off-site, while still passing the
+  // full URL on same-origin navigations.
+  referrer: "strict-origin-when-cross-origin",
   openGraph: {
     title: "Moadim — Put your agents on a loop",
     description,
