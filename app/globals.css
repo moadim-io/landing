@@ -75,3 +75,30 @@ body::before {
     scroll-behavior: auto !important;
   }
 }
+
+/*
+ * Forced Colors Mode support — Windows High Contrast (WCAG 1.4.11 Non-text
+ * Contrast). The neobrutalist look leans on `box-shadow` hard drop shadows for
+ * elevation and on the accent-yellow fill to mark the primary CTA, but Forced
+ * Colors Mode suppresses `box-shadow` outright and remaps every `background`
+ * to a system color. The hard `border-4` borders survive (they remap to a
+ * system color), so cards and CTAs stay bounded — but the shadow-driven
+ * hover/active feedback vanishes and the accent fill that singled out the
+ * primary CTA flattens into the same system surface as its neighbors, leaving
+ * the interactive *state* with no visible cue.
+ *
+ * Outlines are honored in Forced Colors Mode, so surface one on hover and
+ * active for links and buttons (mirroring the keyboard focus ring defined
+ * above). `Highlight` is a system color, so it always meets contrast against
+ * the system canvas. This also restores the hover affordance on the reading
+ * list rows, whose `hover:bg-accent` is otherwise dropped.
+ */
+@media (forced-colors: active) {
+  a:hover,
+  a:active,
+  button:hover,
+  button:active {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}
