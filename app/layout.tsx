@@ -17,11 +17,26 @@ const description =
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://moadim.io"),
+  applicationName: "Moadim",
   title: {
     default: "Moadim — Put your agents on a loop",
     template: "%s — Moadim",
   },
   description,
+  keywords: [
+    "AI agents",
+    "loop engine",
+    "agent scheduling",
+    "MCP",
+    "Model Context Protocol",
+    "Claude",
+    "Codex",
+    "cron",
+    "open source",
+  ],
+  authors: [{ name: "Moadim", url: "https://github.com/moadim-io" }],
+  creator: "Moadim",
+  publisher: "Moadim",
   openGraph: {
     title: "Moadim — Put your agents on a loop",
     description,
@@ -44,6 +59,16 @@ const jsonLd = {
   applicationCategory: "DeveloperApplication",
   operatingSystem: "Linux, macOS, Windows",
   description,
+  author: {
+    "@type": "Organization",
+    name: "Moadim",
+    url: "https://github.com/moadim-io",
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "Moadim",
+    url: "https://github.com/moadim-io",
+  },
   license: "https://opensource.org/licenses/MIT",
   offers: {
     "@type": "Offer",
