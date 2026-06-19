@@ -14,27 +14,23 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/*
+ * Faint grid texture. The line color is mixed down to 6% foreground over the
+ * page background up front -- color-mix(in srgb, --foreground 6%, --background)
+ * is exactly the pixel a full-contrast --foreground line used to yield under
+ * the old `--background @ opacity 0.94` overlay. Painting it pre-dimmed lets us
+ * drop that fixed, full-viewport `body::before` mask, removing a redundant
+ * compositing layer while keeping the grid theme-token driven.
+ */
 body {
-  background: var(--background);
+  --grid-line: color-mix(in srgb, var(--foreground) 6%, var(--background));
+  background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
-  background-image: linear-gradient(var(--foreground) 1px, transparent 1px),
-    linear-gradient(90deg, var(--foreground) 1px, transparent 1px);
+  background-image: linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 32px 32px;
   background-position: -1px -1px;
-  /* faint grid */
-  background-blend-mode: normal;
-}
-
-/* dim the grid so it reads as texture, not noise */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: var(--background);
-  opacity: 0.94;
-  z-index: -1;
-  pointer-events: none;
 }
 
 /*
