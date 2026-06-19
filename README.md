@@ -12,9 +12,14 @@ and can be served from any static host or CDN.
 
 ## Getting started
 
+This project targets **Node.js >= 20.9.0** (the minimum required by Next 16).
+If you use [nvm](https://github.com/nvm-sh/nvm), run `nvm use` to pick up the
+version pinned in `.nvmrc`.
+
 Install dependencies and start the dev server:
 
 ```bash
+nvm use        # optional — selects the Node version from .nvmrc
 npm install
 npm run dev
 ```
