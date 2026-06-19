@@ -2,6 +2,17 @@
   "name": "landing",
   "version": "0.1.0",
   "private": true,
+  "description": "The marketing/landing site for Moadim, an open-source loop engine for AI agents.",
+  "license": "MIT",
+  "author": "Moadim",
+  "homepage": "https://moadim.io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moadim-io/landing.git"
+  },
+  "bugs": {
+    "url": "https://github.com/moadim-io/landing/issues"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
