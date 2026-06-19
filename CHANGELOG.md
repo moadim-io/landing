@@ -21,3 +21,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Applied the loaded Geist Sans font to body text so typography renders as intended (#7).
+- Shortened and front-loaded the shared meta description (was 189 chars, now 142) so it no longer truncates in search results and social previews; added a build-time length guard (≤160 chars) to keep it that way (#135).

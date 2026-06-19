@@ -12,8 +12,19 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Search-result snippets and social cards truncate descriptions past ~160
+// characters, so keep the key terms front-loaded ("open-source loop engine for
+// AI agents") and the whole string short enough to render in full. The guard
+// below fails the build if a future edit overflows the window. (#135)
+const META_DESCRIPTION_MAX = 160;
 const description =
-  "Moadim is an open-source loop engine for AI agents. Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes against your repo on every tick, over MCP and REST.";
+  "Open-source loop engine for AI agents: a prompt, a schedule, an agent. Moadim runs Claude, Codex, or Hermes against your repo over MCP & REST.";
+
+if (description.length > META_DESCRIPTION_MAX) {
+  throw new Error(
+    `Meta description is ${description.length} chars; keep it ≤${META_DESCRIPTION_MAX} to avoid SERP/social truncation.`,
+  );
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://moadim.io"),
