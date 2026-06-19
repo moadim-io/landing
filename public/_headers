@@ -14,3 +14,13 @@
 # picked up immediately instead of serving a stale page.
 /*
   Cache-Control: public, max-age=0, must-revalidate
+
+# Baseline security response headers for every route. Cloudflare Pages applies
+# all matching rule blocks, so these compose with the Cache-Control rules above.
+# Kept to standard, behaviour-safe hardening for a static marketing site (no CSP,
+# which would need per-asset tuning against Next.js's inline runtime).
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
