@@ -1,0 +1,11 @@
+# Code owners for the Moadim landing site.
+#
+# GitHub auto-requests a review from the owners listed here on every pull
+# request that touches matching paths. With a single catch-all rule, the
+# repository owner is requested on all PRs — including automated Dependabot
+# dependency bumps — so nothing merges without an owner in the loop.
+#
+# Docs: https://docs.github.com/articles/about-code-owners
+
+# Default owner for everything in the repo.
+*       @tupe12334
