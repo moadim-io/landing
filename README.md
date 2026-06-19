@@ -36,10 +36,14 @@ you edit files under `app/`.
 
 ```
 app/
-  layout.tsx    Root layout, fonts, and site metadata (SEO / Open Graph).
-  page.tsx      Landing page content.
-  globals.css   Global styles and Tailwind theme tokens.
-public/         Static assets served at the site root.
+  layout.tsx            Root layout, fonts, and site metadata (SEO / Open Graph).
+  page.tsx              Landing page content.
+  globals.css           Global styles and Tailwind theme tokens.
+  opengraph-image.tsx   Generated Open Graph social card.
+  twitter-image.tsx     Generated Twitter/X social card.
+  robots.ts             Generated robots.txt.
+  sitemap.ts            Generated sitemap.xml.
+  favicon.ico           Site favicon.
 ```
 
 ## Deploying
