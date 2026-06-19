@@ -36,6 +36,13 @@ const loopEngineeringReads = [
   },
 ];
 
+// Shared neobrutalist CTA button styling — the hard drop shadow plus the
+// hover/active translate-and-shadow choreography. Extracted so the two hero
+// buttons (and any future ones) can't drift out of sync; each call site adds
+// only its own gap and fill color.
+const ctaButton =
+  "flex items-center justify-center border-4 border-black px-8 py-4 text-base font-black uppercase tracking-wide shadow-[6px_6px_0_0_#000] transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#000]";
+
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col items-center px-4 py-10 sm:px-8 sm:py-16">
@@ -68,7 +75,7 @@ export default function Home() {
             </code>
           </div>
           <a
-            className="group flex items-center justify-center gap-3 border-4 border-black bg-accent px-8 py-4 text-base font-black uppercase tracking-wide shadow-[6px_6px_0_0_#000] transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#000]"
+            className={`${ctaButton} group gap-3 bg-accent`}
             href={`https://github.com/${REPO}`}
             target="_blank"
             rel="noopener noreferrer"
@@ -81,7 +88,7 @@ export default function Home() {
             <span className="sr-only">(opens in a new tab)</span>
           </a>
           <a
-            className="flex items-center justify-center gap-2 border-4 border-black bg-white px-8 py-4 text-base font-black uppercase tracking-wide shadow-[6px_6px_0_0_#000] transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#000]"
+            className={`${ctaButton} gap-2 bg-white`}
             href="https://crates.io/crates/moadim"
             target="_blank"
             rel="noopener noreferrer"
