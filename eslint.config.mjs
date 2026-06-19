@@ -18,6 +18,12 @@ const eslintConfig = defineConfig([
       // Keep stray debug logging out of the shipped landing page.
       // console.warn/console.error remain allowed for intentional diagnostics.
       "no-console": ["error", { allow: ["warn", "error"] }],
+      // Force type-only imports to use `import type`, so they are erased at
+      // build time and can never trigger an unintended runtime side effect.
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        { prefer: "type-imports", fixStyle: "separate-type-imports" },
+      ],
     },
   },
 ]);
