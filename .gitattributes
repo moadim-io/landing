@@ -1,0 +1,20 @@
+# Normalize line endings across every contributor's OS: store text as LF in the
+# repository and check it out as LF, so CRLF never sneaks into a commit and
+# diffs don't churn on the whole file when someone edits on Windows.
+* text=auto eol=lf
+
+# Generated lockfile: keep it out of code review noise (collapsed by default in
+# GitHub diffs) and out of the repo's language statistics.
+package-lock.json linguist-generated=true -diff
+
+# Binary assets: never line-ending-normalized, never shown as text diffs.
+*.ico binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
