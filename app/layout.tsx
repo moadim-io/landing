@@ -66,7 +66,13 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          // Escape `<` so a value containing `</script>` (or any `<…`) can't
+          // break out of the inline <script> and inject markup. `<` is an
+          // equivalent JSON string escape, so the parsed structured data is
+          // unchanged.
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
         />
         {children}
       </body>
