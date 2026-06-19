@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `public/_headers` declaring a Cloudflare Pages `Cache-Control` policy: content-hashed `/_next/static/*` assets are served `immutable` for a year, while HTML is `max-age=0, must-revalidate` so redeploys are picked up immediately (#122).
 - SoftwareApplication JSON-LD structured data so search engines can richly index the app (#9).
 - Open Graph and Twitter social-share card for better link previews when the page is shared (#8).
 
