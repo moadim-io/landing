@@ -18,6 +18,9 @@ const eslintConfig = defineConfig([
       // Keep stray debug logging out of the shipped landing page.
       // console.warn/console.error remain allowed for intentional diagnostics.
       "no-console": ["error", { allow: ["warn", "error"] }],
+      // Ban the `any` escape hatch so the codebase keeps real type safety.
+      // `unknown` + narrowing (or a precise type) should be used instead.
+      "@typescript-eslint/no-explicit-any": "error",
     },
   },
 ]);
