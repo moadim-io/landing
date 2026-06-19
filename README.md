@@ -51,6 +51,11 @@ app/
 `npm run build` emits a static site to `out/`. Deploy that directory to any static host
 (e.g. Vercel, Netlify, Cloudflare Pages, GitHub Pages, or an S3 bucket behind a CDN).
 
+## Security
+
+Found a vulnerability in the site or its build pipeline? Please report it
+privately — see [`SECURITY.md`](./SECURITY.md). Do not open a public issue.
+
 ## License
 
 Released under the [MIT License](./LICENSE).
