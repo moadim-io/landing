@@ -18,6 +18,10 @@ const eslintConfig = defineConfig([
       // Keep stray debug logging out of the shipped landing page.
       // console.warn/console.error remain allowed for intentional diagnostics.
       "no-console": ["error", { allow: ["warn", "error"] }],
+      // Prefer `const` for bindings that are never reassigned: it signals
+      // intent, enables immutability-by-default, and turns any accidental
+      // future reassignment into a compile-time error.
+      "prefer-const": "error",
     },
   },
 ]);
