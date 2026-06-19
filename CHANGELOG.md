@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - SoftwareApplication JSON-LD structured data so search engines can richly index the app (#9).
 - Open Graph and Twitter social-share card for better link previews when the page is shared (#8).
+- `.gitattributes` that normalizes text files to LF and marks `package-lock.json` as generated, so CRLF can't sneak into commits and the lockfile stays collapsed in diffs (#150).
 
 ### Changed
 
