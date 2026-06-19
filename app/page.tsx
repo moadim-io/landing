@@ -36,6 +36,24 @@ const loopEngineeringReads = [
   },
 ];
 
+// The same routine — a prompt, a schedule, an agent — defined over each interface, so the
+// dual-interface story (one source of truth over REST and MCP) is shown, not just claimed.
+const restSnippet = `$ curl localhost:5784/api/v1/routines \\
+    -d '{
+      "title": "Nightly issue triage",
+      "schedule": "0 2 * * *",
+      "agent": "claude",
+      "prompt": "Triage new GitHub issues"
+    }'`;
+
+const mcpSnippet = `// MCP endpoint: http://localhost:5784/mcp
+create_routine({
+  "title": "Nightly issue triage",
+  "schedule": "0 2 * * *",
+  "agent": "claude",
+  "prompt": "Triage new GitHub issues"
+})`;
+
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col items-center px-4 py-10 sm:px-8 sm:py-16">
@@ -92,6 +110,42 @@ export default function Home() {
             <span className="sr-only">(opens in a new tab)</span>
           </a>
         </div>
+
+        <section className="border-4 border-black bg-white shadow-[10px_10px_0_0_#000]">
+          <h2 className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent">
+            Quickstart
+          </h2>
+          <div className="flex flex-col gap-6 p-6 sm:p-8">
+            <p className="max-w-2xl text-sm font-medium leading-6 sm:text-base">
+              Start the daemon, then define a loop over REST or MCP — the same
+              routine, one source of truth. It lands in your OS crontab and fires
+              on schedule.
+            </p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="flex flex-col gap-3 border-4 border-black bg-black p-5 shadow-[6px_6px_0_0_#000]">
+                <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+                  REST · curl
+                </span>
+                <pre className="overflow-x-auto font-mono text-xs leading-6 text-white">
+                  <code>{restSnippet}</code>
+                </pre>
+              </div>
+              <div className="flex flex-col gap-3 border-4 border-black bg-black p-5 shadow-[6px_6px_0_0_#000]">
+                <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+                  MCP · tool call
+                </span>
+                <pre className="overflow-x-auto font-mono text-xs leading-6 text-white">
+                  <code>{mcpSnippet}</code>
+                </pre>
+              </div>
+            </div>
+            <p className="text-xs font-medium leading-6 text-black/70">
+              Every field is documented in the daemon&apos;s OpenAPI spec — Swagger
+              UI and a browser dashboard are baked in at{" "}
+              <code className="font-mono">localhost:5784</code>.
+            </p>
+          </div>
+        </section>
 
         <ul className="grid gap-0 border-4 border-black bg-white shadow-[10px_10px_0_0_#000] sm:grid-cols-3">
           {features.map((feature, i) => (
