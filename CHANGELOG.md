@@ -21,3 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Applied the loaded Geist Sans font to body text so typography renders as intended (#7).
+- Enabled `trailingSlash` so the static export emits directory-style routes
+  (`out/<route>/index.html`), giving consistent clean URLs on static hosts and
+  removing the need for `/route` → `/route.html` rewrite rules as pages are added.
