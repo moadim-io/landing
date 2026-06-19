@@ -22,6 +22,11 @@ const eslintConfig = defineConfig([
       // intent, enables immutability-by-default, and turns any accidental
       // future reassignment into a compile-time error.
       "prefer-const": "error",
+      // Require ES6 shorthand for object properties and methods
+      // (`{ foo }` over `{ foo: foo }`, `{ fn() {} }` over `{ fn: function () {} }`).
+      // Shorthand is more concise, avoids accidental name/value drift, and keeps
+      // object literals consistent across the codebase.
+      "object-shorthand": ["error", "always"],
     },
   },
 ]);
