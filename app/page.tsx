@@ -71,7 +71,7 @@ export default function Home() {
               Install
             </span>
             <code className="font-mono text-base text-white sm:text-lg">
-              <span className="text-accent">$</span> cargo install moadim
+              <span className="text-accent">$</span> cargo install --locked moadim
             </code>
           </div>
           <a
