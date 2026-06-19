@@ -22,6 +22,17 @@ export const metadata: Metadata = {
     template: "%s — Moadim",
   },
   description,
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
     title: "Moadim — Put your agents on a loop",
     description,
