@@ -4,7 +4,7 @@ import { ImageResponse } from "next/og";
 export const dynamic = "force-static";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "Moadim — Cron jobs over MCP & REST";
+export const alt = "Moadim — Put your agents on a loop";
 
 export default function OpenGraphImage() {
   return new ImageResponse(
@@ -38,7 +38,7 @@ export default function OpenGraphImage() {
             color: "#a1a1aa",
           }}
         >
-          Cron jobs over MCP &amp; REST
+          Put your agents on a loop.
         </div>
         <div
           style={{
@@ -47,7 +47,7 @@ export default function OpenGraphImage() {
             color: "#71717a",
           }}
         >
-          Open-source scheduling for AI agents and developers
+          Open-source loop engine for AI agents
         </div>
       </div>
     ),
