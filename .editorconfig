@@ -1,0 +1,15 @@
+# EditorConfig is awesome: https://EditorConfig.org
+# Top-most EditorConfig file for the landing site.
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Markdown uses two trailing spaces for hard line breaks.
+[*.md]
+trim_trailing_whitespace = false
