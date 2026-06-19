@@ -20,8 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replaced the create-next-app boilerplate with a real Moadim hero so the landing page reflects the product (#4).
 - Replaced the create-next-app boilerplate README with real project documentation (#10).
 - Enabled the `no-console` lint rule to keep stray console statements out of the codebase (#6).
+- Added `package.json` metadata — license, description, and repository — so the package is properly described (#119).
+- Enforced a clean lint baseline: `npm run lint` now fails on warnings (`--max-warnings 0`), with the `prefer-const` and `object-shorthand` rules enabled (#139).
 
 ### Fixed
 
 - Honor `prefers-reduced-motion`: hover/active CTA and reading-list animations no longer tween for users who request reduced motion (WCAG 2.3.3) (#89).
+- Added a visible keyboard focus indicator on interactive elements so keyboard users can see where they are (WCAG 2.4.7) (#84).
+- Raised the source-label text contrast to meet the WCAG 1.4.3 minimum (#103).
 - Applied the loaded Geist Sans font to body text so typography renders as intended (#7).
