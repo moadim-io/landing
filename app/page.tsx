@@ -43,6 +43,13 @@ const loopEngineeringReads = [
 const ctaButton =
   "flex items-center justify-center border-4 border-black px-8 py-4 text-base font-black uppercase tracking-wide shadow-[6px_6px_0_0_#000] transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#000]";
 
+// Persistent project links surfaced in the footer landmark.
+const footerLinks = [
+  { label: "GitHub", href: `https://github.com/${REPO}` },
+  { label: "crates.io", href: "https://crates.io/crates/moadim" },
+  { label: "Issues", href: `https://github.com/${REPO}/issues` },
+];
+
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col items-center px-4 py-10 sm:px-8 sm:py-16">
@@ -157,6 +164,28 @@ export default function Home() {
           </ul>
         </section>
       </main>
+      <footer className="mt-10 flex w-full max-w-4xl flex-col items-center gap-4 border-t-4 border-black pt-6 sm:flex-row sm:justify-between">
+        <p className="font-mono text-xs font-bold uppercase tracking-widest text-black/70">
+          Moadim · open source loop engine
+        </p>
+        <nav aria-label="Project links">
+          <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+            {footerLinks.map((link) => (
+              <li key={link.href}>
+                <a
+                  className="text-sm font-black uppercase tracking-wide underline decoration-2 underline-offset-4 hover:bg-accent hover:text-black"
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {link.label}
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </footer>
     </div>
   );
 }
