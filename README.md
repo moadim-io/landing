@@ -29,7 +29,7 @@ you edit files under `app/`.
 | --- | --- |
 | `npm run dev` | Start the local dev server with hot reload. |
 | `npm run build` | Produce the static export in `out/`. |
-| `npm run start` | Serve the production build locally. |
+| `npm run start` | Serve the static `out/` production build locally (run `npm run build` first). |
 | `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript rules). |
 
 ## Project structure
