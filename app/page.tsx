@@ -71,7 +71,13 @@ export default function Home() {
               Install
             </span>
             <code className="font-mono text-base text-white sm:text-lg">
-              <span className="text-accent">$</span> cargo install moadim
+              {/* The shell prompt is decoration: hide it from screen readers and
+                  exclude it from text selection so copying the line yields a
+                  runnable `cargo install moadim`, not `$ cargo install moadim`. */}
+              <span aria-hidden="true" className="select-none text-accent">
+                ${" "}
+              </span>
+              cargo install moadim
             </code>
           </div>
           <a
