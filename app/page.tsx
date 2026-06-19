@@ -36,6 +36,44 @@ const loopEngineeringReads = [
   },
 ];
 
+// Pre-install objections, answered on-page. Also emitted as FAQPage
+// structured data (below) so search engines can surface them as rich results.
+const faqs = [
+  {
+    q: "Is Moadim free? What's the license?",
+    a: "Yes — Moadim is open source under the MIT license, free to use, modify, and self-host. There's no paid tier and no account to create.",
+  },
+  {
+    q: "Is it self-hosted or a cloud service?",
+    a: "It runs entirely on your own machine. Loops fire from your OS crontab — no hidden queue, no cloud, no sign-up. One install command registers a launchd (macOS) or systemd (Linux) service so they survive logins and reboots.",
+  },
+  {
+    q: "Which agents does it support?",
+    a: "Claude, Codex, and Hermes today. Each loop names the agent it runs, and Moadim launches it for you on every tick.",
+  },
+  {
+    q: "Which operating systems are supported?",
+    a: "macOS and Linux. Loops are scheduled through the OS crontab and kept alive across reboots by launchd on macOS and systemd on Linux.",
+  },
+  {
+    q: "How is each run isolated?",
+    a: "Every tick launches the agent in a fresh, isolated workbench. A watchdog kills hung runs, and the session is reaped once it finishes — so one run can't leak state into the next.",
+  },
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.a,
+    },
+  })),
+};
+
 // Shared neobrutalist CTA button styling — the hard drop shadow plus the
 // hover/active translate-and-shadow choreography. Extracted so the two hero
 // buttons (and any future ones) can't drift out of sync; each call site adds
@@ -156,7 +194,32 @@ export default function Home() {
             ))}
           </ul>
         </section>
+
+        <section className="border-4 border-black bg-white shadow-[10px_10px_0_0_#000]">
+          <h2 className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent">
+            FAQ
+          </h2>
+          <dl className="flex flex-col">
+            {faqs.map((faq, i) => (
+              <div
+                key={faq.q}
+                className={`flex flex-col gap-2 px-6 py-5 ${
+                  i < faqs.length - 1 ? "border-b-2 border-black/15" : ""
+                }`}
+              >
+                <dt className="text-base font-black uppercase leading-tight">
+                  {faq.q}
+                </dt>
+                <dd className="text-sm font-medium leading-6">{faq.a}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
       </main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
     </div>
   );
 }
