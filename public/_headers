@@ -1,0 +1,11 @@
+# Cloudflare Pages headers (https://developers.cloudflare.com/pages/configuration/headers/)
+#
+# Next.js `output: "export"` emits the dynamic OG/Twitter card routes as
+# extensionless files (out/opengraph-image, out/twitter-image). Without a
+# recognized extension, Cloudflare Pages serves them as application/octet-stream,
+# so Slack / X / Facebook / LinkedIn / iMessage refuse to render the link
+# preview. The files are valid PNGs — force the correct Content-Type.
+/opengraph-image
+  Content-Type: image/png
+/twitter-image
+  Content-Type: image/png
