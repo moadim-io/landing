@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -34,6 +34,15 @@ export const metadata: Metadata = {
     title: "Moadim — Put your agents on a loop",
     description,
   },
+};
+
+// The site ships a single light theme (see app/globals.css). Declaring it
+// explicitly tints mobile browser UI (address bar) to the brand background and
+// tells the browser to render native controls in light mode, avoiding a
+// light-on-load flash and mismatched form-control colors on dark-mode devices.
+export const viewport: Viewport = {
+  colorScheme: "light",
+  themeColor: "#f4f1e8",
 };
 
 const jsonLd = {
