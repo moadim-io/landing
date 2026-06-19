@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Site footer with a `contentinfo` landmark, copyright line, and GitHub / crates.io / Issues links — the page previously rendered only a `<main>` (#28).
 - SoftwareApplication JSON-LD structured data so search engines can richly index the app (#9).
 - Open Graph and Twitter social-share card for better link previews when the page is shared (#8).
 
