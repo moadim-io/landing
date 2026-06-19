@@ -27,6 +27,12 @@ const eslintConfig = defineConfig([
       // Shorthand is more concise, avoids accidental name/value drift, and keeps
       // object literals consistent across the codebase.
       "object-shorthand": ["error", "always"],
+      // Forbid the non-null assertion operator (`foo!.bar`). It silently
+      // overrides the type checker's null/undefined safety, so a value the
+      // compiler believes is present can still be null at runtime, causing a
+      // "cannot read properties of null" crash. Force an explicit guard
+      // (early return, optional chaining, or narrowing) instead.
+      "@typescript-eslint/no-non-null-assertion": "error",
     },
   },
 ]);
