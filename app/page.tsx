@@ -1,5 +1,11 @@
 const REPO = "moadim-io/daemon";
 
+const footerLinks = [
+  { label: "GitHub", href: `https://github.com/${REPO}` },
+  { label: "crates.io", href: "https://crates.io/crates/moadim" },
+  { label: "Issues", href: `https://github.com/${REPO}/issues` },
+];
+
 const features = [
   {
     tag: "01",
@@ -150,6 +156,32 @@ export default function Home() {
           </ul>
         </section>
       </main>
+
+      <footer className="mt-10 flex w-full max-w-4xl flex-col gap-4 border-4 border-black bg-white px-6 py-5 shadow-[10px_10px_0_0_#000] sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-xs font-bold uppercase tracking-[0.2em]">
+          © {new Date().getFullYear()} Moadim · Open-source loop engine
+        </p>
+        <nav aria-label="Footer">
+          <ul className="flex flex-wrap gap-x-6 gap-y-2">
+            {footerLinks.map((link) => (
+              <li key={link.href}>
+                <a
+                  className="font-mono text-xs font-bold uppercase tracking-widest text-black/70 underline-offset-4 transition-colors hover:text-black hover:underline"
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {link.label}
+                  <span aria-hidden="true" className="ml-1">
+                    ↗
+                  </span>
+                  <span className="sr-only">(opens in a new tab)</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </footer>
     </div>
   );
 }
