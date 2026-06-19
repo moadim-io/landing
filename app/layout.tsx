@@ -44,6 +44,10 @@ const jsonLd = {
   applicationCategory: "DeveloperApplication",
   operatingSystem: "Linux, macOS, Windows",
   description,
+  sameAs: [
+    "https://github.com/moadim-io/daemon",
+    "https://crates.io/crates/moadim",
+  ],
   license: "https://opensource.org/licenses/MIT",
   offers: {
     "@type": "Offer",
