@@ -1,4 +1,4 @@
-const REPO = "moadim-io/daemon";
+import { CRATE_NAME, CRATES_IO_URL, GITHUB_URL } from "./site";
 
 const features = [
   {
@@ -71,12 +71,12 @@ export default function Home() {
               Install
             </span>
             <code className="font-mono text-base text-white sm:text-lg">
-              <span className="text-accent">$</span> cargo install moadim
+              <span className="text-accent">$</span> cargo install {CRATE_NAME}
             </code>
           </div>
           <a
             className={`${ctaButton} group gap-3 bg-accent`}
-            href={`https://github.com/${REPO}`}
+            href={GITHUB_URL}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Star moadim on GitHub (opens in a new tab)"
@@ -89,7 +89,7 @@ export default function Home() {
           </a>
           <a
             className={`${ctaButton} gap-2 bg-white`}
-            href="https://crates.io/crates/moadim"
+            href={CRATES_IO_URL}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="crates.io (opens in a new tab)"
