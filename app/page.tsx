@@ -46,7 +46,17 @@ const ctaButton =
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col items-center px-4 py-10 sm:px-8 sm:py-16">
-      <main className="flex w-full max-w-4xl flex-1 flex-col gap-10">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:border-4 focus:border-black focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-black focus:uppercase focus:tracking-wide focus:shadow-[6px_6px_0_0_#000]"
+      >
+        Skip to content
+      </a>
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="flex w-full max-w-4xl flex-1 flex-col gap-10 focus:outline-none"
+      >
         <header className="border-4 border-black bg-white p-6 shadow-[10px_10px_0_0_#000] sm:p-10">
           <p className="mb-6 inline-block border-2 border-black bg-accent px-3 py-1 text-xs font-bold uppercase tracking-[0.2em]">
             Open source · Loop engine
