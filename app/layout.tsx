@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { SITE_URL } from "./site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,7 +17,7 @@ const description =
   "Moadim is an open-source loop engine for AI agents. Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes against your repo on every tick, over MCP and REST.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://moadim.io"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Moadim — Put your agents on a loop",
     template: "%s — Moadim",
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Moadim — Put your agents on a loop",
     description,
-    url: "https://moadim.io",
+    url: SITE_URL,
     siteName: "Moadim",
     type: "website",
   },
@@ -40,7 +41,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name: "Moadim",
-  url: "https://moadim.io",
+  url: SITE_URL,
   applicationCategory: "DeveloperApplication",
   operatingSystem: "Linux, macOS, Windows",
   description,
