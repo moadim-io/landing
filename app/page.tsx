@@ -134,7 +134,7 @@ export default function Home() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span className="shrink-0 font-mono text-xs font-bold uppercase tracking-widest text-black/50 group-hover:text-black">
+                  <span className="shrink-0 font-mono text-xs font-bold uppercase tracking-widest text-black/70 group-hover:text-black">
                     {read.source}
                   </span>
                   <span className="font-medium leading-6">
