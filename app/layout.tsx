@@ -29,6 +29,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: "Moadim",
     type: "website",
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
