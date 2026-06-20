@@ -9,7 +9,7 @@ const features = [
   {
     tag: "02",
     title: "Runs locally, survives reboot",
-    body: "Loops fire from your own OS crontab — no hidden queue, no cloud. One install command registers a launchd / systemd service so they keep running across logins and reboots.",
+    body: "Loops fire from your own OS crontab — no hidden queue, no cloud. A separate moadim install step registers the daemon as a launchd / systemd service so it comes back after every login and reboot.",
   },
   {
     tag: "03",
