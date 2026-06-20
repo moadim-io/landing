@@ -51,6 +51,25 @@ app/
 `npm run build` emits a static site to `out/`. Deploy that directory to any static host
 (e.g. Vercel, Netlify, Cloudflare Pages, GitHub Pages, or an S3 bucket behind a CDN).
 
+### Build provenance
+
+Each build embeds the commit it was produced from, so you can confirm which commit is
+actually live. A `prebuild` step (`scripts/gen-version.mjs`) writes `public/version.json`
+from `GITHUB_SHA` / `GITHUB_REF_NAME` (set automatically by GitHub Actions; `dev` / `local`
+for a local `npm run build`), and the same commit is mirrored as `<meta name="build-commit">`
+in the page `<head>`.
+
+Read the live build id:
+
+```bash
+curl -s https://moadim.io/version.json
+# {"commit":"<sha>","ref":"main","builtAt":"<iso-8601>"}
+```
+
+Both `/version.json` and the `<meta>` tag fall under the `must-revalidate` cache rule in
+[`public/_headers`](./public/_headers) (not the immutable bucket), so they always reflect
+the latest deploy.
+
 ## Security
 
 Found a vulnerability in the site or its build pipeline? Please report it
