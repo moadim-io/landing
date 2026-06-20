@@ -85,6 +85,13 @@ export default function Home() {
               </span>
               cargo install moadim
             </code>
+            <p className="mt-1 text-xs font-medium leading-snug text-white">
+              Requires a Unix-like OS with{" "}
+              <code className="font-mono text-accent">tmux</code> and a cron
+              daemon (cron / launchd / systemd) — loops fire from your OS crontab
+              inside a tmux session, so without them the install succeeds but
+              nothing runs.
+            </p>
           </div>
           <a
             className={`${ctaButton} group gap-3 bg-accent`}
