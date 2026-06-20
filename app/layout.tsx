@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE_URL } from "./site";
@@ -15,6 +15,13 @@ const geistMono = Geist_Mono({
 
 const description =
   "Moadim is an open-source loop engine for AI agents. Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes against your repo on every tick, over MCP and REST.";
+
+// Paint the mobile browser chrome (address bar / status bar) in the brand
+// page background instead of the default white, so the UI extends the
+// neobrutalist palette edge-to-edge. Matches `--background` in globals.css.
+export const viewport: Viewport = {
+  themeColor: "#f4f1e8",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
