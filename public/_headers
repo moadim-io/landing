@@ -3,14 +3,24 @@
 #
 # Without this file the site relies on the host's default caching, which both
 # re-fetches content-hashed immutable assets and risks serving stale HTML.
-
-# Next.js emits content-hashed, immutable assets (JS, CSS, fonts, media) under
-# /_next/static/*. A new build changes the hash (and the URL), so these can be
-# cached forever.
-/_next/static/*
-  Cache-Control: public, max-age=31536000, immutable
+#
+# Cloudflare applies *every* matching rule and joins a repeated header with a
+# comma, so two rules that both match a path and both set Cache-Control would
+# emit one conflicting value. Rules are processed top-to-bottom, and a later,
+# more specific rule can detach an inherited header with `! <Header>`. So the
+# broad revalidate rule comes first, and the immutable-asset rule below detaches
+# that inherited Cache-Control before setting its own — leaving hashed assets
+# with the immutable value alone instead of `immutable, ..., must-revalidate`.
 
 # HTML and everything else: cache but always revalidate, so a redeploy is
 # picked up immediately instead of serving a stale page.
 /*
   Cache-Control: public, max-age=0, must-revalidate
+
+# Next.js emits content-hashed, immutable assets (JS, CSS, fonts, media) under
+# /_next/static/*. A new build changes the hash (and the URL), so these can be
+# cached forever. Detach the inherited revalidate value from the rule above so
+# this path is served with the immutable directive only.
+/_next/static/*
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
