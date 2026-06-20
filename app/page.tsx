@@ -43,11 +43,17 @@ const loopEngineeringReads = [
 const ctaButton =
   "flex items-center justify-center border-4 border-black px-8 py-4 text-base font-black uppercase tracking-wide shadow-[6px_6px_0_0_#000] transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#000]";
 
+// Shared neobrutalist panel surface — the 4px black frame, white fill, and
+// 10px hard drop shadow worn by the hero header, the feature grid, and the
+// reading-list section. Extracted (mirroring `ctaButton`) so the three panels
+// can't drift apart; each call site appends only its own padding/layout.
+const panel = "border-4 border-black bg-white shadow-[10px_10px_0_0_#000]";
+
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col items-center px-4 py-10 sm:px-8 sm:py-16">
       <main className="flex w-full max-w-4xl flex-1 flex-col gap-10">
-        <header className="border-4 border-black bg-white p-6 shadow-[10px_10px_0_0_#000] sm:p-10">
+        <header className={`${panel} p-6 sm:p-10`}>
           <p className="mb-6 inline-block border-2 border-black bg-accent px-3 py-1 text-xs font-bold uppercase tracking-[0.2em]">
             Open source · Loop engine
           </p>
@@ -100,7 +106,7 @@ export default function Home() {
           </a>
         </div>
 
-        <ul className="grid gap-0 border-4 border-black bg-white shadow-[10px_10px_0_0_#000] sm:grid-cols-3">
+        <ul className={`${panel} grid gap-0 sm:grid-cols-3`}>
           {features.map((feature, i) => (
             <li
               key={feature.title}
@@ -121,7 +127,7 @@ export default function Home() {
           ))}
         </ul>
 
-        <section className="border-4 border-black bg-white shadow-[10px_10px_0_0_#000]">
+        <section className={panel}>
           <h2 className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent">
             On loop engineering
           </h2>
