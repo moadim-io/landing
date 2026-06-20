@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Refreshed the Open Graph / Twitter social-share card copy to the current "Put your agents on a loop" / "Open-source loop engine for AI agents" positioning, replacing the stale pre-rebrand "Cron jobs over MCP & REST" / "scheduling" tagline so shared link previews match the rest of the site.
 - Tightened TypeScript strictness with `noUncheckedIndexedAccess`, `noUnusedLocals`, `noUnusedParameters`, and `noFallthroughCasesInSwitch` so unchecked index access, dead code, and switch fall-through are caught at build time.
 - Replaced the create-next-app boilerplate with a real Moadim hero so the landing page reflects the product (#4).
 - Replaced the create-next-app boilerplate README with real project documentation (#10).
