@@ -12,6 +12,19 @@
   --color-accent: #ffd400;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /*
+   * Neobrutalist hard drop shadows. Defined once here (driven by
+   * --color-foreground, not a hardcoded #000) so every card/button shares one
+   * source of truth instead of re-typing `Npx_Npx_0_0_#000` per element — and
+   * so tuning the shadow color becomes a single edit. The scale matches the
+   * offsets worn today: sm (active press), base (install card + CTA rest), md
+   * (CTA hover), lg (hero / feature / reads panels).
+   */
+  --shadow-brutal-sm: 2px 2px 0 0 var(--color-foreground);
+  --shadow-brutal: 6px 6px 0 0 var(--color-foreground);
+  --shadow-brutal-md: 8px 8px 0 0 var(--color-foreground);
+  --shadow-brutal-lg: 10px 10px 0 0 var(--color-foreground);
 }
 
 /*
