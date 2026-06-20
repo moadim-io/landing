@@ -16,8 +16,17 @@ const geistMono = Geist_Mono({
 const description =
   "Moadim is an open-source loop engine for AI agents. Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes against your repo on every tick, over MCP and REST.";
 
+// Build provenance: the commit this static export was built from. GITHUB_SHA is
+// set automatically by GitHub Actions; locally it is absent, so we fall back to
+// "dev". Surfaced as <meta name="build-commit"> in <head> (and mirrored in
+// /version.json) so a deploy's live commit is verifiable without auth.
+const buildCommit = process.env.GITHUB_SHA || "dev";
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  other: {
+    "build-commit": buildCommit,
+  },
   title: {
     default: "Moadim — Put your agents on a loop",
     template: "%s — Moadim",
