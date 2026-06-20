@@ -69,6 +69,21 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        {/* Site banner landmark: gives assistive-tech users a top-level `banner`
+            region to land on, plus a persistent Moadim wordmark for brand
+            identity. The hero's <header> sits inside <main>, so it does not
+            expose a banner — this does. */}
+        <header className="border-b-4 border-black bg-background">
+          <div className="mx-auto flex w-full max-w-4xl items-center px-4 py-4 sm:px-8">
+            <a
+              href="/"
+              className="text-2xl font-black uppercase tracking-tight"
+              aria-label="Moadim home"
+            >
+              moadim<span className="text-accent">.</span>
+            </a>
+          </div>
+        </header>
         {children}
       </body>
     </html>
