@@ -74,16 +74,24 @@ export default function Home() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-stretch">
           <div className="flex flex-1 flex-col gap-2 border-4 border-black bg-black p-5 shadow-[6px_6px_0_0_#000]">
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
-              Install
+              Install &amp; run
             </span>
+            {/* Two steps: installing the crate leaves you with a binary, not a
+                running daemon — `moadim` is what actually starts the loop engine
+                (in the background) so loops fire. The shell prompt is decoration:
+                hide it from screen readers and exclude it from text selection so
+                copying a line yields the runnable command, not a `$`-prefixed one. */}
             <code className="font-mono text-base text-white sm:text-lg">
-              {/* The shell prompt is decoration: hide it from screen readers and
-                  exclude it from text selection so copying the line yields a
-                  runnable `cargo install moadim`, not `$ cargo install moadim`. */}
               <span aria-hidden="true" className="select-none text-accent">
                 ${" "}
               </span>
               cargo install moadim
+            </code>
+            <code className="font-mono text-base text-white sm:text-lg">
+              <span aria-hidden="true" className="select-none text-accent">
+                ${" "}
+              </span>
+              moadim
             </code>
           </div>
           <a
