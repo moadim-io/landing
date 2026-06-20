@@ -151,7 +151,11 @@ export default function Home() {
                   className="group flex items-baseline gap-4 px-6 py-4 transition-colors hover:bg-accent"
                   href={read.href}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  // These are third-party blog posts, not Moadim properties.
+                  // Mark them nofollow so the homepage doesn't pass ranking
+                  // signal out to them (the GitHub / crates.io CTAs above are
+                  // our own canonical destinations and stay dofollow).
+                  rel="nofollow noopener noreferrer"
                 >
                   <span className="shrink-0 font-mono text-xs font-bold uppercase tracking-widest text-black/70 group-hover:text-black">
                     {read.source}
