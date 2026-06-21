@@ -16,6 +16,14 @@ const geistMono = Geist_Mono({
 const description =
   "Moadim is an open-source loop engine for AI agents. Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes against your repo on every tick, over MCP and REST.";
 
+// Search-engine ownership-verification tokens, read at build time so nothing
+// sensitive lands in the repo and the tags can differ per environment. They are
+// public (non-secret) identifiers. When a token is unset, its `<meta>` tag is
+// omitted entirely — see `verification` below. Set these in the deploy build
+// env (e.g. Cloudflare Pages / Actions). See README "Deploying".
+const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
+const bingSiteVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION;
+
 // Paint the mobile browser chrome (address bar / status bar) in the brand
 // page background instead of the default white, so the UI extends the
 // neobrutalist palette edge-to-edge. Matches `--background` in globals.css.
@@ -42,6 +50,15 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Moadim — Put your agents on a loop",
     description,
+  },
+  // Ownership-verification meta tags for Google Search Console / Bing Webmaster
+  // Tools. Each tag is emitted only when its build-time token is set, so an
+  // unconfigured environment produces no empty/garbage tag.
+  verification: {
+    google: googleSiteVerification,
+    ...(bingSiteVerification
+      ? { other: { "msvalidate.01": bingSiteVerification } }
+      : {}),
   },
 };
 
