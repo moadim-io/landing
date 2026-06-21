@@ -45,6 +45,15 @@ export const metadata: Metadata = {
   },
 };
 
+// The site ships a single light theme (see app/globals.css). Declaring it
+// explicitly tints mobile browser UI (address bar) to the brand background and
+// tells the browser to render native controls in light mode, avoiding a
+// light-on-load flash and mismatched form-control colors on dark-mode devices.
+export const viewport: Viewport = {
+  colorScheme: "light",
+  themeColor: "#f4f1e8",
+};
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
