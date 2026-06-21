@@ -1,3 +1,5 @@
+import { jsonLdHtml } from "./jsonLd";
+
 const REPO = "moadim-io/daemon";
 
 const features = [
@@ -241,7 +243,7 @@ export default function Home() {
       </main>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(faqJsonLd) }}
       />
     </div>
   );
