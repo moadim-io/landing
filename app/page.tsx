@@ -1,3 +1,5 @@
+import { ctaButton } from "./ui";
+
 const REPO = "moadim-io/daemon";
 
 const features = [
@@ -73,13 +75,6 @@ const faqJsonLd = {
     },
   })),
 };
-
-// Shared neobrutalist CTA button styling — the hard drop shadow plus the
-// hover/active translate-and-shadow choreography. Extracted so the two hero
-// buttons (and any future ones) can't drift out of sync; each call site adds
-// only its own gap and fill color.
-const ctaButton =
-  "flex items-center justify-center border-4 border-black px-8 py-4 text-base font-black uppercase tracking-wide shadow-[6px_6px_0_0_#000] transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#000]";
 
 // Shared neobrutalist panel surface — the 4px black frame, white fill, and
 // 10px hard drop shadow worn by the hero header, the feature grid, and the
