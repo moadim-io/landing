@@ -1,17 +1,25 @@
 @import "tailwindcss";
 
-:root {
-  --background: #f4f1e8;
-  --foreground: #0a0a0a;
-  --accent: #ffd400;
-}
-
 @theme {
   --color-background: #f4f1e8;
   --color-foreground: #0a0a0a;
   --color-accent: #ffd400;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+}
+
+/*
+ * Short brand-color aliases. The hex values live in exactly one place -- the
+ * `@theme` block above, which Tailwind needs as literals to generate the
+ * `bg-*`/`text-*`/`border-*` utilities (and their opacity modifiers). These
+ * aliases just re-expose the same `--color-*` tokens under the terser names the
+ * hand-written CSS below uses (`var(--foreground)`, `var(--background)`), so the
+ * two naming schemes can never drift to different values.
+ */
+:root {
+  --background: var(--color-background);
+  --foreground: var(--color-foreground);
+  --accent: var(--color-accent);
 }
 
 /*
