@@ -16,10 +16,10 @@ The landing site is a continuously deployed static site with no released
 versions: only the currently deployed `main` build is supported. Please report
 against the live site or the latest `main`.
 
-| Version            | Supported          |
-| ------------------ | ------------------ |
-| Deployed `main`    | :white_check_mark: |
-| Older commits/PRs  | :x:                |
+| Version           | Supported          |
+| ----------------- | ------------------ |
+| Deployed `main`   | :white_check_mark: |
+| Older commits/PRs | :x:                |
 
 ## Reporting a vulnerability
 

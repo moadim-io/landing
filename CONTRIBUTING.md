@@ -19,12 +19,12 @@ npm install
 
 ## Development
 
-| Command | What it does |
-| --- | --- |
-| `npm run dev` | Start the local dev server with hot reload at http://localhost:3000. |
-| `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript rules). |
-| `npm run build` | Produce the static export in `out/`. |
-| `npm run start` | Serve the production build locally. |
+| Command         | What it does                                                         |
+| --------------- | -------------------------------------------------------------------- |
+| `npm run dev`   | Start the local dev server with hot reload at http://localhost:3000. |
+| `npm run lint`  | Run ESLint (Next.js core-web-vitals + TypeScript rules).             |
+| `npm run build` | Produce the static export in `out/`.                                 |
+| `npm run start` | Serve the production build locally.                                  |
 
 Page content lives under `app/` (`layout.tsx` for metadata/SEO, `page.tsx` for the
 landing content, `globals.css` for styles). Static assets go in `public/`.
