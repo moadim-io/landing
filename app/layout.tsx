@@ -52,7 +52,12 @@ const jsonLd = {
   name: "Moadim",
   url: SITE_URL,
   applicationCategory: "DeveloperApplication",
-  operatingSystem: "Linux, macOS, Windows",
+  // macOS and Linux only: loops fire from the OS crontab inside a tmux
+  // session and are kept alive by launchd / systemd — all Unix-only. The
+  // hero install card ("Unix-like OS with tmux and a cron daemon") and the
+  // FAQ ("macOS and Linux") say the same; advertising Windows here would let
+  // search engines surface the app for an unsupported platform.
+  operatingSystem: "macOS, Linux",
   description,
   license: "https://opensource.org/licenses/MIT",
   offers: {
