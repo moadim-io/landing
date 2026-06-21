@@ -1,5 +1,9 @@
 # Moadim — Landing Site
 
+[![Deploy to Cloudflare Pages](https://github.com/moadim-io/landing/actions/workflows/deploy.yml/badge.svg)](https://github.com/moadim-io/landing/actions/workflows/deploy.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![Live site](https://img.shields.io/badge/live-moadim.io-ffd400)](https://moadim.io)
+
 The marketing/landing site for **Moadim**, an open-source loop engine for AI agents.
 Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes
 against your repo on every tick, over MCP and REST.
@@ -38,6 +42,7 @@ you edit files under `app/`.
 app/
   layout.tsx            Root layout, fonts, and site metadata (SEO / Open Graph).
   page.tsx              Landing page content.
+  site.ts               Shared site constants (canonical SITE_URL).
   globals.css           Global styles and Tailwind theme tokens.
   opengraph-image.tsx   Generated Open Graph social card.
   twitter-image.tsx     Generated Twitter/X social card.
