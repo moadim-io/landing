@@ -30,6 +30,21 @@ export const metadata: Metadata = {
     template: "%s — Moadim",
   },
   description,
+  // Opt into large image previews so Google Search & Discover render the full
+  // Open Graph card (Google's default is `max-image-preview:standard`, a small
+  // thumbnail) and allow full-length text snippets. Complements robots.ts:
+  // robots.txt is a crawl directive, this is the per-document indexing one.
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
     title: "Moadim — Put your agents on a loop",
     description,
