@@ -1,17 +1,24 @@
 @import "tailwindcss";
 
-:root {
-  --background: #f4f1e8;
-  --foreground: #0a0a0a;
-  --accent: #ffd400;
-}
-
 @theme {
   --color-background: #f4f1e8;
   --color-foreground: #0a0a0a;
   --color-accent: #ffd400;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+}
+
+/*
+ * Short-name aliases for the palette tokens consumed directly in this
+ * stylesheet (the `body` fill and the focus ring). They reference the
+ * `@theme` colors above rather than restating the hex literals, so the raw
+ * `--background`/`--foreground`/`--accent` names and the Tailwind-facing
+ * `--color-*` names can never drift to different values (#236).
+ */
+:root {
+  --background: var(--color-background);
+  --foreground: var(--color-foreground);
+  --accent: var(--color-accent);
 }
 
 /*
