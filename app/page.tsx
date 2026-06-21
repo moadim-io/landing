@@ -82,9 +82,9 @@ const ctaButton =
   "flex items-center justify-center border-4 border-black px-8 py-4 text-base font-black uppercase tracking-wide shadow-[6px_6px_0_0_#000] transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#000]";
 
 // Shared neobrutalist panel surface — the 4px black frame, white fill, and
-// 10px hard drop shadow worn by the hero header, the feature grid, and the
-// reading-list section. Extracted (mirroring `ctaButton`) so the three panels
-// can't drift apart; each call site appends only its own padding/layout.
+// 10px hard drop shadow worn by the hero header, the feature grid, the
+// reading-list section, and the FAQ. Extracted (mirroring `ctaButton`) so the
+// panels can't drift apart; each call site appends only its own padding/layout.
 const panel = "border-4 border-black bg-white shadow-[10px_10px_0_0_#000]";
 
 export default function Home() {
@@ -218,7 +218,7 @@ export default function Home() {
           </ul>
         </section>
 
-        <section className="border-4 border-black bg-white shadow-[10px_10px_0_0_#000]">
+        <section className={panel}>
           <h2 className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent">
             FAQ
           </h2>
