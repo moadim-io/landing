@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE_URL } from "./site";
@@ -82,13 +83,13 @@ export default function RootLayout({
             expose a banner — this does. */}
         <header className="border-b-4 border-black bg-background">
           <div className="mx-auto flex w-full max-w-4xl items-center px-4 py-4 sm:px-8">
-            <a
+            <Link
               href="/"
               className="text-2xl font-black uppercase tracking-tight"
               aria-label="Moadim home"
             >
               moadim<span className="text-accent">.</span>
-            </a>
+            </Link>
           </div>
         </header>
         {children}
