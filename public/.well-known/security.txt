@@ -1,0 +1,9 @@
+# Moadim landing site security contact (RFC 9116).
+# Vulnerabilities in the moadim daemon (the product) are out of scope here;
+# report those via https://github.com/moadim-io/daemon/security/policy
+Contact: https://github.com/moadim-io/landing/security/advisories/new
+Contact: mailto:ofek.gabay.he@gmail.com
+Expires: 2027-06-22T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://moadim.io/.well-known/security.txt
+Policy: https://github.com/moadim-io/landing/blob/main/SECURITY.md
