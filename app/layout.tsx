@@ -21,6 +21,12 @@ const description =
 // page background instead of the default white, so the UI extends the
 // neobrutalist palette edge-to-edge. Matches `--background` in globals.css.
 export const viewport: Viewport = {
+  // The site is a single light-mode neobrutalist palette with no dark theme.
+  // Declaring `light` emits <meta name="color-scheme" content="light">, so a
+  // dark-mode browser renders native UI — form controls, scrollbars, and the
+  // pre-paint canvas — in light too, instead of inverting them against the
+  // cream `--background`.
+  colorScheme: "light",
   themeColor: "#f4f1e8",
 };
 
