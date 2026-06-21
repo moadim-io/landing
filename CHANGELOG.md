@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `CONTRIBUTING.md` security-reporting guidance now points at this repo's `SECURITY.md` instead of the **daemon** repo's advisory page, and drops the reference to a non-existent `/.well-known/security.txt`, so contributors report landing-site vulnerabilities through the correct, working channel.
 - The hero install snippet's leading `$` prompt is no longer selectable/copyable, so copying the command doesn't drag the shell prompt along with it (#200).
 - Restored interactive state cues (borders/outlines on buttons and links) under Forced Colors Mode / Windows High Contrast, so controls stay distinguishable (#123).
 - Honor `prefers-reduced-motion`: hover/active CTA and reading-list animations no longer tween for users who request reduced motion (WCAG 2.3.3) (#89).
