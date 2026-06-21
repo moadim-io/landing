@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `public/.well-known/security.txt` (RFC 9116) pointing security researchers at the private GitHub advisory channel and `SECURITY.md`, with `Contact`, `Canonical`, `Expires`, and `Policy` fields so the disclosure path is machine-discoverable.
 - Status badges (live site, product crates.io version, MIT license) at the top of `README.md` for at-a-glance credibility, mirroring the daemon repo (#191).
 - `public/_headers` declaring a Cloudflare Pages `Cache-Control` policy: content-hashed `/_next/static/*` assets are served `immutable` for a year, while HTML is `max-age=0, must-revalidate` so redeploys are picked up immediately (#122).
 - `og:locale` declared in the Open Graph metadata so social platforms know the page's language when rendering share previews (#211).
