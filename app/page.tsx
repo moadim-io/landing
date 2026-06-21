@@ -79,13 +79,13 @@ const faqJsonLd = {
 // buttons (and any future ones) can't drift out of sync; each call site adds
 // only its own gap and fill color.
 const ctaButton =
-  "flex items-center justify-center border-4 border-black px-8 py-4 text-base font-black uppercase tracking-wide shadow-[6px_6px_0_0_#000] transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#000]";
+  "flex items-center justify-center border-4 border-black px-8 py-4 text-base font-black uppercase tracking-wide shadow-brutal transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-brutal-md active:translate-x-[2px] active:translate-y-[2px] active:shadow-brutal-sm";
 
 // Shared neobrutalist panel surface — the 4px black frame, white fill, and
 // 10px hard drop shadow worn by the hero header, the feature grid, and the
 // reading-list section. Extracted (mirroring `ctaButton`) so the three panels
 // can't drift apart; each call site appends only its own padding/layout.
-const panel = "border-4 border-black bg-white shadow-[10px_10px_0_0_#000]";
+const panel = "border-4 border-black bg-white shadow-brutal-lg";
 
 export default function Home() {
   return (
@@ -110,7 +110,7 @@ export default function Home() {
         </header>
 
         <div className="flex flex-col gap-4 sm:flex-row sm:items-stretch">
-          <div className="flex flex-1 flex-col gap-2 border-4 border-black bg-black p-5 shadow-[6px_6px_0_0_#000]">
+          <div className="flex flex-1 flex-col gap-2 border-4 border-black bg-black p-5 shadow-brutal">
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
               Install
             </span>
