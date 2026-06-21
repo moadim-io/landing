@@ -45,6 +45,20 @@ export const metadata: Metadata = {
   },
 };
 
+// The page ships a `prefers-color-scheme` dark theme (see globals.css), but
+// without these declarations the browser still renders native UI — scrollbars,
+// form controls, the mobile address bar — in its default light palette, which
+// clashes with the dark page. `colorScheme` opts those surfaces into matching
+// the active theme; `themeColor` tints the mobile browser chrome to match the
+// real background colors (#ffffff light, #0a0a0a dark).
+export const viewport: Viewport = {
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+};
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
