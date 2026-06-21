@@ -1,3 +1,4 @@
+import { ExternalLink } from "./ExternalLink";
 import { CRATE_NAME, CRATE_URL, REPO_URL } from "./site";
 
 const features = [
@@ -131,30 +132,24 @@ export default function Home() {
               nothing runs.
             </p>
           </div>
-          <a
+          <ExternalLink
             className={`${ctaButton} group gap-3 bg-accent`}
             href={REPO_URL}
-            target="_blank"
-            rel="noopener noreferrer"
             aria-label="Star moadim on GitHub (opens in a new tab)"
           >
             <span aria-hidden="true" className="text-lg leading-none">
               ★
             </span>
             Star on GitHub
-            <span className="sr-only">(opens in a new tab)</span>
-          </a>
-          <a
+          </ExternalLink>
+          <ExternalLink
             className={`${ctaButton} gap-2 bg-white`}
             href={CRATE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
             aria-label="crates.io (opens in a new tab)"
           >
             crates.io
             <span aria-hidden="true">↗</span>
-            <span className="sr-only">(opens in a new tab)</span>
-          </a>
+          </ExternalLink>
         </div>
 
         <ul className={`${panel} grid gap-0 sm:grid-cols-3`}>
@@ -192,15 +187,14 @@ export default function Home() {
                     : ""
                 }
               >
-                <a
+                <ExternalLink
                   className="group flex items-baseline gap-4 px-6 py-4 transition-colors hover:bg-accent"
                   href={read.href}
-                  target="_blank"
                   // These are third-party blog posts, not Moadim properties.
                   // Mark them nofollow so the homepage doesn't pass ranking
                   // signal out to them (the GitHub / crates.io CTAs above are
                   // our own canonical destinations and stay dofollow).
-                  rel="nofollow noopener noreferrer"
+                  relExtra="nofollow"
                 >
                   <span className="shrink-0 font-mono text-xs font-bold uppercase tracking-widest text-black/70 group-hover:text-black">
                     {read.source}
@@ -211,8 +205,7 @@ export default function Home() {
                       ↗
                     </span>
                   </span>
-                  <span className="sr-only">(opens in a new tab)</span>
-                </a>
+                </ExternalLink>
               </li>
             ))}
           </ul>

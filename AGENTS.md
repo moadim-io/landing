@@ -68,6 +68,7 @@ app/
   layout.tsx            Root layout: fonts, <html lang>, site metadata, JSON-LD.
   page.tsx              Landing page content.
   not-found.tsx         Branded 404 route (statically prerendered).
+  ExternalLink.tsx      Outbound (new-tab) link wrapper — use it for any link that leaves the site, not a raw `<a target="_blank">`.
   site.ts               Single source of truth for SITE_URL — import it, don't hardcode the origin.
   globals.css           Theme tokens + global styles.
   opengraph-image.tsx   Generated OG card (file-based metadata route).
