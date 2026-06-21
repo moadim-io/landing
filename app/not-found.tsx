@@ -3,6 +3,11 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Page not found",
+  // The 404 route is a generic error off-ramp, not real content. The static
+  // export emits a crawlable out/404.html and robots.ts allows everything, so
+  // tell crawlers not to index it — otherwise it can surface in search results
+  // and trip Google Search Console's "Soft 404" report.
+  robots: { index: false },
 };
 
 // Branded 404 for the static export. Without this route Next.js ships its
