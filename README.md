@@ -36,20 +36,33 @@ you edit files under `app/`.
 
 ```
 app/
-  layout.tsx            Root layout, fonts, and site metadata (SEO / Open Graph).
+  layout.tsx            Root layout, fonts, site metadata (SEO / Open Graph), JSON-LD.
   page.tsx              Landing page content.
+  not-found.tsx         Branded 404 page.
+  site.ts               Shared site constants (canonical SITE_URL).
   globals.css           Global styles and Tailwind theme tokens.
   opengraph-image.tsx   Generated Open Graph social card.
   twitter-image.tsx     Generated Twitter/X social card.
   robots.ts             Generated robots.txt.
   sitemap.ts            Generated sitemap.xml.
   favicon.ico           Site favicon.
+public/
+  _headers              Cloudflare Pages response headers.
+.github/workflows/
+  deploy.yml            Build + deploy to Cloudflare Pages on push to main.
 ```
 
 ## Deploying
 
-`npm run build` emits a static site to `out/`. Deploy that directory to any static host
-(e.g. Vercel, Netlify, Cloudflare Pages, GitHub Pages, or an S3 bucket behind a CDN).
+Deployment is automated. Every push to `main` runs
+[`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml), which builds the static
+export and publishes `out/` to Cloudflare Pages (project `moadim-landing`) via
+[`wrangler`](https://developers.cloudflare.com/workers/wrangler/). The workflow can also be
+triggered manually from the Actions tab (`workflow_dispatch`).
+
+Because the build is a fully static export, the same `out/` directory can be served from any
+static host — running `npm run build` locally and uploading `out/` to Vercel, Netlify, GitHub
+Pages, or an S3 bucket behind a CDN works without any of the Cloudflare-specific tooling.
 
 ## Security
 
