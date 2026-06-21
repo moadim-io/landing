@@ -51,7 +51,7 @@ const jsonLd = {
   name: "Moadim",
   url: SITE_URL,
   applicationCategory: "DeveloperApplication",
-  operatingSystem: "Linux, macOS, Windows",
+  operatingSystem: "Linux, macOS",
   description,
   license: "https://opensource.org/licenses/MIT",
   offers: {
