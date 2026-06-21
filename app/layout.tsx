@@ -72,6 +72,15 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        {/* Skip link (WCAG 2.4.1 Bypass Blocks): lets keyboard and screen-reader
+            users jump past the banner straight to <main>. Visually hidden until
+            focused, then rendered as a neobrutalist chip pinned top-left. */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:border-4 focus:border-black focus:bg-accent focus:px-4 focus:py-2 focus:font-black focus:uppercase focus:tracking-tight focus:text-foreground"
+        >
+          Skip to main content
+        </a>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

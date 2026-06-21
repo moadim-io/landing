@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- A "Skip to main content" link as the first focusable element on every page (WCAG 2.4.1 Bypass Blocks): keyboard and screen-reader users can jump past the site banner straight to `<main>` (now `id="main-content"`). The link is visually hidden until focused, then shown as a neobrutalist accent chip.
 - `public/_headers` declaring a Cloudflare Pages `Cache-Control` policy: content-hashed `/_next/static/*` assets are served `immutable` for a year, while HTML is `max-age=0, must-revalidate` so redeploys are picked up immediately (#122).
 - `og:locale` declared in the Open Graph metadata so social platforms know the page's language when rendering share previews (#211).
 - SoftwareApplication JSON-LD structured data so search engines can richly index the app (#9).
