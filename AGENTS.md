@@ -69,7 +69,7 @@ app/
   page.tsx              Landing page content.
   not-found.tsx         Branded 404 route (statically prerendered).
   ExternalLink.tsx      Outbound (new-tab) link wrapper — use it for any link that leaves the site, not a raw `<a target="_blank">`.
-  site.ts               Single source of truth for SITE_URL — import it, don't hardcode the origin.
+  site.ts               Single source of truth for product identifiers: SITE_URL plus the GitHub/crates.io slugs and URLs (REPO_SLUG, REPO_URL, CRATE_NAME, CRATE_URL). Import these — don't hardcode the origin or the github.com / crates.io links.
   globals.css           Theme tokens + global styles.
   opengraph-image.tsx   Generated OG card (file-based metadata route).
   twitter-image.tsx     Generated Twitter card.
