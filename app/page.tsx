@@ -9,7 +9,7 @@ const features = [
   {
     tag: "02",
     title: "Runs locally, survives reboot",
-    body: "Loops fire from your own OS crontab — no hidden queue, no cloud. One install command registers a launchd / systemd service so they keep running across logins and reboots.",
+    body: "Loops fire from your own OS crontab — no hidden queue, no cloud. Run moadim install to register a launchd / systemd service so the daemon keeps running across logins and reboots.",
   },
   {
     tag: "03",
@@ -45,7 +45,7 @@ const faqs = [
   },
   {
     q: "Is it self-hosted or a cloud service?",
-    a: "It runs entirely on your own machine. Loops fire from your OS crontab — no hidden queue, no cloud, no sign-up. One install command registers a launchd (macOS) or systemd (Linux) service so they survive logins and reboots.",
+    a: "It runs entirely on your own machine. Loops fire from your OS crontab — no hidden queue, no cloud, no sign-up. Run moadim install to register a launchd (macOS) or systemd (Linux) service so the daemon survives logins and reboots.",
   },
   {
     q: "Which agents does it support?",
@@ -53,7 +53,7 @@ const faqs = [
   },
   {
     q: "Which operating systems are supported?",
-    a: "macOS and Linux. Loops are scheduled through the OS crontab and kept alive across reboots by launchd on macOS and systemd on Linux.",
+    a: "macOS and Linux. Loops are scheduled through the OS crontab; running moadim install registers a launchd (macOS) or systemd (Linux) service that keeps the daemon alive across reboots.",
   },
   {
     q: "How is each run isolated?",
