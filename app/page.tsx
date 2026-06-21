@@ -152,26 +152,35 @@ export default function Home() {
           </ExternalLink>
         </div>
 
-        <ul className={`${panel} grid gap-0 sm:grid-cols-3`}>
-          {features.map((feature, i) => (
-            <li
-              key={feature.title}
-              className={`flex flex-col gap-3 p-6 ${
-                i < features.length - 1
-                  ? "border-b-4 border-black sm:border-b-0 sm:border-r-4"
-                  : ""
-              }`}
-            >
-              <span className="font-mono text-3xl font-black text-accent [-webkit-text-stroke:1px_#000]">
-                {feature.tag}
-              </span>
-              <h2 className="text-lg font-black uppercase leading-tight">
-                {feature.title}
-              </h2>
-              <p className="text-sm font-medium leading-6">{feature.body}</p>
-            </li>
-          ))}
-        </ul>
+        {/* Group the feature cards under one labelled section so the heading
+            outline reads h1 → h2 (this group) → h3 (each card), instead of the
+            three cards surfacing as bare peer h2s with no parent. The group
+            heading is visually hidden to keep the headerless grid design. */}
+        <section aria-labelledby="features-heading">
+          <h2 id="features-heading" className="sr-only">
+            What Moadim does
+          </h2>
+          <ul className={`${panel} grid gap-0 sm:grid-cols-3`}>
+            {features.map((feature, i) => (
+              <li
+                key={feature.title}
+                className={`flex flex-col gap-3 p-6 ${
+                  i < features.length - 1
+                    ? "border-b-4 border-black sm:border-b-0 sm:border-r-4"
+                    : ""
+                }`}
+              >
+                <span className="font-mono text-3xl font-black text-accent [-webkit-text-stroke:1px_#000]">
+                  {feature.tag}
+                </span>
+                <h3 className="text-lg font-black uppercase leading-tight">
+                  {feature.title}
+                </h3>
+                <p className="text-sm font-medium leading-6">{feature.body}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
 
         <section className={panel}>
           <h2 className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent">
