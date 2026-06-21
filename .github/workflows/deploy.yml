@@ -12,6 +12,12 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # A static Next.js export + Cloudflare Pages deploy normally finishes in a
+    # couple of minutes. Without this, the job inherits the 360-minute (6-hour)
+    # default, so a hung build, npm install, or wrangler call would hold a runner
+    # for hours. 10 minutes leaves comfortable headroom over a cold build+deploy
+    # while turning a hang into a fast, visible failure.
+    timeout-minutes: 10
     permissions:
       contents: read
       deployments: write
@@ -32,9 +38,11 @@ jobs:
         run: npm install --no-audit --no-fund
 
       - name: Build static export
+        timeout-minutes: 5
         run: npm run build
 
       - name: Deploy to Cloudflare Pages
+        timeout-minutes: 5
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
