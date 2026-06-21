@@ -43,6 +43,7 @@ app/
   layout.tsx            Root layout, fonts, site metadata (SEO / Open Graph), JSON-LD.
   page.tsx              Landing page content.
   not-found.tsx         Branded 404 page.
+  ExternalLink.tsx      Outbound (new-tab) link wrapper with the safe rel attributes.
   site.ts               Shared site constants (canonical SITE_URL).
   globals.css           Global styles and Tailwind theme tokens.
   opengraph-image.tsx   Generated Open Graph social card.
