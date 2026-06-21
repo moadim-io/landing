@@ -64,6 +64,9 @@ const faqs = [
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
+  // Content language of the Q&A, kept in sync with <html lang="en"> and the
+  // og:locale (en_US) so the rich-result language signal matches the page.
+  inLanguage: "en-US",
   mainEntity: faqs.map((faq) => ({
     "@type": "Question",
     name: faq.q,

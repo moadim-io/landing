@@ -52,6 +52,10 @@ const jsonLd = {
   url: SITE_URL,
   applicationCategory: "DeveloperApplication",
   operatingSystem: "Linux, macOS, Windows",
+  // Content language of this node, kept in sync with <html lang="en"> and the
+  // og:locale (en_US) so crawlers see one consistent language signal across the
+  // page metadata and its structured data.
+  inLanguage: "en-US",
   description,
   license: "https://opensource.org/licenses/MIT",
   offers: {
