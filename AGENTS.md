@@ -1,8 +1,6 @@
-<!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
 
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
 
 # Agent guide — Moadim landing site
 
@@ -16,12 +14,12 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Commands
 
-| Command | What it does |
-| --- | --- |
-| `npm run dev` | Local dev server with hot reload (http://localhost:3000). |
+| Command         | What it does                                                       |
+| --------------- | ------------------------------------------------------------------ |
+| `npm run dev`   | Local dev server with hot reload (http://localhost:3000).          |
 | `npm run build` | Static export to `out/`. Run this to validate a change end-to-end. |
-| `npm run start` | Serve the production build locally. |
-| `npm run lint` | ESLint (Next core-web-vitals + TypeScript). |
+| `npm run start` | Serve the production build locally.                                |
+| `npm run lint`  | ESLint (Next core-web-vitals + TypeScript).                        |
 
 Before opening a PR, make sure `npm run lint` **and** `npm run build` both pass — the
 build is the real gate, since static export surfaces errors `dev` tolerates.
@@ -42,11 +40,11 @@ deployed to Cloudflare Pages from `out/`. There is **no Node server at runtime**
 
 Neobrutalist. Tokens live in `app/globals.css`:
 
-| Token | Value | Use |
-| --- | --- | --- |
+| Token          | Value     | Use                                         |
+| -------------- | --------- | ------------------------------------------- |
 | `--background` | `#f4f1e8` | page background (with a faint grid overlay) |
-| `--foreground` | `#0a0a0a` | text, borders |
-| `--accent` | `#ffd400` | highlights, CTAs, tags |
+| `--foreground` | `#0a0a0a` | text, borders                               |
+| `--accent`     | `#ffd400` | highlights, CTAs, tags                      |
 
 Conventions: thick `4px` black borders, hard offset shadows
 (`shadow-[10px_10px_0_0_#000]`, no blur), uppercase bold headings, and the Geist Sans / Geist

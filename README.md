@@ -25,12 +25,12 @@ you edit files under `app/`.
 
 ## Scripts
 
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start the local dev server with hot reload. |
-| `npm run build` | Produce the static export in `out/`. |
-| `npm run start` | Serve the production build locally. |
-| `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript rules); fails on any warning (`--max-warnings 0`). |
+| Command         | Description                                                                                         |
+| --------------- | --------------------------------------------------------------------------------------------------- |
+| `npm run dev`   | Start the local dev server with hot reload.                                                         |
+| `npm run build` | Produce the static export in `out/`.                                                                |
+| `npm run start` | Serve the production build locally.                                                                 |
+| `npm run lint`  | Run ESLint (Next.js core-web-vitals + TypeScript rules); fails on any warning (`--max-warnings 0`). |
 
 ## Project structure
 
