@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SITE_URL } from "./site";
+import { SITE_URL, REPO_URL, CRATE_URL } from "./site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -66,6 +66,8 @@ const jsonLd = {
   operatingSystem: "macOS, Linux",
   description,
   license: "https://opensource.org/licenses/MIT",
+  codeRepository: REPO_URL,
+  downloadUrl: CRATE_URL,
   offers: {
     "@type": "Offer",
     price: "0",
