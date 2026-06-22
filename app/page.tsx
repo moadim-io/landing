@@ -173,8 +173,11 @@ export default function Home() {
           ))}
         </ul>
 
-        <section className={panel}>
-          <h2 className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent">
+        <section className={panel} aria-labelledby="reads-heading">
+          <h2
+            id="reads-heading"
+            className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent"
+          >
             On loop engineering
           </h2>
           <ul className="flex flex-col">
@@ -211,8 +214,11 @@ export default function Home() {
           </ul>
         </section>
 
-        <section className={panel}>
-          <h2 className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent">
+        <section className={panel} aria-labelledby="faq-heading">
+          <h2
+            id="faq-heading"
+            className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent"
+          >
             FAQ
           </h2>
           <dl className="flex flex-col">
