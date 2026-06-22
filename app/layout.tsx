@@ -2,7 +2,8 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SITE_URL } from "./site";
+import { SITE_URL, REPO_URL } from "./site";
+import { ExternalLink } from "./ExternalLink";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -93,7 +94,7 @@ export default function RootLayout({
             identity. The hero's <header> sits inside <main>, so it does not
             expose a banner — this does. */}
         <header className="border-b-4 border-black bg-background">
-          <div className="mx-auto flex w-full max-w-4xl items-center px-4 py-4 sm:px-8">
+          <div className="mx-auto flex w-full max-w-4xl items-center justify-between px-4 py-4 sm:px-8">
             <Link
               href="/"
               className="text-2xl font-black uppercase tracking-tight"
@@ -101,6 +102,28 @@ export default function RootLayout({
             >
               moadim<span className="text-accent">.</span>
             </Link>
+            <nav aria-label="Site navigation">
+              <ul className="flex items-center gap-6">
+                <li>
+                  <ExternalLink
+                    href={`${REPO_URL}#readme`}
+                    className="text-sm font-bold uppercase tracking-wide hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                    aria-label="Docs (opens in a new tab)"
+                  >
+                    Docs
+                  </ExternalLink>
+                </li>
+                <li>
+                  <ExternalLink
+                    href={REPO_URL}
+                    className="text-sm font-bold uppercase tracking-wide hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                    aria-label="GitHub (opens in a new tab)"
+                  >
+                    GitHub
+                  </ExternalLink>
+                </li>
+              </ul>
+            </nav>
           </div>
         </header>
         {children}
