@@ -162,7 +162,10 @@ export default function Home() {
                   : ""
               }`}
             >
-              <span className="font-mono text-3xl font-black text-accent [-webkit-text-stroke:1px_#000]">
+              <span
+                aria-hidden="true"
+                className="font-mono text-3xl font-black text-accent [-webkit-text-stroke:1px_#000]"
+              >
                 {feature.tag}
               </span>
               <h2 className="text-lg font-black uppercase leading-tight">
