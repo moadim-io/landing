@@ -9,7 +9,7 @@ CSS**, shipped as a fully static export (`output: "export"`).
 
 ## Prerequisites
 
-- **Node.js 20+** and npm (the repo targets `@types/node` v20).
+- **Node.js 20+** and npm (the repo targets `@types/node` v26).
 
 ## Setup
 
