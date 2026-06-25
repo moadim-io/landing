@@ -33,6 +33,12 @@ const eslintConfig = defineConfig([
       // "cannot read properties of null" crash. Force an explicit guard
       // (early return, optional chaining, or narrowing) instead.
       "@typescript-eslint/no-non-null-assertion": "error",
+      // Forbid explicit `any` type annotations, casts, and generics. `any`
+      // opts a value out of type-checking entirely — property access, calls,
+      // and assignments on it are never verified, and the unsafety silently
+      // spreads to everything it touches. Use `unknown` + narrowing, or a
+      // precise type, at boundaries instead.
+      "@typescript-eslint/no-explicit-any": "error",
     },
   },
 ]);
