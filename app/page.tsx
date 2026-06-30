@@ -243,7 +243,12 @@ export default function Home() {
       </main>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        // Escape `<` so a value containing `</script>` (or any `<…`) can't break
+        // out of the inline <script> and inject markup. `<` is an equivalent
+        // JSON string escape, so the parsed structured data is unchanged.
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c"),
+        }}
       />
     </div>
   );
