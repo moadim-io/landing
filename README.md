@@ -8,8 +8,8 @@ The marketing/landing site for **Moadim**, an open-source loop engine for AI age
 Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes
 against your repo on every tick, over MCP and REST.
 
-- **Live site:** https://moadim.io
-- **Product source:** https://github.com/moadim-io/daemon
+- **Live site:** <https://moadim.io>
+- **Product source:** <https://github.com/moadim-io/daemon>
 
 Built with [Next.js](https://nextjs.org) (App Router) and [Tailwind CSS](https://tailwindcss.com).
 The site is a fully static export (`output: "export"`), so it builds to plain HTML/CSS/JS
@@ -38,7 +38,7 @@ you edit files under `app/`.
 
 ## Project structure
 
-```
+```text
 app/
   layout.tsx            Root layout, fonts, site metadata (SEO / Open Graph), JSON-LD.
   page.tsx              Landing page content.

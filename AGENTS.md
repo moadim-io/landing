@@ -4,6 +4,7 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
+<!-- markdownlint-disable-next-line MD025 -- auto-managed block above injects its own H1; this is the doc's real title -->
 # Agent guide — Moadim landing site
 
 ## Stack
@@ -18,7 +19,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 | Command | What it does |
 | --- | --- |
-| `npm run dev` | Local dev server with hot reload (http://localhost:3000). |
+| `npm run dev` | Local dev server with hot reload (<http://localhost:3000>). |
 | `npm run build` | Static export to `out/`. Run this to validate a change end-to-end. |
 | `npm run start` | Serve the production build locally. |
 | `npm run lint` | ESLint (Next core-web-vitals + TypeScript). |
@@ -63,7 +64,7 @@ Configured in `eslint.config.mjs`:
 
 ## Where things live
 
-```
+```text
 app/
   layout.tsx            Root layout: fonts, <html lang>, site metadata, JSON-LD.
   page.tsx              Landing page content.

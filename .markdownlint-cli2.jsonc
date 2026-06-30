@@ -1,0 +1,19 @@
+{
+  "config": {
+    "default": true,
+    // Noisy for prose-heavy docs (README/CHANGELOG); not a structural defect.
+    "MD013": false,
+    // CHANGELOG.md repeats heading text like "### Added" under every version.
+    "MD024": { "siblings_only": true }
+  },
+  "globs": ["**/*.md"],
+  "ignores": [
+    "node_modules/**",
+    "out/**",
+    ".next/**",
+    // Single-line Claude Code include directive ("@AGENTS.md"), not prose.
+    "CLAUDE.md",
+    // GitHub PR template convention starts with an HTML comment, not an H1.
+    ".github/PULL_REQUEST_TEMPLATE.md"
+  ]
+}
