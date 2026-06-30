@@ -3,6 +3,21 @@ name: Deploy to Cloudflare Pages
 on:
   push:
     branches: [main]
+    # Only run the deploy job for changes that can actually affect the
+    # exported static site. Docs/meta files (README, CHANGELOG, LICENSE,
+    # other workflows, etc.) are intentionally excluded so a docs-only push
+    # doesn't trigger a cold build + a new production Cloudflare deploy.
+    # This file is included so edits to the deploy workflow itself are
+    # always exercised.
+    paths:
+      - "app/**"
+      - "public/**"
+      - "package.json"
+      - "package-lock.json"
+      - "next.config.ts"
+      - "postcss.config.mjs"
+      - "tsconfig.json"
+      - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
 concurrency:
