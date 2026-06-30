@@ -20,7 +20,8 @@
     "lint": "eslint --max-warnings 0",
     "lint:md": "markdownlint-cli2",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepare": "husky"
   },
   "dependencies": {
     "next": "16.2.9",
@@ -37,10 +38,16 @@
     "@vitejs/plugin-react": "^6.0.3",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
+    "husky": "^9.1.7",
     "jsdom": "^29.1.1",
+    "lint-staged": "^17.0.8",
     "markdownlint-cli2": "^0.22.1",
     "tailwindcss": "^4",
     "typescript": "^6",
     "vitest": "^4.1.9"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,mjs}": "eslint --fix --max-warnings 0",
+    "*.md": "markdownlint-cli2"
   }
 }
