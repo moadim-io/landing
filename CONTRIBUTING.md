@@ -25,6 +25,7 @@ npm install
 | `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript rules). |
 | `npm run build` | Produce the static export in `out/`. |
 | `npm run start` | Serve the production build locally. |
+| `actionlint` | Lint `.github/workflows/**` YAML (and embedded shell via shellcheck). Install via `brew install actionlint` or see the [actionlint releases](https://github.com/rhysd/actionlint/releases). |
 
 Page content lives under `app/` (`layout.tsx` for metadata/SEO, `page.tsx` for the
 landing content, `globals.css` for styles). Static assets go in `public/`.
