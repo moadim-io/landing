@@ -1,0 +1,26 @@
+name: actionlint
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/**"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/**"
+
+jobs:
+  actionlint:
+    name: Lint workflow YAML
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Run actionlint
+        # shellcheck is enabled by default and lints embedded `run:` steps.
+        uses: docker://rhysd/actionlint:1.7.12
+        with:
+          args: -color
