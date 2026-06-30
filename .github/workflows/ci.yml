@@ -33,6 +33,9 @@ jobs:
       - name: Lint (ESLint)
         run: npm run lint
 
+      - name: Lint (Stylelint)
+        run: npm run lint:css
+
       - name: Build static export
         timeout-minutes: 5
         run: npm run build
