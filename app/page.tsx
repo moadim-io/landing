@@ -1,5 +1,5 @@
 import { ExternalLink } from "./ExternalLink";
-import { CRATE_NAME, CRATE_URL, REPO_URL } from "./site";
+import { CRATE_NAME, CRATE_URL, REPO_SLUG, REPO_URL } from "./site";
 
 const features = [
   {
@@ -88,7 +88,38 @@ const ctaButton =
 // panels can't drift apart; each call site appends only its own padding/layout.
 const panel = "border-4 border-black bg-white shadow-[10px_10px_0_0_#000]";
 
-export default function Home() {
+// Fetched at build time only (Server Component, static export) — no client
+// JS, no token. Cached for an hour so a burst of rebuilds can't hammer the
+// unauthenticated GitHub REST rate limit. A failed/rate-limited fetch falls
+// back to `null` rather than failing the build or showing a stale/zero count
+// (issue #162).
+async function getStarCount(): Promise<number | null> {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${REPO_SLUG}`, {
+      headers: { Accept: "application/vnd.github+json" },
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return null;
+    const data: unknown = await res.json();
+    const count =
+      data !== null && typeof data === "object" && "stargazers_count" in data
+        ? (data as { stargazers_count: unknown }).stargazers_count
+        : null;
+    return typeof count === "number" ? count : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Human-format a star count for display, e.g. `1234` -> `"1.2k"`. */
+function formatStarCount(count: number): string {
+  if (count < 1000) return String(count);
+  return `${(count / 1000).toFixed(1).replace(/\.0$/, "")}k`;
+}
+
+export default async function Home() {
+  const stars = await getStarCount();
+
   return (
     <div className="flex flex-1 flex-col items-center px-4 py-10 sm:px-8 sm:py-16">
       <main className="flex w-full max-w-4xl flex-1 flex-col gap-10">
@@ -135,12 +166,21 @@ export default function Home() {
           <ExternalLink
             className={`${ctaButton} group gap-3 bg-accent`}
             href={REPO_URL}
-            aria-label="Star moadim on GitHub (opens in a new tab)"
+            aria-label={
+              stars === null
+                ? "Star moadim on GitHub (opens in a new tab)"
+                : `Star moadim on GitHub (opens in a new tab) — ${stars.toLocaleString("en-US")} ${stars === 1 ? "star" : "stars"}`
+            }
           >
             <span aria-hidden="true" className="text-lg leading-none">
               ★
             </span>
             Star on GitHub
+            {stars !== null && (
+              <span aria-hidden="true" className="text-sm font-bold opacity-70">
+                {formatStarCount(stars)}
+              </span>
+            )}
           </ExternalLink>
           <ExternalLink
             className={`${ctaButton} gap-2 bg-white`}

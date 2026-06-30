@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Live GitHub star count on the "Star on GitHub" hero CTA, fetched at build time from the
+  public GitHub REST API with no client JS or token, human-formatted (e.g. `1.2k`), and
+  read out to screen readers via the link's `aria-label`. Falls back to the unchanged CTA
+  with no count if the build-time fetch fails or is rate-limited (#162).
 - On-page FAQ section answering the questions visitors weigh before installing (license, self-hosted vs cloud, supported agents/OS, run isolation), with the same five Q&As emitted as schema.org `FAQPage` structured data from a single source so the copy and markup can't drift (#176).
 - Branded `404` not-found page that reuses the site's neobrutalist design language and offers a clear link back home, replacing Next.js's default unstyled error screen (#155).
 - Site banner landmark with the `moadim.` wordmark above `<main>`, giving assistive-tech users a top-level region to jump to and the single-page site a persistent brand anchor (#188).
