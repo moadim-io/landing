@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Escaped `<` to `<` in the `SoftwareApplication` JSON-LD injected via `dangerouslySetInnerHTML`, closing the `</script>` breakout sink that `JSON.stringify` alone does not guard against (#198).
 - Declared a light `color-scheme` so visitors in OS/browser dark mode no longer get dark-rendered native controls, scrollbars, and a pre-paint flash against the single-theme light design (#293).
 - Corrected the `SoftwareApplication` JSON-LD `operatingSystem` to macOS + Linux, matching the platforms the product actually supports instead of advertising Windows (#267).
 - Stopped the `/*` `Cache-Control` rule in `public/_headers` from overlapping `/_next/static/*`, so content-hashed assets keep their year-long `immutable` policy instead of being shadowed by the must-revalidate HTML rule (#180).
