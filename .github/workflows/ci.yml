@@ -7,12 +7,12 @@ on:
 
 jobs:
   lint-and-build:
-    name: Lint & build
+    name: Lint, test & build
     runs-on: ubuntu-latest
-    # A static Next.js lint + export normally finishes well under 5 minutes.
-    # Without this the job inherits the 360-minute default, turning a hung npm
-    # install or build into a 6-hour runner hold.
-    timeout-minutes: 10
+    # A static Next.js lint + Vitest run + export normally finishes well under
+    # 10 minutes. Without this the job inherits the 360-minute default,
+    # turning a hung npm install, test, or build into a 6-hour runner hold.
+    timeout-minutes: 15
     permissions:
       contents: read
     steps:
@@ -32,6 +32,10 @@ jobs:
 
       - name: Lint (ESLint)
         run: npm run lint
+
+      - name: Test (Vitest)
+        timeout-minutes: 5
+        run: npm run test
 
       - name: Build static export
         timeout-minutes: 5
