@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Stylelint (`stylelint-config-standard`, with Tailwind v4 at-rules like `@theme`/`@apply` allowed) as the lint gate for `app/globals.css` — CSS was the only source language with no linter. Enabled `declaration-block-no-duplicate-custom-properties` to catch token drift like #236. Run locally via `npm run lint:css`; wiring it into the `Lint & build` CI workflow is a follow-up, since this PR's credentials can't push a `.github/workflows/*` change (#250).
 - On-page FAQ section answering the questions visitors weigh before installing (license, self-hosted vs cloud, supported agents/OS, run isolation), with the same five Q&As emitted as schema.org `FAQPage` structured data from a single source so the copy and markup can't drift (#176).
 - Branded `404` not-found page that reuses the site's neobrutalist design language and offers a clear link back home, replacing Next.js's default unstyled error screen (#155).
 - Site banner landmark with the `moadim.` wordmark above `<main>`, giving assistive-tech users a top-level region to jump to and the single-page site a persistent brand anchor (#188).
