@@ -23,6 +23,7 @@ npm install
 | --- | --- |
 | `npm run dev` | Start the local dev server with hot reload at http://localhost:3000. |
 | `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript rules). |
+| `npm run lint:css` | Run Stylelint on `app/**/*.css`. |
 | `npm run build` | Produce the static export in `out/`. |
 | `npm run start` | Serve the production build locally. |
 
@@ -32,9 +33,10 @@ landing content, `globals.css` for styles). Static assets go in `public/`.
 ## Submitting a change
 
 1. Fork the repo and create a branch (e.g. `fix/short-description`).
-2. Make your change. Before opening a PR, make sure both pass:
+2. Make your change. Before opening a PR, make sure these pass:
    ```bash
    npm run lint
+   npm run lint:css
    npm run build
    ```
 3. Open a pull request using the PR template. Link the related issue
