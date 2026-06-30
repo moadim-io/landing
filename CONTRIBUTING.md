@@ -21,7 +21,7 @@ npm install
 
 | Command | What it does |
 | --- | --- |
-| `npm run dev` | Start the local dev server with hot reload at http://localhost:3000. |
+| `npm run dev` | Start the local dev server with hot reload at <http://localhost:3000>. |
 | `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript rules). |
 | `npm run build` | Produce the static export in `out/`. |
 | `npm run start` | Serve the production build locally. |
@@ -33,10 +33,12 @@ landing content, `globals.css` for styles). Static assets go in `public/`.
 
 1. Fork the repo and create a branch (e.g. `fix/short-description`).
 2. Make your change. Before opening a PR, make sure both pass:
+
    ```bash
    npm run lint
    npm run build
    ```
+
 3. Open a pull request using the PR template. Link the related issue
    (e.g. `Closes #123`) and attach screenshots for any visual change.
 

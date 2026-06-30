@@ -36,3 +36,26 @@ jobs:
       - name: Build static export
         timeout-minutes: 5
         run: npm run build
+
+  markdown-lint:
+    name: Markdown lint
+    runs-on: ubuntu-latest
+    # Doc-only changes get a fast, isolated verdict instead of waiting on the
+    # full lint-and-build job.
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Lint (markdownlint)
+        run: npm run lint:md
