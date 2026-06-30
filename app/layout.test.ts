@@ -16,9 +16,29 @@ describe("root layout metadata", () => {
 });
 
 describe("root layout JSON-LD", () => {
+  const [organization, website, softwareApplication] = jsonLd["@graph"];
+
   it("identifies the app under the MIT license at the canonical URL", () => {
-    expect(jsonLd.url).toBe(SITE_URL);
-    expect(jsonLd.license).toBe("https://opensource.org/licenses/MIT");
-    expect(jsonLd["@type"]).toBe("SoftwareApplication");
+    expect(softwareApplication.url).toBe(SITE_URL);
+    expect(softwareApplication.license).toBe(
+      "https://opensource.org/licenses/MIT",
+    );
+    expect(softwareApplication["@type"]).toBe("SoftwareApplication");
+  });
+
+  it("declares an Organization node with a logo, referenced by the other nodes", () => {
+    expect(organization["@type"]).toBe("Organization");
+    expect(organization.url).toBe(SITE_URL);
+    expect(organization.logo).toBe(`${SITE_URL}/opengraph-image`);
+    expect(website.publisher).toEqual({ "@id": organization["@id"] });
+    expect(softwareApplication.publisher).toEqual({
+      "@id": organization["@id"],
+    });
+  });
+
+  it("declares a WebSite node with the site name and canonical URL", () => {
+    expect(website["@type"]).toBe("WebSite");
+    expect(website.name).toBe("Moadim");
+    expect(website.url).toBe(SITE_URL);
   });
 });
