@@ -5,6 +5,14 @@ on:
   push:
     branches: [main]
 
+# Cancel a stale run when a PR gets a new push, so a superseded npm
+# install/lint/build doesn't keep holding a runner after it's been
+# overtaken by a newer commit. Scoped per-workflow-per-ref so unrelated
+# PRs (and the push-to-main trigger) never cancel each other.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint-and-build:
     name: Lint & build
