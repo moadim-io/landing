@@ -45,3 +45,8 @@ landing content, `globals.css` for styles). Static assets go in `public/`.
 Use the issue templates (Bug report / Feature request). For security
 vulnerabilities, please **do not** open a public issue — see
 [`SECURITY.md`](./SECURITY.md) for how to report privately.
+
+## Code of Conduct
+
+This project follows the [Contributor Covenant](./CODE_OF_CONDUCT.md). By
+participating, you are expected to uphold it.
