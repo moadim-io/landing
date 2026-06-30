@@ -1,6 +1,7 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
+import jsxA11y from "eslint-plugin-jsx-a11y";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -15,6 +16,13 @@ const eslintConfig = defineConfig([
   ]),
   {
     rules: {
+      // eslint-config-next's core-web-vitals already registers the
+      // jsx-a11y plugin but only wires a limited subset of its rules, some
+      // at warn. Layer the full recommended ruleset's severities at error
+      // (it already registers the plugin, so only pull in its `rules`) so
+      // markup-level a11y mistakes fail `npm run lint` instead of landing
+      // silently.
+      ...jsxA11y.flatConfigs.recommended.rules,
       // Keep stray debug logging out of the shipped landing page.
       // console.warn/console.error remain allowed for intentional diagnostics.
       "no-console": ["error", { allow: ["warn", "error"] }],
