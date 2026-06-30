@@ -12,6 +12,31 @@
 # that inherited Cache-Control before setting its own — leaving hashed assets
 # with the immutable value alone instead of `immutable, ..., must-revalidate`.
 
+# Generated metadata assets (social cards, sitemap, robots, favicon) change at
+# most once per deploy, yet without an explicit rule they fall under the `/*`
+# `max-age=0, must-revalidate` policy below — so every crawl and every social
+# unfurl revalidates against origin. Give them a real cache window (a more
+# specific path wins over `/*` for the same header). `stale-while-revalidate`
+# keeps a CDN edge serving the cached copy while it refreshes in the background,
+# so a deploy is still picked up promptly without a blocking origin fetch.
+
+# Open Graph / Twitter card PNGs: referenced with a content-hash query, so the
+# URL changes when the image changes — safe to cache the path for a day.
+/opengraph-image
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/twitter-image
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# robots.txt and sitemap.xml: small, crawled often, change only on deploy.
+/robots.txt
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+/sitemap.xml
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+# Favicon: effectively static across deploys.
+/favicon.ico
+  Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
+
 # HTML and everything else: cache but always revalidate, so a redeploy is
 # picked up immediately instead of serving a stale page.
 /*
