@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Removed a byte-for-byte duplicate `@media (prefers-reduced-motion: reduce)` rule in `app/globals.css`, left behind after two separate commits independently fixed the same reduced-motion issue (#89) without either noticing the other's rule was already shipped.
 - Escaped `<` to `<` in the `SoftwareApplication` JSON-LD injected via `dangerouslySetInnerHTML`, closing the `</script>` breakout sink that `JSON.stringify` alone does not guard against (#198).
 - Declared a light `color-scheme` so visitors in OS/browser dark mode no longer get dark-rendered native controls, scrollbars, and a pre-paint flash against the single-theme light design (#293).
 - Corrected the `SoftwareApplication` JSON-LD `operatingSystem` to macOS + Linux, matching the platforms the product actually supports instead of advertising Windows (#267).
