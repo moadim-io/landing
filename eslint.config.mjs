@@ -15,6 +15,32 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
   ]),
   {
+    // Type-aware linting needs the TypeScript program, which only covers
+    // files matched by tsconfig.json's `include` (**/*.ts, **/*.tsx, ...).
+    // Scope this block to those extensions so config/script files like this
+    // one (eslint.config.mjs) aren't fed through the type checker.
+    files: ["**/*.ts", "**/*.tsx"],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    rules: {
+      // An unawaited / un-`.catch()`ed promise silently swallows
+      // rejections, hiding errors that should crash a build or surface a
+      // bug. Require every promise to be awaited, returned, or explicitly
+      // handled (`.catch()` / `void`).
+      "@typescript-eslint/no-floating-promises": "error",
+      // Passing an `async` function where a `void`-returning callback is
+      // expected (event handlers, `Array.prototype.forEach`) drops its
+      // returned promise on the floor, silently swallowing rejections the
+      // same way. Force the call site to use a non-async callback or
+      // handle the promise explicitly.
+      "@typescript-eslint/no-misused-promises": "error",
+    },
+  },
+  {
     rules: {
       // eslint-config-next's core-web-vitals already registers the
       // jsx-a11y plugin but only wires a limited subset of its rules, some
