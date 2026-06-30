@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
+export const jsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name: "Moadim",
