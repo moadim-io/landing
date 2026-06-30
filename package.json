@@ -18,7 +18,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint --max-warnings 0",
-    "lint:md": "markdownlint-cli2"
+    "lint:md": "markdownlint-cli2",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "next": "16.2.9",
@@ -27,13 +29,18 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^26",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.0.3",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
+    "jsdom": "^29.1.1",
     "markdownlint-cli2": "^0.22.1",
     "tailwindcss": "^4",
-    "typescript": "^6"
+    "typescript": "^6",
+    "vitest": "^4.1.9"
   }
 }
