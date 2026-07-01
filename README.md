@@ -76,7 +76,10 @@ Deployment is automated. Every push to `main` runs
 [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml), which builds the static
 export and publishes `out/` to Cloudflare Pages (project `moadim-landing`) via
 [`wrangler`](https://developers.cloudflare.com/workers/wrangler/). The workflow can also be
-triggered manually from the Actions tab (`workflow_dispatch`).
+triggered manually from the Actions tab (`workflow_dispatch`). After the upload, a smoke-test
+step requests `https://moadim.io` and fails the job if the live site doesn't respond or its
+body no longer mentions "Moadim" — a successful `wrangler` upload alone doesn't prove the
+production URL is actually serving the new build.
 
 Because the build is a fully static export, the same `out/` directory can be served from any
 static host — running `npm run build` locally and uploading `out/` to Vercel, Netlify, GitHub

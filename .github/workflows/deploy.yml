@@ -88,3 +88,22 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy out --project-name=moadim-landing --branch=main --commit-dirty=true
+
+      - name: Smoke test the live site
+        # `wrangler pages deploy` exiting 0 only confirms the upload
+        # succeeded — it doesn't confirm moadim.io actually serves the new
+        # build. Without this, a broken-but-uploaded deploy (edge propagation
+        # failure, DNS/routing misconfiguration, a 5xx from the origin) ships
+        # to production undetected. `--retry` absorbs the few seconds of edge
+        # propagation lag right after a deploy; a real failure still fails
+        # the job loudly instead of shipping silently.
+        timeout-minutes: 2
+        run: |
+          set -euo pipefail
+          body="$(curl --fail --silent --show-error --location \
+            --retry 5 --retry-delay 5 --retry-all-errors \
+            https://moadim.io)"
+          if ! grep -q "Moadim" <<< "$body"; then
+            echo "::error::https://moadim.io responded but the body doesn't mention Moadim — the live site may be serving a broken or unexpected page." >&2
+            exit 1
+          fi
