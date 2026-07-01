@@ -58,7 +58,16 @@ public/
   _headers              Cloudflare Pages response headers.
 .github/workflows/
   deploy.yml            Build + deploy to Cloudflare Pages on push to main.
+  link-check.yml        Lint outbound/internal links in the built export + docs.
 ```
+
+## Link check
+
+[`.github/workflows/link-check.yml`](./.github/workflows/link-check.yml) builds the static
+export and runs [`lychee`](https://github.com/lycheeverse/lychee-action) against `out/**/*.html`
+and the root Markdown docs, on PRs that touch `app/`, `public/`, or `*.md`, and weekly on a
+schedule so third-party link rot is caught even without a code change. Excludes and retry/UA
+settings live in [`.lychee.toml`](./.lychee.toml).
 
 ## Deploying
 
