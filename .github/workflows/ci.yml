@@ -49,6 +49,11 @@ jobs:
         timeout-minutes: 5
         run: npm run build
 
+      - name: Lint (html-validate)
+        # Runs against the built out/**/*.html, so this must stay after the
+        # build step above — it validates the actual static export, not source.
+        run: npm run lint:html
+
   markdown-lint:
     name: Markdown lint
     runs-on: ubuntu-latest
