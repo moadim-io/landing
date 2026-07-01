@@ -38,6 +38,7 @@ you edit files under `app/`.
 | `npm run lint:md` | Lint Markdown files with `markdownlint-cli2`. |
 | `npm test` | Run the Vitest unit/component test suite once. |
 | `npm run test:watch` | Run the Vitest suite in watch mode while developing. |
+| `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship; runs after every build in CI. |
 | `typos` | Spell-check `app/**`, `*.md`, and config files with [`typos`](https://github.com/crate-ci/typos) (config: [`_typos.toml`](./_typos.toml)). Not an npm script — install with `cargo install typos-cli` or `brew install typos-cli`, then run `typos` from the repo root. Gated in CI on every PR and push to `main`. |
 
 ## Project structure
@@ -48,7 +49,10 @@ app/
   page.tsx              Landing page content.
   not-found.tsx         Branded 404 page.
   ExternalLink.tsx      Outbound (new-tab) link wrapper with the safe rel attributes.
-  site.ts               Shared site constants (canonical SITE_URL).
+  JsonLdScript.tsx      Escapes and inlines JSON-LD structured data as a <script> tag.
+  site.ts               Shared site constants: canonical SITE_URL plus the product's
+                         GitHub/crates.io identifiers (REPO_SLUG, REPO_URL, CRATE_NAME,
+                         CRATE_URL).
   globals.css           Global styles and Tailwind theme tokens.
   opengraph-image.tsx   Generated Open Graph social card.
   twitter-image.tsx     Generated Twitter/X social card.
@@ -57,9 +61,16 @@ app/
   favicon.ico           Site favicon.
 public/
   _headers              Cloudflare Pages response headers.
+scripts/
+  verify-export.mjs     Checks the built out/ directory for required routes/files (see
+                         `npm run verify:export`).
 .github/workflows/
-  deploy.yml            Build + deploy to Cloudflare Pages on push to main.
-  link-check.yml        Lint outbound/internal links in the built export + docs.
+  ci.yml                 Lint, test, build, and verify the export on every PR and push to main.
+  deploy.yml             Build + deploy to Cloudflare Pages on push to main.
+  codeql.yml             CodeQL static analysis.
+  dependency-review.yml  Flag vulnerable/incompatible-license dependencies on pull requests.
+  actionlint.yml         Lint the GitHub Actions workflow files themselves.
+  link-check.yml         Lint outbound/internal links in the built export + docs.
 ```
 
 ## Link check
