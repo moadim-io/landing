@@ -63,7 +63,10 @@ const faqs = [
   },
 ];
 
-const faqJsonLd = {
+// Exported so tests can assert the FAQPage structured data actually reflects
+// the FAQ content rendered on the page, instead of only exercising the
+// generic JsonLdScript component in isolation (see page.test.tsx).
+export const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   mainEntity: faqs.map((faq) => ({
