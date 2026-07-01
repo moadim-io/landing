@@ -119,11 +119,14 @@ export default function Home() {
             <code className="font-mono text-base text-white sm:text-lg">
               {/* The shell prompt is decoration: hide it from screen readers and
                   exclude it from text selection so copying the line yields a
-                  runnable `cargo install moadim`, not `$ cargo install moadim`. */}
+                  runnable `cargo install --locked moadim`, not
+                  `$ cargo install --locked moadim`. `--locked` installs the
+                  crate's tested Cargo.lock dependency set instead of
+                  re-resolving to the newest semver-compatible versions. */}
               <span aria-hidden="true" className="select-none text-accent">
                 ${" "}
               </span>
-              {`cargo install ${CRATE_NAME}`}
+              {`cargo install --locked ${CRATE_NAME}`}
             </code>
             <p className="mt-1 text-xs font-medium leading-snug text-white">
               Requires a Unix-like OS with{" "}
