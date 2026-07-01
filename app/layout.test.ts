@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { jsonLd, metadata } from "./layout";
+import { jsonLd, metadata, viewport } from "./layout";
 import { SITE_URL } from "./site";
 
 describe("root layout metadata", () => {
@@ -12,6 +12,35 @@ describe("root layout metadata", () => {
 
   it("declares the canonical site URL as the metadata base", () => {
     expect(metadata.metadataBase?.toString()).toBe(`${SITE_URL}/`);
+  });
+
+  it("declares an Open Graph card matching the page title, description, and canonical URL", () => {
+    expect(metadata.openGraph).toMatchObject({
+      title: "Moadim — Put your agents on a loop",
+      description: metadata.description,
+      url: SITE_URL,
+      siteName: "Moadim",
+      type: "website",
+      locale: "en_US",
+    });
+  });
+
+  it("declares a large-image Twitter card matching the page title and description", () => {
+    expect(metadata.twitter).toMatchObject({
+      card: "summary_large_image",
+      title: "Moadim — Put your agents on a loop",
+      description: metadata.description,
+    });
+  });
+});
+
+describe("root layout viewport", () => {
+  it("locks the color scheme to light so dark-mode browsers don't invert the brand palette", () => {
+    expect(viewport.colorScheme).toBe("light");
+  });
+
+  it("paints mobile browser chrome in the brand background color", () => {
+    expect(viewport.themeColor).toBe("#f4f1e8");
   });
 });
 
