@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
 // Static social-share card, generated at build time (compatible with `output: export`).
@@ -5,6 +7,18 @@ export const dynamic = "force-static";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt = "Moadim — Put your agents on a loop";
+
+// Read the vendored Geist TTFs from the `geist` package rather than fetching
+// them over the network, so `next build` stays offline-safe under
+// `output: export`. Satori (the renderer behind `ImageResponse`) only
+// accepts TTF/OTF/WOFF, not WOFF2, hence the `.ttf` files here.
+const geistFontsDir = join(
+  process.cwd(),
+  "node_modules/geist/dist/fonts/geist-sans",
+);
+const geistBold = readFileSync(join(geistFontsDir, "Geist-Bold.ttf"));
+const geistMedium = readFileSync(join(geistFontsDir, "Geist-Medium.ttf"));
+const geistRegular = readFileSync(join(geistFontsDir, "Geist-Regular.ttf"));
 
 export default function OpenGraphImage() {
   return new ImageResponse(
@@ -44,6 +58,7 @@ export default function OpenGraphImage() {
           style={{
             marginTop: 16,
             fontSize: 30,
+            fontWeight: 400,
             color: "#71717a",
           }}
         >
@@ -51,6 +66,13 @@ export default function OpenGraphImage() {
         </div>
       </div>
     ),
-    size,
+    {
+      ...size,
+      fonts: [
+        { name: "Geist", data: geistBold, weight: 700, style: "normal" },
+        { name: "Geist", data: geistMedium, weight: 500, style: "normal" },
+        { name: "Geist", data: geistRegular, weight: 400, style: "normal" },
+      ],
+    },
   );
 }
