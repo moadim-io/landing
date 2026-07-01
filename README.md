@@ -54,7 +54,7 @@ app/
   twitter-image.tsx     Generated Twitter/X social card.
   robots.ts             Generated robots.txt.
   sitemap.ts            Generated sitemap.xml.
-  favicon.ico           Site favicon.
+  icon.tsx              Generated favicon (brand mark).
 public/
   _headers              Cloudflare Pages response headers.
 .github/workflows/

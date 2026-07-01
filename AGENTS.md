@@ -78,6 +78,6 @@ app/
   twitter-image.tsx     Generated Twitter card.
   sitemap.ts            /sitemap.xml (force-static).
   robots.ts             /robots.txt (force-static).
-  favicon.ico           Site favicon.
+  icon.tsx              Generated favicon (file-based metadata route, brand mark).
 public/                 Static assets served at the site root.
 ```
