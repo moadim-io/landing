@@ -1,0 +1,40 @@
+# Cloudflare Pages `_redirects` — canonical-host policy for issue #142.
+# https://developers.cloudflare.com/pages/configuration/redirects/
+#
+# Goal: stop the `.pages.dev` mirrors of this static export (the project alias
+# `moadim-landing.pages.dev` and per-deploy/preview aliases like
+# `<hash>.moadim-landing.pages.dev`) — and eventually `www.moadim.io` — from
+# being crawlable, indexable duplicates of the canonical `https://moadim.io`.
+#
+# This file intentionally does NOT contain a redirect rule for that. Cloudflare
+# Pages' `_redirects` has no host-matching support: its own docs list
+# "Domain-level redirects" as an explicitly UNSUPPORTED advanced-redirect
+# feature, with the unsupported example being exactly this shape:
+#   workers.example.com/*  workers.example.com/blog/:splat  301
+# (https://developers.cloudflare.com/pages/configuration/redirects/#advanced-redirects)
+# Every rule in `_redirects` matches on PATH ONLY, and — critically — the same
+# `_redirects` file is served for every hostname aliased to this one Pages
+# deployment: the production custom domain, the `*.pages.dev` alias, and every
+# preview/branch alias alike. So a rule such as
+#   https://moadim-landing.pages.dev/*  https://moadim.io/:splat  301
+# is not valid Cloudflare Pages syntax (unlike Netlify, which does support this
+# shape) — Cloudflare either ignores it outright, or, if a future release ever
+# parsed the path portion as a plain splat, that same rule would also match
+# requests already on the canonical `https://moadim.io` origin and create a
+# redirect loop there. Neither outcome is acceptable, so it is not shipped here.
+#
+# The actual 301 from `moadim-landing.pages.dev` → `https://moadim.io`, and (once
+# `www.moadim.io` DNS exists) from `www.moadim.io` → `https://moadim.io`, has to
+# be configured as a Cloudflare account-level Bulk Redirect (or a zone-level
+# Redirect Rule for `www`), which lives outside this repo's static export:
+# https://developers.cloudflare.com/pages/how-to/redirect-to-custom-domain/
+# https://developers.cloudflare.com/pages/how-to/www-redirect/
+# That dashboard/API-level configuration still needs to be created manually —
+# see the linked issue/PR for the follow-up.
+#
+# What CAN be done from a static file — and is documented as supported, because
+# `_headers` (unlike `_redirects`) does support absolute-URL/host-scoped
+# patterns — is stopping the `.pages.dev` mirrors from being indexed at all, so
+# they can no longer split ranking signals with the canonical origin even
+# though they still return 200. See `public/_headers` for the
+# `X-Robots-Tag: noindex` rules scoped to `*.pages.dev`.
