@@ -51,10 +51,9 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        # npm install (not npm ci): the committed lockfile omits Linux-only
-        # optional deps (@emnapi/*, nested in wasm32 variants) that macOS dev
-        # machines never resolve, so strict `npm ci` fails on the Linux runner.
-        run: npm install --no-audit --no-fund
+        # npm ci installs the exact, frozen tree from package-lock.json
+        # instead of re-resolving it, so the production build is reproducible.
+        run: npm ci --no-audit --no-fund
 
       - name: Cache Next.js build cache
         # Persists .next/cache (compiled modules, minified output, image/font

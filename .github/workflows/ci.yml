@@ -33,10 +33,10 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        # npm install (not npm ci): the committed lockfile omits Linux-only
-        # optional deps (@emnapi/*, nested in wasm32 variants) that macOS dev
-        # machines never resolve, so strict `npm ci` fails on the Linux runner.
-        run: npm install --no-audit --no-fund
+        # npm ci installs the exact, frozen tree from package-lock.json and
+        # also acts as a guard: a future lockfile that's missing platform
+        # entries fails this PR check instead of silently degrading deploy.
+        run: npm ci --no-audit --no-fund
 
       - name: Lint (ESLint)
         run: npm run lint
@@ -67,7 +67,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Lint (markdownlint)
         run: npm run lint:md
