@@ -1,0 +1,36 @@
+name: Dependency Review
+
+# Dependabot (dependabot.yml) only opens PRs for *existing* dependencies once
+# a newer version is published — it never blocks a PR that introduces a new,
+# already-vulnerable or incompatibly-licensed dependency in the first place.
+# This gate diffs each PR's dependency manifest/lockfile and fails fast on
+# that, before the change ever reaches `main`.
+on:
+  pull_request:
+    paths:
+      - "package.json"
+      - "package-lock.json"
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    name: Scan dependency changes
+    runs-on: ubuntu-latest
+    # A lockfile diff review normally finishes in well under a minute; capped
+    # so a stuck advisory-database fetch can't hold a runner indefinitely.
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v5
+        with:
+          # Fail on high/critical advisories only — moderate/low findings stay
+          # visible in the job summary without blocking the PR.
+          fail-on-severity: high
+          # MIT (this repo's own license) plus the permissive licenses the
+          # existing npm tree already uses. Anything outside this allow-list
+          # fails the check instead of silently merging.
+          allow-licenses: MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, 0BSD, CC0-1.0, Unlicense, Python-2.0
