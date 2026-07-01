@@ -39,6 +39,7 @@ you edit files under `app/`.
 | `npm test` | Run the Vitest unit/component test suite once. |
 | `npm run test:watch` | Run the Vitest suite in watch mode while developing. |
 | `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship; runs after every build in CI. |
+| `npm run knip` | Check for unused files, exports, and dependencies with [`knip`](https://knip.dev) (config: [`knip.json`](./knip.json)). Gated in CI on every PR and push to `main`. |
 | `typos` | Spell-check `app/**`, `*.md`, and config files with [`typos`](https://github.com/crate-ci/typos) (config: [`_typos.toml`](./_typos.toml)). Not an npm script — install with `cargo install typos-cli` or `brew install typos-cli`, then run `typos` from the repo root. Gated in CI on every PR and push to `main`. |
 
 ## Project structure

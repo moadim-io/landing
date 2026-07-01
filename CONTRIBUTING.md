@@ -24,6 +24,7 @@ npm install
 | `npm run dev` | Start the local dev server with hot reload at <http://localhost:3000>. |
 | `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript rules). |
 | `npm run lint:md` | Lint Markdown files with `markdownlint-cli2`. |
+| `npm run knip` | Check for unused files, exports, and dependencies with `knip`. |
 | `npm test` | Run the Vitest unit/component test suite once (tests live next to the code they cover, e.g. `app/page.test.tsx`). |
 | `npm run test:watch` | Run the Vitest suite in watch mode. |
 | `npm run build` | Produce the static export in `out/`. |
