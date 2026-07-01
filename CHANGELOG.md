@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `verify:export` script (and a matching CI/deploy step) that asserts the static export in `out/` actually contains every file the site depends on — `index.html`, `404.html`, `sitemap.xml`, `robots.txt`, the OG/Twitter images, `favicon.ico`, and `_headers` — so a route or asset that silently drops from a green `next build` fails CI instead of shipping a broken page (#345).
+- `JsonLdScript`, a shared component (plus a `toSafeJsonLd` helper) that `layout.tsx` and `page.tsx` both route through to escape JSON-LD before inlining it, with its own dedicated test coverage for the `</script>`-breakout escaping (#352).
+- CI: a `dependency-review` gate (`actions/dependency-review-action`) that fails a PR on a new high/critical-severity advisory or a disallowed dependency license, catching a vulnerable or incompatibly-licensed package before Dependabot ever sees it (#148, #344).
+- CI: a `lychee` link-check gate over the built static export and the root Markdown docs, plus a weekly scheduled run so external link rot is caught even without a code change (#341).
+- CI: a `typos` spell-check gate over `app/**`, Markdown docs, and config files (#347).
+- CI: an `actionlint` gate for `.github/workflows/**` YAML, including embedded shell via shellcheck (#313).
+- CI: a `markdownlint` gate for the repo's Markdown docs (#314).
+- CI: a `lint-and-build` gate (ESLint + `next build`) on every pull request and push to `main` (#308), later extended to run the Vitest suite too (#321).
+- CI: a CodeQL scanning gate for `javascript-typescript` (#331).
+- CI: cancel a superseded CI run when a PR gets a new push, instead of letting stale runs keep holding a runner (#323).
+- CI/deploy: bound the Cloudflare Pages deploy job with `timeout-minutes`, so a hung build/install/`wrangler` call can't hold a runner for hours (#275).
+- CI/deploy: declare a GitHub `production` Environment on the deploy job, so every deploy shows up in the Deployments tab with a link to the live URL and Cloudflare secrets can be scoped to it (#330).
+- CI/deploy: cache `.next/cache` on the deploy job so `next build` can do an incremental build instead of a fully cold one on every push (#327).
+- Persistent "Docs" and "GitHub" navigation links beside the site wordmark in the header banner (#295, #303).
+- `CODE_OF_CONDUCT.md` (Contributor Covenant) (#309).
+- Unit tests for `not-found.tsx`, the branded 404 page (#325).
+- Unit tests for `app/site.ts`'s constant derivations (`REPO_URL`, `CRATE_URL`, etc.) (#340).
 - `.github/workflows/dependency-review.yml`: a PR-time gate (`actions/dependency-review-action`) that fails on a new high/critical-severity advisory or a disallowed dependency license, so a vulnerable or incompatibly-licensed package can't be introduced before Dependabot ever sees it (#148).
 - Unit tests for the `opengraph-image`/`twitter-image` metadata routes, asserting the `force-static` export (required under `output: "export"`), the declared `1200x630` OG dimensions, the `image/png` content type, and that `twitter-image.tsx` genuinely re-exports (not hand-copies) `opengraph-image`'s config and renderer — previously the only two route files in `app/` with no test coverage.
 - Unit tests for `ExternalLink`, covering `target="_blank"` + `rel="noopener noreferrer"` (reverse-tabnabbing protection), the `relExtra` prepend behavior, and the screen-reader "(opens in a new tab)" suffix — none of which had direct coverage before, so a regression in the component itself could pass CI undetected.
@@ -28,6 +45,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Third-party GitHub Actions across `ci.yml`, `codeql.yml`, `dependency-review.yml`, `link-check.yml`, `actionlint.yml`, and `deploy.yml` pinned to commit SHAs instead of floating version tags, closing a supply-chain tampering vector where a compromised tag could silently change what a workflow runs (#342, #350).
+- `eqeqeq` ESLint rule enabled, requiring `===`/`!==` over `==`/`!=` (#335).
+- `@typescript-eslint/no-explicit-any` enabled as an error (#307).
+- `eslint-plugin-jsx-a11y`'s recommended ruleset enabled at error level (#320).
+- Sitemap `lastModified` bumped to 2026-06-25 and `changeFrequency` set to `weekly` (#306).
+- Generated metadata routes (OG/Twitter images, favicon) given a real, long-lived cache window instead of an implicit no-cache default (#228, #278).
+- `cloudflare/wrangler-action` bumped from v3 to v4 (#114).
+- CI and deploy installs switched to `npm ci` against a regenerated, in-sync lockfile, instead of a re-resolving `npm install` (#328).
+- Production deploys now skip for docs-only pushes (README, CHANGELOG, other workflow files) that can't affect the exported static site (#326).
+- README and `CONTRIBUTING.md` now document the test scripts (`npm test`, `npm run test:watch`) (#333).
 - Enabled type-aware ESLint linting (`parserOptions.projectService`, scoped to `**/*.ts`/`**/*.tsx`) and turned on `@typescript-eslint/no-floating-promises` / `@typescript-eslint/no-misused-promises`, so an unawaited promise or an `async` callback passed where a `void`-returning one is expected now fails `npm run lint` instead of silently swallowing the rejection (#288).
 - Marked the three third-party "On loop engineering" reading-list links `rel="nofollow"` so the homepage stops passing ranking signal out to external commentary domains on every crawl (#233).
 - Tightened TypeScript strictness further by enabling `noImplicitOverride`, completing the opt-in strictness set so class members that override a base member must say so explicitly (#160).
@@ -50,6 +77,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Escaped `<` in the FAQ `JSON-LD` before inlining, closing the same `</script>`-breakout sink already fixed for the `SoftwareApplication` JSON-LD (#301).
+- Cloudflare Pages deploys are no longer cancelled mid-flight by a newer push to `main`; queued runs now serialize instead, so a killed `wrangler pages deploy` can't leave a half-uploaded deployment (#310).
+- Removed dead `focus-visible` Tailwind utility classes on the header nav links — an unlayered global CSS rule in `globals.css` already always wins the cascade over them, so the per-link classes compiled but never actually rendered (#338).
+- Removed `public/_headers` `Cache-Control` rules that were dead, shadowed by a later, more specific override rule (#334).
 - Removed a byte-for-byte duplicate `@media (prefers-reduced-motion: reduce)` rule in `app/globals.css`, left behind after two separate commits independently fixed the same reduced-motion issue (#89) without either noticing the other's rule was already shipped.
 - Escaped `<` to `<` in the `SoftwareApplication` JSON-LD injected via `dangerouslySetInnerHTML`, closing the `</script>` breakout sink that `JSON.stringify` alone does not guard against (#198).
 - Declared a light `color-scheme` so visitors in OS/browser dark mode no longer get dark-rendered native controls, scrollbars, and a pre-paint flash against the single-theme light design (#293).
