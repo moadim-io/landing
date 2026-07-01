@@ -1,4 +1,5 @@
 import { ExternalLink } from "./ExternalLink";
+import { JsonLdScript } from "./JsonLdScript";
 import { CRATE_NAME, CRATE_URL, REPO_URL } from "./site";
 
 const features = [
@@ -241,15 +242,7 @@ export default function Home() {
           </dl>
         </section>
       </main>
-      <script
-        type="application/ld+json"
-        // Escape `<` so a value containing `</script>` (or any `<…`) can't break
-        // out of the inline <script> and inject markup. `<` is an equivalent
-        // JSON string escape, so the parsed structured data is unchanged.
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c"),
-        }}
-      />
+      <JsonLdScript data={faqJsonLd} />
     </div>
   );
 }

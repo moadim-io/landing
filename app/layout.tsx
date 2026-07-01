@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE_URL, REPO_URL } from "./site";
 import { ExternalLink } from "./ExternalLink";
+import { JsonLdScript } from "./JsonLdScript";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -85,12 +86,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
-          }}
-        />
+        <JsonLdScript data={jsonLd} />
         {/* Site banner landmark: gives assistive-tech users a top-level `banner`
             region to land on, plus a persistent Moadim wordmark for brand
             identity. The hero's <header> sits inside <main>, so it does not
