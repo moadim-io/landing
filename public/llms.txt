@@ -1,0 +1,15 @@
+# Moadim
+
+> Moadim is an open-source loop engine for AI agents. Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes against your repo on every tick, in an isolated workbench, over MCP and REST.
+
+Moadim runs entirely on your own machine: loops fire from your OS crontab, with no hidden queue and no cloud. Install with `cargo install moadim` (requires a Unix-like OS with tmux and a cron daemon), then run `moadim install` to register a launchd (macOS) or systemd (Linux) service so the daemon survives logins and reboots. Every loop is exposed as an MCP tool and a documented HTTP endpoint — Swagger UI, an iCal feed, and a web UI are baked into the daemon.
+
+## Docs
+
+- [README](https://github.com/moadim-io/daemon#readme): install, configuration, and usage
+- [GitHub repository](https://github.com/moadim-io/daemon): source, issues, and releases
+
+## Links
+
+- [Homepage](https://moadim.io)
+- [crates.io](https://crates.io/crates/moadim): published crate
