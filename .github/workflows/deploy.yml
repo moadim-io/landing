@@ -81,6 +81,12 @@ jobs:
         timeout-minutes: 5
         run: npm run build
 
+      - name: Verify static export
+        # A green `next build` can still emit an incomplete out/ (a dropped route, a no-op
+        # metadata route, a public/ file that didn't get copied). Fail here, before wrangler
+        # uploads anything, instead of shipping a silently broken page to prod.
+        run: npm run verify:export
+
       - name: Deploy to Cloudflare Pages
         timeout-minutes: 5
         uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e # v4.0.0
