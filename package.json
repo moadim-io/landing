@@ -16,7 +16,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "npx serve out",
     "lint": "eslint --max-warnings 0",
     "lint:md": "markdownlint-cli2",
     "test": "vitest run",
