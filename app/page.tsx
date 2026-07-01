@@ -131,6 +131,22 @@ export default function Home() {
               inside a tmux session, so without them the install succeeds but
               nothing runs.
             </p>
+            <ExternalLink
+              className="mt-1 inline-flex w-fit"
+              href={CRATE_URL}
+              aria-label="Latest published moadim version, links to the crate's release page (opens in a new tab)"
+            >
+              {/* Static shields.io badge image: resolves at request time from
+                  crates.io, so the version never goes stale without a rebuild,
+                  and it's a plain <img> since next/image isn't configured for
+                  remote hosts in this static export. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=latest`}
+                alt={`Latest published moadim version on crates.io`}
+                className="h-5 w-auto"
+              />
+            </ExternalLink>
           </div>
           <ExternalLink
             className={`${ctaButton} group gap-3 bg-accent`}
