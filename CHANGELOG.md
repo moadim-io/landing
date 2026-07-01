@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Branded favicon generated from `app/icon.tsx` (via `next/og`, the same mechanism as the OG/Twitter cards), replacing the default create-next-app Next.js logo that had shipped in `app/favicon.ico` since the initial scaffold commit and was never swapped for Moadim's own mark (#145).
 - `.github/workflows/dependency-review.yml`: a PR-time gate (`actions/dependency-review-action`) that fails on a new high/critical-severity advisory or a disallowed dependency license, so a vulnerable or incompatibly-licensed package can't be introduced before Dependabot ever sees it (#148).
 - Unit tests for the `opengraph-image`/`twitter-image` metadata routes, asserting the `force-static` export (required under `output: "export"`), the declared `1200x630` OG dimensions, the `image/png` content type, and that `twitter-image.tsx` genuinely re-exports (not hand-copies) `opengraph-image`'s config and renderer — previously the only two route files in `app/` with no test coverage.
 - Unit tests for `ExternalLink`, covering `target="_blank"` + `rel="noopener noreferrer"` (reverse-tabnabbing protection), the `relExtra` prepend behavior, and the screen-reader "(opens in a new tab)" suffix — none of which had direct coverage before, so a regression in the component itself could pass CI undetected.
