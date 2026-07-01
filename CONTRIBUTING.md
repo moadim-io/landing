@@ -23,6 +23,9 @@ npm install
 | --- | --- |
 | `npm run dev` | Start the local dev server with hot reload at <http://localhost:3000>. |
 | `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript rules). |
+| `npm run lint:md` | Lint Markdown files with `markdownlint-cli2`. |
+| `npm test` | Run the Vitest unit/component test suite once (tests live next to the code they cover, e.g. `app/page.test.tsx`). |
+| `npm run test:watch` | Run the Vitest suite in watch mode. |
 | `npm run build` | Produce the static export in `out/`. |
 | `npm run start` | Serve the production build locally. |
 | `actionlint` | Lint `.github/workflows/**` YAML (and embedded shell via shellcheck). Install via `brew install actionlint` or see the [actionlint releases](https://github.com/rhysd/actionlint/releases). |
@@ -33,10 +36,11 @@ landing content, `globals.css` for styles). Static assets go in `public/`.
 ## Submitting a change
 
 1. Fork the repo and create a branch (e.g. `fix/short-description`).
-2. Make your change. Before opening a PR, make sure both pass:
+2. Make your change. Before opening a PR, make sure all of these pass:
 
    ```bash
    npm run lint
+   npm test
    npm run build
    ```
 
