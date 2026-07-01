@@ -45,7 +45,14 @@ landing content, `globals.css` for styles). Static assets go in `public/`.
    npm run build
    ```
 
-3. Open a pull request using the PR template. Link the related issue
+3. Write commit messages as [Conventional Commits](https://www.conventionalcommits.org/)
+   (e.g. `fix(seo): correct canonical URL`, `docs: clarify install step`). A
+   CI job (`commitlint`) rejects PRs whose commits don't follow this format;
+   accepted types come from
+   [`@commitlint/config-conventional`](https://github.com/conventional-changelog/commitlint/tree/master/%40commitlint/config-conventional)
+   (`feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `ci`, `build`,
+   `perf`, `style`, `revert`).
+4. Open a pull request using the PR template. Link the related issue
    (e.g. `Closes #123`) and attach screenshots for any visual change.
 
 ## Reporting issues
