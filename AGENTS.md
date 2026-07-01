@@ -23,11 +23,13 @@ This version has breaking changes — APIs, conventions, and file structure may 
 | `npm run build` | Static export to `out/`. Run this to validate a change end-to-end. |
 | `npm run start` | Serve the production build locally. |
 | `npm run lint` | ESLint (Next core-web-vitals + TypeScript). |
+| `npm run typecheck` | `tsc --noEmit` over the whole project — catches errors in files `next build`'s own TypeScript pass skips, e.g. `*.test.ts`. |
 | `npm run test` | Vitest unit/component tests (`*.test.ts`/`*.test.tsx` next to the code they cover). |
 | `npm run test:watch` | Vitest in watch mode. |
 
-Before opening a PR, make sure `npm run lint`, `npm run test`, **and** `npm run build` all
-pass — the build is the real gate, since static export surfaces errors `dev` tolerates.
+Before opening a PR, make sure `npm run lint`, `npm run typecheck`, `npm run test`, **and**
+`npm run build` all pass — the build is the real gate, since static export surfaces errors
+`dev` tolerates.
 
 ## Static-export constraint (read before adding features)
 

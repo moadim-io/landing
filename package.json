@@ -19,6 +19,7 @@
     "start": "next start",
     "lint": "eslint --max-warnings 0",
     "lint:md": "markdownlint-cli2",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "verify:export": "node scripts/verify-export.mjs"
