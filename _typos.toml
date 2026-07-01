@@ -1,0 +1,32 @@
+# Configuration for `typos` (https://github.com/crate-ci/typos), the spell
+# checker gated in CI by the `typos` job in .github/workflows/ci.yml.
+#
+# Run it locally from the repo root with:
+#   typos
+#
+# See CONTRIBUTING.md / README.md for install instructions.
+
+[default.extend-words]
+# Product name and its wordmark/URL casing.
+moadim = "moadim"
+Moadim = "Moadim"
+
+# Agent runtimes the product launches, named throughout the hero/FAQ copy.
+codex = "codex"
+Codex = "Codex"
+hermes = "hermes"
+Hermes = "Hermes"
+
+# Rust packaging tool used in the install command (`cargo install moadim`).
+cargo = "cargo"
+
+# Unix service managers referenced in the "survives reboot" copy.
+launchd = "launchd"
+systemd = "systemd"
+
+# Unix job scheduler the product hooks into.
+crontab = "crontab"
+
+# The site's design language, used in code comments and docs.
+neobrutalist = "neobrutalist"
+neobrutalism = "neobrutalism"
