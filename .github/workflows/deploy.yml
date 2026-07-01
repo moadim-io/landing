@@ -37,6 +37,13 @@ jobs:
     # for hours. 10 minutes leaves comfortable headroom over a cold build+deploy
     # while turning a hang into a fast, visible failure.
     timeout-minutes: 10
+    # Declares a GitHub Environment so every production deploy shows up in the
+    # repo's Deployments tab with a direct link to the live URL, and so
+    # Cloudflare credentials can be scoped to this environment instead of
+    # living only as repo-wide secrets.
+    environment:
+      name: production
+      url: https://moadim.io
     permissions:
       contents: read
       deployments: write
