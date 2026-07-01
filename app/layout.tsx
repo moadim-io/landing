@@ -104,12 +104,23 @@ export default function RootLayout({
             >
               moadim<span className="text-accent">.</span>
             </Link>
+            {/* Intentionally no per-link focus-ring utility classes on these
+                two links: globals.css declares an unlayered :focus-visible
+                rule (solid 3px ring in the --foreground token, 3px offset)
+                that always wins the cascade over any Tailwind focus-visible
+                utility, which Tailwind v4 emits inside a lower-priority
+                @layer. Per the CSS cascade-layers spec, unlayered rules beat
+                layered ones regardless of selector specificity or source
+                order, so a same-purpose utility applied here would compile
+                but never actually render — dead, misleading markup. Rely on
+                the global rule instead, as every other link on the site
+                does. */}
             <nav aria-label="Site navigation">
               <ul className="flex items-center gap-6">
                 <li>
                   <ExternalLink
                     href={`${REPO_URL}#readme`}
-                    className="text-sm font-bold uppercase tracking-wide hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                    className="text-sm font-bold uppercase tracking-wide hover:text-accent"
                     aria-label="Docs (opens in a new tab)"
                   >
                     Docs
@@ -118,7 +129,7 @@ export default function RootLayout({
                 <li>
                   <ExternalLink
                     href={REPO_URL}
-                    className="text-sm font-bold uppercase tracking-wide hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                    className="text-sm font-bold uppercase tracking-wide hover:text-accent"
                     aria-label="GitHub (opens in a new tab)"
                   >
                     GitHub
