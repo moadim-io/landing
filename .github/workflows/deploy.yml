@@ -56,6 +56,21 @@ jobs:
         # machines never resolve, so strict `npm ci` fails on the Linux runner.
         run: npm install --no-audit --no-fund
 
+      - name: Cache Next.js build cache
+        # Persists .next/cache (compiled modules, minified output, image/font
+        # pipeline artifacts) across runs so `next build` can do an incremental
+        # build instead of a fully cold one. Only the build cache is stored
+        # here, not `out/` or `.next/` wholesale, so the published artifact is
+        # unaffected by cache presence/absence; a stale or missing cache just
+        # falls back to a full build. See:
+        # https://nextjs.org/docs/app/building-your-application/deploying/ci-build-caching
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('app/**', '*.ts', '*.tsx', '*.mjs') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+
       - name: Build static export
         timeout-minutes: 5
         run: npm run build
