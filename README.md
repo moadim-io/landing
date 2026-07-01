@@ -36,6 +36,7 @@ you edit files under `app/`.
 | `npm run start` | Serve the production build locally. |
 | `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript + `jsx-a11y` recommended rules); fails on any warning (`--max-warnings 0`). |
 | `npm run lint:md` | Lint Markdown files with `markdownlint-cli2`. |
+| `npm run typecheck` | Type-check the whole project with `tsc --noEmit` (`next build`'s own TypeScript pass only covers the app route graph, so it misses files like `*.test.ts`). |
 | `npm test` | Run the Vitest unit/component test suite once. |
 | `npm run test:watch` | Run the Vitest suite in watch mode while developing. |
 | `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship; runs after every build in CI. |
