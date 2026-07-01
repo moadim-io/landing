@@ -71,3 +71,22 @@ jobs:
 
       - name: Lint (markdownlint)
         run: npm run lint:md
+
+  spell-check:
+    name: Spell check
+    runs-on: ubuntu-latest
+    # A `typos` pass over app/**, *.md, and config files is a few seconds of
+    # work; an isolated job gives docs-only PRs a fast, independent verdict
+    # instead of waiting on the full lint-and-build job.
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Run typos
+        # Config lives in _typos.toml (project-specific identifier allow-list,
+        # e.g. Moadim, cargo, launchd, systemd, crontab, Codex, Hermes,
+        # neobrutalist). Scans app/**, *.md, and config files from the repo
+        # root; fails the build on a real misspelling in source/content.
+        uses: crate-ci/typos@v1.48.0

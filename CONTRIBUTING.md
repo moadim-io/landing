@@ -29,6 +29,7 @@ npm install
 | `npm run build` | Produce the static export in `out/`. |
 | `npm run start` | Serve the production build locally. |
 | `actionlint` | Lint `.github/workflows/**` YAML (and embedded shell via shellcheck). Install via `brew install actionlint` or see the [actionlint releases](https://github.com/rhysd/actionlint/releases). |
+| `typos` | Spell-check `app/**`, `*.md`, and config files (config: [`_typos.toml`](./_typos.toml)). Install via `cargo install typos-cli` or `brew install typos-cli`, then run `typos` from the repo root. |
 
 Page content lives under `app/` (`layout.tsx` for metadata/SEO, `page.tsx` for the
 landing content, `globals.css` for styles). Static assets go in `public/`.
