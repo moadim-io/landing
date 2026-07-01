@@ -19,6 +19,7 @@
     "start": "next start",
     "lint": "eslint --max-warnings 0",
     "lint:md": "markdownlint-cli2",
+    "lint:html": "html-validate \"out/**/*.html\"",
     "test": "vitest run",
     "test:watch": "vitest"
   },
@@ -38,6 +39,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
     "eslint-plugin-jsx-a11y": "^6.10.2",
+    "html-validate": "^11.5.4",
     "jsdom": "^29.1.1",
     "markdownlint-cli2": "^0.22.1",
     "tailwindcss": "^4",

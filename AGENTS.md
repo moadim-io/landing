@@ -23,6 +23,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 | `npm run build` | Static export to `out/`. Run this to validate a change end-to-end. |
 | `npm run start` | Serve the production build locally. |
 | `npm run lint` | ESLint (Next core-web-vitals + TypeScript). |
+| `npm run lint:html` | `html-validate` against the built `out/**/*.html` — run `npm run build` first. |
 | `npm run test` | Vitest unit/component tests (`*.test.ts`/`*.test.tsx` next to the code they cover). |
 | `npm run test:watch` | Vitest in watch mode. |
 
@@ -63,6 +64,22 @@ Configured in `eslint.config.mjs`:
 
 - `no-console` — `console.log` is an error; only `console.warn` / `console.error` are allowed.
 - `prefer-const` — never reassigned bindings must be `const`.
+
+`.htmlvalidate.json` validates the *built* HTML in `out/` (`npm run lint:html`), not JSX source.
+It extends `html-validate:recommended` with a few rules relaxed to match React's own SSR
+serialization instead of hand-written HTML conventions — this is not a loosened gate, it's
+matching the framework's real (spec-valid) output style:
+
+- `void-style: selfclosing` — React always self-closes void elements (`<meta/>`, `<br/>`).
+- `attribute-boolean-style` / `attribute-empty-style: empty` — React emits boolean/empty
+  attributes as `async=""`, `hidden=""`, `crossorigin=""` rather than bare.
+- `attr-case: [lowercase, camelcase]` — React's DOM attribute names (`charSet`, `fetchPriority`,
+  `noModule`, `crossOrigin`) are intentionally camelCase.
+- `valid-id: { relaxed: true }` — allows the underscore-led ids React's `useId()` generates
+  (e.g. `_R_`), while `no-dup-id` still fails on real duplicate ids.
+
+Everything else (duplicate ids, invalid/obsolete attributes and elements, broken nesting,
+missing required attributes) stays at the `recommended` severity and still fails the build.
 
 ## Where things live
 

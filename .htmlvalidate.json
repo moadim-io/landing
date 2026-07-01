@@ -1,0 +1,10 @@
+{
+  "extends": ["html-validate:recommended"],
+  "rules": {
+    "void-style": ["error", { "style": "selfclosing" }],
+    "attribute-boolean-style": ["error", { "style": "empty" }],
+    "attribute-empty-style": ["error", { "style": "empty" }],
+    "attr-case": ["error", { "style": ["lowercase", "camelcase"] }],
+    "valid-id": ["error", { "relaxed": true }]
+  }
+}

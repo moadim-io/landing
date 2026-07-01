@@ -36,6 +36,7 @@ you edit files under `app/`.
 | `npm run start` | Serve the production build locally. |
 | `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript + `jsx-a11y` recommended rules); fails on any warning (`--max-warnings 0`). |
 | `npm run lint:md` | Lint Markdown files with `markdownlint-cli2`. |
+| `npm run lint:html` | Validate the built static export (`out/**/*.html`) with [`html-validate`](https://html-validate.org) — run `npm run build` first. |
 | `npm test` | Run the Vitest unit/component test suite once. |
 | `npm run test:watch` | Run the Vitest suite in watch mode while developing. |
 
