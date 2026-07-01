@@ -49,6 +49,12 @@ jobs:
         timeout-minutes: 5
         run: npm run build
 
+      - name: Verify static export
+        # A green `next build` can still emit an incomplete out/ (a dropped route, a no-op
+        # metadata route, a public/ file that didn't get copied) — catch that on every PR, not
+        # just at deploy time.
+        run: npm run verify:export
+
   markdown-lint:
     name: Markdown lint
     runs-on: ubuntu-latest
