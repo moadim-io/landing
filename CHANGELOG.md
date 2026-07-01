@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Branded error boundaries (`app/error.tsx` for errors under the root layout, `app/global-error.tsx` for the rare case the root layout itself throws), so an uncaught render error shows the site's neobrutalist "Try again" / "Back to home" screen instead of App Router's default unstyled error page (#76).
 - Unit tests for the `opengraph-image`/`twitter-image` metadata routes, asserting the `force-static` export (required under `output: "export"`), the declared `1200x630` OG dimensions, the `image/png` content type, and that `twitter-image.tsx` genuinely re-exports (not hand-copies) `opengraph-image`'s config and renderer — previously the only two route files in `app/` with no test coverage.
 - Unit tests for `ExternalLink`, covering `target="_blank"` + `rel="noopener noreferrer"` (reverse-tabnabbing protection), the `relExtra` prepend behavior, and the screen-reader "(opens in a new tab)" suffix — none of which had direct coverage before, so a regression in the component itself could pass CI undetected.
 - A first automated test suite — Vitest + React Testing Library, wired into CI — covering the hero headline/install command/CTA links, the root layout's metadata and `SoftwareApplication` JSON-LD, and the `sitemap.xml`/`robots.txt` output, so regressions in this content now fail CI instead of shipping silently (#40).
