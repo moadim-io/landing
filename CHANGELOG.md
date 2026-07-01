@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Latest published moadim version badge (shields.io, sourced from crates.io) linked from the hero install card, so a visitor can tell what `cargo install moadim` resolves to and whether the project is actively maintained (#183).
 - Unit tests for `ExternalLink`, covering `target="_blank"` + `rel="noopener noreferrer"` (reverse-tabnabbing protection), the `relExtra` prepend behavior, and the screen-reader "(opens in a new tab)" suffix — none of which had direct coverage before, so a regression in the component itself could pass CI undetected.
 - A first automated test suite — Vitest + React Testing Library, wired into CI — covering the hero headline/install command/CTA links, the root layout's metadata and `SoftwareApplication` JSON-LD, and the `sitemap.xml`/`robots.txt` output, so regressions in this content now fail CI instead of shipping silently (#40).
 - On-page FAQ section answering the questions visitors weigh before installing (license, self-hosted vs cloud, supported agents/OS, run isolation), with the same five Q&As emitted as schema.org `FAQPage` structured data from a single source so the copy and markup can't drift (#176).

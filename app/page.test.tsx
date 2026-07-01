@@ -29,4 +29,12 @@ describe("Home", () => {
       CRATE_URL,
     );
   });
+
+  it("links the version badge to crates.io", () => {
+    render(<Home />);
+
+    expect(
+      screen.getByRole("link", { name: /latest published moadim version/i }),
+    ).toHaveAttribute("href", CRATE_URL);
+  });
 });
