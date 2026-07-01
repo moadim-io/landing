@@ -1,0 +1,53 @@
+name: Link check
+
+on:
+  pull_request:
+    paths:
+      - "app/**"
+      - "public/**"
+      - "*.md"
+      - ".lychee.toml"
+      - ".github/workflows/link-check.yml"
+  schedule:
+    # Catch external link rot even without a code change.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lychee:
+    name: Check links
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build static export
+        run: npm run build
+
+      - name: Link check (built export + docs)
+        uses: lycheeverse/lychee-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: >-
+            --config .lychee.toml
+            --no-progress
+            --root-dir "${{ github.workspace }}/out"
+            './out/**/*.html'
+            './*.md'
+          fail: true
