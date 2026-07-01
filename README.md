@@ -82,6 +82,17 @@ Because the build is a fully static export, the same `out/` directory can be ser
 static host — running `npm run build` locally and uploading `out/` to Vercel, Netlify, GitHub
 Pages, or an S3 bucket behind a CDN works without any of the Cloudflare-specific tooling.
 
+**Content-Type caveat for the OG/Twitter images:** `app/opengraph-image.tsx` and
+`app/twitter-image.tsx` are exported as extensionless files (`out/opengraph-image`,
+`out/twitter-image`). Cloudflare Pages gets the correct `image/png` Content-Type from the
+`Content-Type` rules in [`public/_headers`](./public/_headers) (copied into `out/_headers`
+at build time). Netlify also honors a `_headers` file in the publish directory, so it works
+there too. Other static hosts that key MIME type off the file extension (GitHub Pages, a
+plain S3 bucket behind a CDN) do **not** read `_headers` — on those hosts you'll need an
+equivalent host-specific rule (e.g. an S3 object Content-Type override, or a GitHub Pages
+front-end proxy) or the social-card preview will break, since unfurl bots require an
+`image/*` Content-Type.
+
 ## Security
 
 Found a vulnerability in the site or its build pipeline? Please report it
