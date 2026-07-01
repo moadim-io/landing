@@ -3,6 +3,7 @@
 [![Live site](https://img.shields.io/website?url=https%3A%2F%2Fmoadim.io&label=moadim.io)](https://moadim.io)
 [![Product version](https://img.shields.io/crates/v/moadim.svg?label=moadim)](https://crates.io/crates/moadim)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/moadim-io/landing/badge)](https://scorecard.dev/viewer/?uri=github.com/moadim-io/landing)
 
 The marketing/landing site for **Moadim**, an open-source loop engine for AI agents.
 Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes
