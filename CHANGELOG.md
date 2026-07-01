@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Enabled type-aware ESLint linting (`parserOptions.projectService`, scoped to `**/*.ts`/`**/*.tsx`) and turned on `@typescript-eslint/no-floating-promises` / `@typescript-eslint/no-misused-promises`, so an unawaited promise or an `async` callback passed where a `void`-returning one is expected now fails `npm run lint` instead of silently swallowing the rejection (#288).
 - Marked the three third-party "On loop engineering" reading-list links `rel="nofollow"` so the homepage stops passing ranking signal out to external commentary domains on every crawl (#233).
 - Tightened TypeScript strictness further by enabling `noImplicitOverride`, completing the opt-in strictness set so class members that override a base member must say so explicitly (#160).
 - Centralized the remaining product identifiers (GitHub repo slug, crates.io URL, crate name) in `app/site.ts`, extending the existing `SITE_URL` single-source pattern so a repo move or crate rename no longer means hunting down literals (#173).
