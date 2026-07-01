@@ -73,6 +73,12 @@ const eslintConfig = defineConfig([
       // spreads to everything it touches. Use `unknown` + narrowing, or a
       // precise type, at boundaries instead.
       "@typescript-eslint/no-explicit-any": "error",
+      // Require strict equality (`===`/`!==`) instead of loose (`==`/`!=`),
+      // which applies JavaScript's type-coercion rules and produces
+      // surprising results (`0 == ""`, `[] == false`, `"1" == 1` all `true`).
+      // `{ null: "ignore" }` keeps the idiomatic `x == null` nullish check
+      // (matches both `null` and `undefined`) allowed.
+      eqeqeq: ["error", "always", { null: "ignore" }],
     },
   },
 ]);
