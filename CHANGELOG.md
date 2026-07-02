@@ -77,6 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- The hero install card now shows the `moadim` run step after `cargo install moadim`, matching the daemon README's install-then-run onboarding — the snippet previously stopped at the install command, leaving visitors with an installed-but-not-running daemon (#206).
 - Escaped `<` in the FAQ `JSON-LD` before inlining, closing the same `</script>`-breakout sink already fixed for the `SoftwareApplication` JSON-LD (#301).
 - Cloudflare Pages deploys are no longer cancelled mid-flight by a newer push to `main`; queued runs now serialize instead, so a killed `wrangler pages deploy` can't leave a half-uploaded deployment (#310).
 - Removed dead `focus-visible` Tailwind utility classes on the header nav links — an unlayered global CSS rule in `globals.css` already always wins the cascade over them, so the per-link classes compiled but never actually rendered (#338).
