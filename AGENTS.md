@@ -74,12 +74,15 @@ app/
   page.tsx              Landing page content.
   not-found.tsx         Branded 404 route (statically prerendered).
   ExternalLink.tsx      Outbound (new-tab) link wrapper — use it for any link that leaves the site, not a raw `<a target="_blank">`.
+  JsonLdScript.tsx      Escapes and inlines JSON-LD structured data as a `<script>` tag — route any new JSON-LD through this instead of `dangerouslySetInnerHTML` directly.
   site.ts               Single source of truth for product identifiers: SITE_URL plus the GitHub/crates.io slugs and URLs (REPO_SLUG, REPO_URL, CRATE_NAME, CRATE_URL). Import these — don't hardcode the origin or the github.com / crates.io links.
   globals.css           Theme tokens + global styles.
+  icon.svg              Site favicon (SVG, file-based metadata route).
+  apple-icon.tsx        Generated Apple touch icon (file-based metadata route).
+  manifest.ts           /manifest.webmanifest (force-static).
   opengraph-image.tsx   Generated OG card (file-based metadata route).
   twitter-image.tsx     Generated Twitter card.
   sitemap.ts            /sitemap.xml (force-static).
   robots.ts             /robots.txt (force-static).
-  favicon.ico           Site favicon.
 public/                 Static assets served at the site root.
 ```
