@@ -71,6 +71,10 @@ export const jsonLd = {
   // search engines surface the app for an unsupported platform.
   operatingSystem: "macOS, Linux",
   description,
+  sameAs: [
+    "https://github.com/moadim-io/daemon",
+    "https://crates.io/crates/moadim",
+  ],
   license: "https://opensource.org/licenses/MIT",
   // TODO(#44): reuse a single base-URL source once base-URL centralization lands.
   image: "https://moadim.io/opengraph-image.png",
