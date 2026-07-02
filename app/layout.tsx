@@ -39,6 +39,13 @@ export const metadata: Metadata = {
     template: "%s — Moadim",
   },
   description,
+  // Resolved against `metadataBase`, this emits
+  // `<link rel="canonical" href="https://moadim.io/">`, consolidating ranking
+  // signals so search engines don't index trailing-slash / query-string (UTM,
+  // ad params) variants of the home page as separate duplicates.
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Moadim — Put your agents on a loop",
     description,
