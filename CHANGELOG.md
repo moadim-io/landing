@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Unit tests for `manifest.ts`, asserting the installable web-app identity (`name`, `short_name`, `start_url`, `display`), that `background_color` and `theme_color` agree, and that every declared icon has a `src`, `sizes`, and `type` — previously the only metadata route in `app/` with no direct test coverage.
 - Unit tests for `page.tsx`'s three feature cards and the "On loop engineering" reading list, asserting the reading-list links carry the `nofollow noopener noreferrer` `rel` baseline — previously the only content on the page with no direct test coverage.
 - `verify:export` script (and a matching CI/deploy step) that asserts the static export in `out/` actually contains every file the site depends on — `index.html`, `404.html`, `sitemap.xml`, `robots.txt`, the OG/Twitter images, `favicon.ico`, and `_headers` — so a route or asset that silently drops from a green `next build` fails CI instead of shipping a broken page (#345).
 - `JsonLdScript`, a shared component (plus a `toSafeJsonLd` helper) that `layout.tsx` and `page.tsx` both route through to escape JSON-LD before inlining it, with its own dedicated test coverage for the `</script>`-breakout escaping (#352).
