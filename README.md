@@ -94,6 +94,20 @@ Because the build is a fully static export, the same `out/` directory can be ser
 static host — running `npm run build` locally and uploading `out/` to Vercel, Netlify, GitHub
 Pages, or an S3 bucket behind a CDN works without any of the Cloudflare-specific tooling.
 
+### Search-engine verification (optional)
+
+To verify the site in **Google Search Console** / **Bing Webmaster Tools**, set the
+ownership tokens as build-time environment variables (see [`.env.example`](./.env.example)):
+
+| Variable | Source |
+| --- | --- |
+| `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Google Search Console → add property → "HTML tag" method |
+| `NEXT_PUBLIC_BING_SITE_VERIFICATION` | Bing Webmaster Tools → add site → "Meta tag" method |
+
+When a variable is set, the build renders the matching `<meta>` tag into the static export;
+when unset, no tag is emitted. These tokens are public (non-secret) identifiers — set them in
+the deploy build environment rather than committing them.
+
 ## Security
 
 Found a vulnerability in the site or its build pipeline? Please report it
