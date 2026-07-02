@@ -16,8 +16,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Kept to ~155 chars (Google SERP truncates ~155-160, Twitter/unfurlers ~120-125)
+// and front-loaded with the value prop so nothing essential is lost to truncation.
 const description =
-  "Moadim is an open-source loop engine for AI agents. Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes against your repo on every tick, over MCP and REST.";
+  "Moadim is an open-source loop engine for AI agents. Define a prompt, schedule, and agent, and it runs Claude, Codex, or Hermes against your repo on every tick.";
 
 // Search-engine ownership-verification tokens, read at build time so nothing
 // sensitive lands in the repo and the tags can differ per environment. They are
