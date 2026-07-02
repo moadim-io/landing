@@ -27,17 +27,21 @@
 
 # Generated metadata assets whose referencing URL carries a content hash:
 # the OG/Twitter share images (`/opengraph-image?<hash>`, `/twitter-image?<hash>`)
-# and the favicon (`/favicon.ico?<hash>`). Because the URL changes whenever the
-# bytes change, the bytes at any given URL are immutable — so an unfurl bot or
-# crawler can cache them forever instead of re-fetching from the origin on every
-# request. Without this they fall under the broad `max-age=0` rule above.
+# and the favicon/touch-icon (`/icon.svg?<hash>`, `/apple-icon?<hash>`). Because
+# the URL changes whenever the bytes change, the bytes at any given URL are
+# immutable — so an unfurl bot or crawler can cache them forever instead of
+# re-fetching from the origin on every request. Without this they fall under
+# the broad `max-age=0` rule above.
 /opengraph-image
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 /twitter-image
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
-/favicon.ico
+/icon.svg
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
+/apple-icon
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
