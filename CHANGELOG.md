@@ -94,3 +94,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a visible keyboard focus indicator on interactive elements so keyboard users can see where they are (WCAG 2.4.7) (#84).
 - Raised the source-label text contrast to meet the WCAG 1.4.3 minimum (#103).
 - Applied the loaded Geist Sans font to body text so typography renders as intended (#7).
+- Shortened and front-loaded the shared meta description (was 189 chars, now 142) so it no longer truncates in search results and social previews; added a build-time length guard (≤160 chars) to keep it that way (#135).
