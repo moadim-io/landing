@@ -12,10 +12,12 @@ describe("Home", () => {
     ).toBeInTheDocument();
   });
 
-  it("shows the cargo install command for the published crate", () => {
+  it("shows the locked cargo install command for the published crate", () => {
     render(<Home />);
 
-    expect(screen.getByText(`cargo install ${CRATE_NAME}`)).toBeInTheDocument();
+    expect(
+      screen.getByText(`cargo install --locked ${CRATE_NAME}`),
+    ).toBeInTheDocument();
   });
 
   it("points the GitHub and crates.io CTAs at the canonical URLs", () => {
