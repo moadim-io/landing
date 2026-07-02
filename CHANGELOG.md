@@ -71,6 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enabled the `no-console` lint rule to keep stray console statements out of the codebase (#6).
 - Added `package.json` metadata — license, description, and repository — so the package is properly described (#119).
 - Enforced a clean lint baseline: `npm run lint` now fails on warnings (`--max-warnings 0`), with the `prefer-const` and `object-shorthand` rules enabled (#139).
+- Bumped `markdownlint-cli2` from `^0.22.1` to `^0.23.0`, which pulls in `js-yaml@5` and `markdown-it@14.2`, resolving two moderate-severity `npm audit` advisories (quadratic-complexity DoS in `js-yaml`'s merge-key handling and in `markdown-it`'s smartquotes rule) that the previous transitive versions carried.
 
 ### Performance
 
