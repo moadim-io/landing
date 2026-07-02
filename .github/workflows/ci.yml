@@ -41,6 +41,11 @@ jobs:
       - name: Lint (ESLint)
         run: npm run lint
 
+      - name: Typecheck (tsc)
+        # next build's own TypeScript pass only covers the app route graph, so it
+        # misses files like *.test.ts (see README.md / AGENTS.md / CONTRIBUTING.md).
+        run: npm run typecheck
+
       - name: Test (Vitest)
         timeout-minutes: 5
         run: npm run test
