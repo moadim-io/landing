@@ -57,7 +57,6 @@ export const metadata: Metadata = {
     siteName: "Moadim",
     locale: "en_US",
     type: "website",
-    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
@@ -118,10 +117,6 @@ const softwareApplication = {
   license: "https://opensource.org/licenses/MIT",
   // TODO(#44): reuse a single base-URL source once base-URL centralization lands.
   image: "https://moadim.io/opengraph-image.png",
-  sameAs: [
-    "https://github.com/moadim-io/daemon",
-    "https://crates.io/crates/moadim",
-  ],
   codeRepository: "https://github.com/moadim-io/daemon",
   downloadUrl: "https://crates.io/crates/moadim",
   offers: {
@@ -132,7 +127,10 @@ const softwareApplication = {
   publisher: { "@id": organizationId },
 };
 
-export const jsonLd = {
+export const jsonLd: {
+  "@context": string;
+  "@graph": [typeof organization, typeof website, typeof softwareApplication];
+} = {
   "@context": "https://schema.org",
   "@graph": [organization, website, softwareApplication],
 };
