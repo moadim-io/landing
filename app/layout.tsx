@@ -115,8 +115,12 @@ const softwareApplication = {
     "https://crates.io/crates/moadim",
   ],
   license: "https://opensource.org/licenses/MIT",
-  // TODO(#44): reuse a single base-URL source once base-URL centralization lands.
-  image: "https://moadim.io/opengraph-image.png",
+  // Derived from SITE_URL (matching `organization.logo` above) rather than a
+  // literal: the generated route is served at `/opengraph-image` with no
+  // extension (see app/opengraph-image.tsx), so the previous hardcoded
+  // ".../opengraph-image.png" literal 404'd — the file it named never
+  // existed in the static export.
+  image: `${SITE_URL}/opengraph-image`,
   codeRepository: "https://github.com/moadim-io/daemon",
   downloadUrl: "https://crates.io/crates/moadim",
   offers: {
