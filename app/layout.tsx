@@ -52,6 +52,22 @@ export const metadata: Metadata = {
     title: "Moadim — Put your agents on a loop",
     description,
   },
+  // Explicit indexability + large-image-preview opt-in: Google's default
+  // (with no `robots` meta set) is `max-image-preview:standard`, a small
+  // thumbnail that undersells the OG card. This is distinct from
+  // `app/robots.ts` (robots.txt crawl directives) — this is the per-document
+  // indexing/snippet meta tag.
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
 
 export const jsonLd = {
