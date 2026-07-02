@@ -78,6 +78,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `public/llms.txt` still told AI agents/crawlers to run the bare `cargo install moadim` and
+  claimed that alone registers a launchd/systemd service — both already corrected on the page
+  itself (`--locked`, and the separate `moadim install` step for reboot persistence, #238) but
+  never propagated to this file, leaving it silently out of sync with the site's own content.
 - `sitemap.xml`'s `lastModified` no longer freezes on a hand-maintained hardcoded date — it now stamps the actual build time, so the sitemap stops claiming every page was last modified on a fixed day forever (#57).
 - Escaped `<` in the FAQ `JSON-LD` before inlining, closing the same `</script>`-breakout sink already fixed for the `SoftwareApplication` JSON-LD (#301).
 - Cloudflare Pages deploys are no longer cancelled mid-flight by a newer push to `main`; queued runs now serialize instead, so a killed `wrangler pages deploy` can't leave a half-uploaded deployment (#310).
