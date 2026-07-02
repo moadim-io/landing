@@ -13,10 +13,15 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: "#fafafa",
     theme_color: "#fafafa",
     icons: [
+      // `app/favicon.ico` was replaced by `app/icon.svg` (#161) — Next serves
+      // the icon route at `/icon.svg`, not `/favicon.ico`, so this manifest
+      // has been pointing PWA installers (Android "Add to Home Screen",
+      // Chrome install prompts) at a file that no longer exists in the
+      // static export. Point at the icon Next actually emits instead.
       {
-        src: "/favicon.ico",
+        src: "/icon.svg",
         sizes: "any",
-        type: "image/x-icon",
+        type: "image/svg+xml",
       },
     ],
   };
