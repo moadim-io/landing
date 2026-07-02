@@ -75,8 +75,31 @@ export const metadata: Metadata = {
   },
 };
 
-export const jsonLd = {
-  "@context": "https://schema.org",
+// @id anchors so the Organization, WebSite, and SoftwareApplication nodes
+// below can cross-reference each other within the same @graph instead of
+// each carrying a duplicate, divergence-prone copy of the brand identity.
+const organizationId = `${SITE_URL}/#organization`;
+
+const organization = {
+  "@type": "Organization",
+  "@id": organizationId,
+  name: "Moadim",
+  url: SITE_URL,
+  // No dedicated brand mark yet (app/favicon.ico is still the create-next-app
+  // scaffold icon, see #145) — the generated OG card is the closest stand-in
+  // for a logo until a real mark ships.
+  logo: `${SITE_URL}/opengraph-image`,
+};
+
+const website = {
+  "@type": "WebSite",
+  "@id": `${SITE_URL}/#website`,
+  name: "Moadim",
+  url: SITE_URL,
+  publisher: { "@id": organizationId },
+};
+
+const softwareApplication = {
   "@type": "SoftwareApplication",
   name: "Moadim",
   url: SITE_URL,
@@ -106,6 +129,12 @@ export const jsonLd = {
     price: "0",
     priceCurrency: "USD",
   },
+  publisher: { "@id": organizationId },
+};
+
+export const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [organization, website, softwareApplication],
 };
 
 export default function RootLayout({
