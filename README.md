@@ -55,13 +55,17 @@ app/
                          GitHub/crates.io identifiers (REPO_SLUG, REPO_URL, CRATE_NAME,
                          CRATE_URL).
   globals.css           Global styles and Tailwind theme tokens.
+  icon.svg              Site favicon (SVG).
+  apple-icon.tsx        Generated Apple touch icon (iOS "Add to Home Screen", Safari bookmarks).
   opengraph-image.tsx   Generated Open Graph social card.
   twitter-image.tsx     Generated Twitter/X social card.
   robots.ts             Generated robots.txt.
   sitemap.ts            Generated sitemap.xml.
-  favicon.ico           Site favicon.
+  manifest.ts           Generated web app manifest.
 public/
   _headers              Cloudflare Pages response headers.
+  _redirects            Cloudflare Pages host redirects (pages.dev / www → canonical host).
+  llms.txt              Plain-text site summary for AI-agent discovery.
 scripts/
   verify-export.mjs     Checks the built out/ directory for required routes/files (see
                          `npm run verify:export`).
