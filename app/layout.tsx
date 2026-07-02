@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SITE_URL, REPO_URL } from "./site";
+import { SITE_URL, REPO_URL, CRATE_URL } from "./site";
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
 
@@ -110,15 +110,11 @@ const softwareApplication = {
   // search engines surface the app for an unsupported platform.
   operatingSystem: "macOS, Linux",
   description,
-  sameAs: [
-    "https://github.com/moadim-io/daemon",
-    "https://crates.io/crates/moadim",
-  ],
+  sameAs: [REPO_URL, CRATE_URL],
   license: "https://opensource.org/licenses/MIT",
-  // TODO(#44): reuse a single base-URL source once base-URL centralization lands.
-  image: "https://moadim.io/opengraph-image.png",
-  codeRepository: "https://github.com/moadim-io/daemon",
-  downloadUrl: "https://crates.io/crates/moadim",
+  image: `${SITE_URL}/opengraph-image`,
+  codeRepository: REPO_URL,
+  downloadUrl: CRATE_URL,
   offers: {
     "@type": "Offer",
     price: "0",
