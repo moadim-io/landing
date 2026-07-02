@@ -16,7 +16,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const description =
+// Exported so other metadata routes (e.g. `manifest.ts`) reuse the same copy
+// instead of hand-copying it and drifting out of sync on the next rebrand.
+export const description =
   "Moadim is an open-source loop engine for AI agents. Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes against your repo on every tick, over MCP and REST.";
 
 // Search-engine ownership-verification tokens, read at build time so nothing
