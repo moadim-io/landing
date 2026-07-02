@@ -13,6 +13,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated Vitest coverage report (v8 instrumentation output), not
+    // hand-written source.
+    "coverage/**",
   ]),
   {
     // Type-aware linting needs the TypeScript program, which only covers
