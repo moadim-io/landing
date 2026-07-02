@@ -39,6 +39,9 @@ export const metadata: Metadata = {
     template: "%s — Moadim",
   },
   description,
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Moadim — Put your agents on a loop",
     description,
