@@ -79,6 +79,12 @@ const eslintConfig = defineConfig([
       // `{ null: "ignore" }` keeps the idiomatic `x == null` nullish check
       // (matches both `null` and `undefined`) allowed.
       eqeqeq: ["error", "always", { null: "ignore" }],
+      // Require type-only imports to use `import type`/`import { type X }`.
+      // Without this, a symbol imported only for its type still emits as a
+      // value import in the compiled output — pulling in a module purely
+      // for an erased type instead of dropping the import entirely. See #16.
+      // Auto-fixable via `eslint --fix`.
+      "@typescript-eslint/consistent-type-imports": "error",
     },
   },
 ]);
