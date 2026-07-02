@@ -22,6 +22,12 @@ const REQUIRED_FILES = [
   // the old file and has been failing every build ever since (a real `favicon.ico`
   // never lands in `out/`).
   "icon.svg",
+  // iOS "Add to Home Screen" / Safari bookmark icon (app/apple-icon.tsx) and the
+  // PWA manifest (app/manifest.ts) both emit real files under `out/` today but
+  // were never added here, so either one silently dropping from a build would
+  // pass this check and CI regardless.
+  "apple-icon",
+  "manifest.webmanifest",
   "_headers",
   // Cloudflare Pages reads this from the export root to 301 moadim-landing.pages.dev
   // and www.moadim.io to the canonical host (public/_redirects) — silently dropping
