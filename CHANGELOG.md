@@ -78,6 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- README's "Project structure" listing: replaced the stale `app/favicon.ico` entry (that file was replaced by `app/icon.svg` a while ago) with the actual `icon.svg`, `apple-icon.tsx`, and `manifest.ts` routes, and added the previously-undocumented `public/_redirects` and `public/llms.txt` files.
 - `sitemap.xml`'s `lastModified` no longer freezes on a hand-maintained hardcoded date — it now stamps the actual build time, so the sitemap stops claiming every page was last modified on a fixed day forever (#57).
 - Escaped `<` in the FAQ `JSON-LD` before inlining, closing the same `</script>`-breakout sink already fixed for the `SoftwareApplication` JSON-LD (#301).
 - Cloudflare Pages deploys are no longer cancelled mid-flight by a newer push to `main`; queued runs now serialize instead, so a killed `wrangler pages deploy` can't leave a half-uploaded deployment (#310).
