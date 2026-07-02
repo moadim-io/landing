@@ -44,6 +44,7 @@ export const metadata: Metadata = {
     description,
     url: SITE_URL,
     siteName: "Moadim",
+    locale: "en_US",
     type: "website",
     locale: "en_US",
   },
