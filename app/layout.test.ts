@@ -29,7 +29,7 @@ describe("root layout JSON-LD", () => {
   it("declares an Organization node with a logo, referenced by the other nodes", () => {
     expect(organization["@type"]).toBe("Organization");
     expect(organization.url).toBe(SITE_URL);
-    expect(organization.logo).toBe(`${SITE_URL}/opengraph-image`);
+    expect(organization.logo).toBe(`${SITE_URL}/apple-icon`);
     expect(website.publisher).toEqual({ "@id": organization["@id"] });
     expect(softwareApplication.publisher).toEqual({
       "@id": organization["@id"],

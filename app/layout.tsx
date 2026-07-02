@@ -84,10 +84,9 @@ const organization = {
   "@id": organizationId,
   name: "Moadim",
   url: SITE_URL,
-  // No dedicated brand mark yet (app/favicon.ico is still the create-next-app
-  // scaffold icon, see #145) — the generated OG card is the closest stand-in
-  // for a logo until a real mark ships.
-  logo: `${SITE_URL}/opengraph-image`,
+  // Square brand mark — Google's Organization/Logo structured-data guidance
+  // wants a square-ish image, not the 1200x630 OG banner.
+  logo: `${SITE_URL}/apple-icon`,
 };
 
 const website = {
