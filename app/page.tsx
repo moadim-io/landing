@@ -125,12 +125,24 @@ export default function Home() {
               </span>
               {`cargo install ${CRATE_NAME}`}
             </code>
+            <code className="font-mono text-base text-white sm:text-lg">
+              {/* `cargo install` only builds the binary — it doesn't start the
+                  daemon. Surface the run step too, so the snippet matches the
+                  daemon README's install-then-run onboarding instead of
+                  leaving visitors with an installed-but-not-running daemon. */}
+              <span aria-hidden="true" className="select-none text-accent">
+                ${" "}
+              </span>
+              {CRATE_NAME}
+            </code>
             <p className="mt-1 text-xs font-medium leading-snug text-white">
               Requires a Unix-like OS with{" "}
               <code className="font-mono text-accent">tmux</code> and a cron
               daemon (cron / launchd / systemd) — loops fire from your OS crontab
-              inside a tmux session, so without them the install succeeds but
-              nothing runs.
+              inside a tmux session. Running{" "}
+              <code className="font-mono text-accent">{CRATE_NAME}</code>{" "}
+              starts the daemon in the background at{" "}
+              <code className="font-mono text-accent">localhost:5784</code>.
             </p>
           </div>
           <ExternalLink
