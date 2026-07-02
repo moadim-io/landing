@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `next` (and the matching `eslint-config-next`) bumped from `16.2.9` to `16.2.10`.
 - Third-party GitHub Actions across `ci.yml`, `codeql.yml`, `dependency-review.yml`, `link-check.yml`, `actionlint.yml`, and `deploy.yml` pinned to commit SHAs instead of floating version tags, closing a supply-chain tampering vector where a compromised tag could silently change what a workflow runs (#342, #350).
 - `eqeqeq` ESLint rule enabled, requiring `===`/`!==` over `==`/`!=` (#335).
 - `@typescript-eslint/no-explicit-any` enabled as an error (#307).
