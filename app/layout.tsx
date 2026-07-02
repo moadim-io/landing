@@ -39,6 +39,12 @@ export const metadata: Metadata = {
     template: "%s — Moadim",
   },
   description,
+  // Consolidate duplicate-URL ranking signal (apex vs www, with/without
+  // trailing slash or /index.html) onto the single preferred origin, matching
+  // metadataBase / openGraph.url / the sitemap entry.
+  alternates: {
+    canonical: SITE_URL,
+  },
   openGraph: {
     title: "Moadim — Put your agents on a loop",
     description,
