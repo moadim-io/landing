@@ -17,8 +17,18 @@ const REQUIRED_FILES = [
   "robots.txt",
   "opengraph-image",
   "twitter-image",
-  "favicon.ico",
+  // The favicon route: app/favicon.ico was replaced by app/icon.svg (#161), which
+  // Next emits as an `/icon.svg` file, not `/favicon.ico` — this list still named
+  // the old file and has been failing every build ever since (a real `favicon.ico`
+  // never lands in `out/`).
+  "icon.svg",
   "_headers",
+  // Cloudflare Pages reads this from the export root to 301 moadim-landing.pages.dev
+  // and www.moadim.io to the canonical host (public/_redirects) — silently dropping
+  // it from a build wouldn't fail `next build`, it would just stop enforcing the
+  // canonical host and let search engines index duplicate-content mirrors.
+  "_redirects",
+  "llms.txt",
 ];
 
 const missing = [];

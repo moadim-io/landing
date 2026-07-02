@@ -20,8 +20,10 @@ const REQUIRED_FILES = [
   "robots.txt",
   "opengraph-image",
   "twitter-image",
-  "favicon.ico",
+  "icon.svg",
   "_headers",
+  "_redirects",
+  "llms.txt",
 ];
 
 let workDir: string | undefined;
@@ -67,10 +69,10 @@ describe("verify-export", () => {
   });
 
   it("exits non-zero and names the file when it exists but is empty", () => {
-    const cwd = makeOutDir({ empty: ["favicon.ico"] });
+    const cwd = makeOutDir({ empty: ["icon.svg"] });
 
     expect(() => execFileSync("node", [SCRIPT_PATH], { cwd, encoding: "utf8" })).toThrow(
-      /favicon\.ico \(empty\)/,
+      /icon\.svg \(empty\)/,
     );
   });
 });
