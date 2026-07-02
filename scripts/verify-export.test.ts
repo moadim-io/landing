@@ -21,6 +21,8 @@ const REQUIRED_FILES = [
   "opengraph-image",
   "twitter-image",
   "icon.svg",
+  "apple-icon",
+  "manifest.webmanifest",
   "_headers",
   "_redirects",
   "llms.txt",
