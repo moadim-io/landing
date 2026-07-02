@@ -59,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `next` (and the matching `eslint-config-next`) bumped from `16.2.9` to `16.2.10`.
 - Extracted the repeated `border-4`/`shadow-[Npx_Npx_0_0_#000]` recipe used at every panel/CTA call site (header, install card, features grid, reads section, FAQ, `ctaButton`) into `shadow-brutal` / `shadow-brutal-hover` / `shadow-brutal-active` / `shadow-brutal-lg` tokens in `app/globals.css`'s `@theme` block, so "the brutalist card" has one definition instead of drifting per call site (#213, #483).
 - Every `actions/setup-node` step in `ci.yml`, `deploy.yml`, `lighthouse.yml`, and `link-check.yml` now reads the Node version from `.nvmrc` (`node-version-file`) instead of a fifth untested hardcoded `node-version: 22` literal (#477).
 - Enabled `noImplicitReturns` and `exactOptionalPropertyTypes` in `tsconfig.json`, completing the project's strict-mode opt-ins (#467, #463).
