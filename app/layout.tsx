@@ -68,6 +68,13 @@ export const jsonLd = {
   operatingSystem: "macOS, Linux",
   description,
   license: "https://opensource.org/licenses/MIT",
+  // Authoritative profiles for this entity. `sameAs` lets search engines tie
+  // this SoftwareApplication node to its canonical homes (source + registry),
+  // disambiguating "Moadim" in the knowledge graph.
+  sameAs: [
+    "https://github.com/moadim-io/daemon",
+    "https://crates.io/crates/moadim",
+  ],
   offers: {
     "@type": "Offer",
     price: "0",
