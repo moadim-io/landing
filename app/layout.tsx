@@ -52,6 +52,21 @@ export const metadata: Metadata = {
     title: "Moadim — Put your agents on a loop",
     description,
   },
+  // iOS home-screen / standalone presentation. When the site is added to the
+  // home screen, launch it chromeless under the Moadim name with a status bar
+  // that matches the neobrutalist light palette (emits
+  // `apple-mobile-web-app-*` meta tags) instead of Safari's defaults.
+  appleWebApp: {
+    capable: true,
+    title: "Moadim",
+    statusBarStyle: "default",
+  },
+  // The copy carries no phone numbers, yet mobile Safari heuristically turns
+  // version-like and identifier strings (e.g. `moadim-io/daemon`) into tap-to-
+  // call links. Opt out so no body text is silently rewritten into a `tel:`.
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export const jsonLd = {
