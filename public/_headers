@@ -51,3 +51,28 @@
 /sitemap.xml
   ! Cache-Control
   Cache-Control: public, max-age=86400
+
+# --- Issue #142: keep the Cloudflare `.pages.dev` mirrors out of search indexes ---
+# This static export is also reachable at the Cloudflare Pages project alias
+# (`moadim-landing.pages.dev`) and at per-deploy/preview aliases
+# (`<hash>.moadim-landing.pages.dev`), which serve byte-identical content to the
+# canonical `https://moadim.io` and would otherwise be fully crawlable,
+# indexable duplicates that split ranking/social signals away from the apex.
+#
+# `app/robots.ts` allows `*` on every host it's served from (it has no way to
+# know its own hostname at build time, since this is a static export), so it
+# can't restrict `.pages.dev` on its own. `public/_redirects` can't fix this
+# either — Cloudflare Pages' `_redirects` has no host-matching support at all
+# (see the comment at the top of `public/_redirects` for the full explanation
+# and links). `_headers`, however, does support absolute-URL/host-scoped
+# patterns, so it's the only static-file mechanism here that can single out the
+# `.pages.dev` hosts: https://developers.cloudflare.com/pages/configuration/headers/
+#
+# `:project` matches the project alias host (`moadim-landing.pages.dev`);
+# `:version` additionally matches the per-deploy/preview hash subdomain
+# (`<hash>.moadim-landing.pages.dev`). Neither pattern matches the custom
+# domain `moadim.io`, so the canonical origin is unaffected.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex
