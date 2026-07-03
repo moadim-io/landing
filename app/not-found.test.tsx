@@ -6,6 +6,10 @@ describe("not-found metadata", () => {
   it("declares a page-specific title", () => {
     expect(metadata.title).toBe("Page not found");
   });
+
+  it("tells crawlers not to index the 404 page", () => {
+    expect(metadata.robots).toEqual({ index: false });
+  });
 });
 
 describe("NotFound", () => {
