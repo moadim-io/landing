@@ -13,6 +13,10 @@ describe("root layout metadata", () => {
   it("declares the canonical site URL as the metadata base", () => {
     expect(metadata.metadataBase?.toString()).toBe(`${SITE_URL}/`);
   });
+
+  it("falls back to a 'dev' build SHA outside CI", () => {
+    expect(metadata.other).toMatchObject({ "x-build-sha": "dev" });
+  });
 });
 
 describe("root layout JSON-LD", () => {

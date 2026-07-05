@@ -27,6 +27,10 @@ const description =
 const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
 const bingSiteVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION;
 
+// Which commit produced this build (see next.config.ts's `env`), so a live incident can be
+// checked against `git log` without a separate deploy-log lookup. "dev" outside CI.
+const buildSha = process.env.NEXT_PUBLIC_BUILD_SHA ?? "dev";
+
 // Paint the mobile browser chrome (address bar / status bar) in the brand
 // page background instead of the default white, so the UI extends the
 // neobrutalist palette edge-to-edge. Matches `--background` in globals.css.
@@ -62,6 +66,11 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Moadim — Put your agents on a loop",
     description,
+  },
+  // Deploy traceability: which commit produced the live page, readable via
+  // `curl -s https://moadim.io | grep x-build-sha` without a separate deploy-log lookup.
+  other: {
+    "x-build-sha": buildSha,
   },
   // Ownership-verification meta tags for Google Search Console / Bing Webmaster
   // Tools. Each tag is emitted only when its build-time token is set, so an
