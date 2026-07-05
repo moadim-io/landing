@@ -47,7 +47,20 @@ landing content, `globals.css` for styles). Static assets go in `public/`.
    npm run build
    ```
 
-3. Open a pull request using the PR template. Link the related issue
+3. If your change touches shipped code (`app/`, `scripts/`, config, etc. —
+   not just docs/Markdown), add a changeset:
+
+   ```bash
+   npx changeset
+   ```
+
+   This writes a `.changeset/<slug>.md` file with a `"landing": patch` (fix,
+   hardening, test) or `"landing": minor` (new user-facing feature) header
+   plus a short summary of the change — `@changesets/cli` uses these to build
+   `CHANGELOG.md` and bump `package.json` on release. Pure docs/Markdown
+   changes don't need one.
+
+4. Open a pull request using the PR template. Link the related issue
    (e.g. `Closes #123`) and attach screenshots for any visual change.
 
 ## Reporting issues

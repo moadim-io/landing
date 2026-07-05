@@ -17,3 +17,4 @@
 - [ ] `npm run verify:export` passes
 - [ ] Screenshots attached for UI/visual changes
 - [ ] Copy stays in sync with the daemon README where it references install/usage
+- [ ] Changeset added (`npx changeset`) for changes to shipped code — not needed for docs/Markdown-only changes
