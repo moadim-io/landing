@@ -1,11 +1,34 @@
 import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
+import recommendedIncremental from "eslint-config-agent/recommended-incremental";
+import nextPlugin from "@next/eslint-plugin-next";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 
 const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
+  // eslint-config-agent/recommended-incremental: the shared config's gentlest
+  // on-ramp for an existing codebase. It already covers the generic
+  // TypeScript/React strictness this repo used to hand-roll (no-console,
+  // prefer-const, object-shorthand, no-non-null-assertion, no-explicit-any,
+  // eqeqeq, consistent-type-imports, ...) — the divisive rules pre-disabled
+  // and everything else at warn, so adopting it doesn't turn today's
+  // backlog into a blocking CI failure.
+  // See https://github.com/tupe12334/eslint-config-agent.
+  ...recommendedIncremental,
+  // Next.js-specific rules, pulled from `@next/eslint-plugin-next` directly
+  // rather than spreading all of `eslint-config-next`: the latter registers
+  // its own copies of the `react`/`react-hooks`/`import` plugins, which
+  // collide with the ones `eslint-config-agent` already registers.
+  {
+    plugins: {
+      "@next/next": nextPlugin,
+    },
+    rules: {
+      ...nextPlugin.configs.recommended.rules,
+      ...nextPlugin.configs["core-web-vitals"].rules,
+    },
+  },
+  // eslint-config-agent doesn't bundle jsx-a11y, so layer its recommended
+  // ruleset on top for markup-level accessibility checks.
+  jsxA11y.flatConfigs.recommended,
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
@@ -27,10 +50,11 @@ const eslintConfig = defineConfig([
       },
     },
     rules: {
-      // An unawaited / un-`.catch()`ed promise silently swallows
-      // rejections, hiding errors that should crash a build or surface a
-      // bug. Require every promise to be awaited, returned, or explicitly
-      // handled (`.catch()` / `void`).
+      // eslint-config-agent/recommended-incremental doesn't cover these yet
+      // (https://github.com/tupe12334/eslint-config-agent/issues/246), so
+      // keep them as hard errors: an unawaited / un-`.catch()`ed promise
+      // silently swallows rejections, hiding errors that should crash a
+      // build or surface a bug.
       "@typescript-eslint/no-floating-promises": "error",
       // Passing an `async` function where a `void`-returning callback is
       // expected (event handlers, `Array.prototype.forEach`) drops its
@@ -38,53 +62,6 @@ const eslintConfig = defineConfig([
       // same way. Force the call site to use a non-async callback or
       // handle the promise explicitly.
       "@typescript-eslint/no-misused-promises": "error",
-    },
-  },
-  {
-    rules: {
-      // eslint-config-next's core-web-vitals already registers the
-      // jsx-a11y plugin but only wires a limited subset of its rules, some
-      // at warn. Layer the full recommended ruleset's severities at error
-      // (it already registers the plugin, so only pull in its `rules`) so
-      // markup-level a11y mistakes fail `npm run lint` instead of landing
-      // silently.
-      ...jsxA11y.flatConfigs.recommended.rules,
-      // Keep stray debug logging out of the shipped landing page.
-      // console.warn/console.error remain allowed for intentional diagnostics.
-      "no-console": ["error", { allow: ["warn", "error"] }],
-      // Prefer `const` for bindings that are never reassigned: it signals
-      // intent, enables immutability-by-default, and turns any accidental
-      // future reassignment into a compile-time error.
-      "prefer-const": "error",
-      // Require ES6 shorthand for object properties and methods
-      // (`{ foo }` over `{ foo: foo }`, `{ fn() {} }` over `{ fn: function () {} }`).
-      // Shorthand is more concise, avoids accidental name/value drift, and keeps
-      // object literals consistent across the codebase.
-      "object-shorthand": ["error", "always"],
-      // Forbid the non-null assertion operator (`foo!.bar`). It silently
-      // overrides the type checker's null/undefined safety, so a value the
-      // compiler believes is present can still be null at runtime, causing a
-      // "cannot read properties of null" crash. Force an explicit guard
-      // (early return, optional chaining, or narrowing) instead.
-      "@typescript-eslint/no-non-null-assertion": "error",
-      // Forbid explicit `any` type annotations, casts, and generics. `any`
-      // opts a value out of type-checking entirely — property access, calls,
-      // and assignments on it are never verified, and the unsafety silently
-      // spreads to everything it touches. Use `unknown` + narrowing, or a
-      // precise type, at boundaries instead.
-      "@typescript-eslint/no-explicit-any": "error",
-      // Require strict equality (`===`/`!==`) instead of loose (`==`/`!=`),
-      // which applies JavaScript's type-coercion rules and produces
-      // surprising results (`0 == ""`, `[] == false`, `"1" == 1` all `true`).
-      // `{ null: "ignore" }` keeps the idiomatic `x == null` nullish check
-      // (matches both `null` and `undefined`) allowed.
-      eqeqeq: ["error", "always", { null: "ignore" }],
-      // Require type-only imports to use `import type`/`import { type X }`.
-      // Without this, a symbol imported only for its type still emits as a
-      // value import in the compiled output — pulling in a module purely
-      // for an erased type instead of dropping the import entirely. See #16.
-      // Auto-fixable via `eslint --fix`.
-      "@typescript-eslint/consistent-type-imports": "error",
     },
   },
 ]);
