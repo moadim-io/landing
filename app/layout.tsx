@@ -177,7 +177,7 @@ export default function RootLayout({
                   <ExternalLink
                     href={`${REPO_URL}#readme`}
                     className="text-sm font-bold uppercase tracking-wide hover:text-accent"
-                    aria-label="Docs (opens in a new tab)"
+                    aria-label="Docs"
                   >
                     Docs
                   </ExternalLink>
@@ -186,7 +186,7 @@ export default function RootLayout({
                   <ExternalLink
                     href={REPO_URL}
                     className="text-sm font-bold uppercase tracking-wide hover:text-accent"
-                    aria-label="GitHub (opens in a new tab)"
+                    aria-label="GitHub"
                   >
                     GitHub
                   </ExternalLink>

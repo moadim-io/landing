@@ -142,7 +142,7 @@ export default function Home() {
           <ExternalLink
             className={`${ctaButton} group gap-3 bg-accent`}
             href={REPO_URL}
-            aria-label="Star moadim on GitHub (opens in a new tab)"
+            aria-label="Star moadim on GitHub"
           >
             <span aria-hidden="true" className="text-lg leading-none">
               ★
@@ -152,7 +152,7 @@ export default function Home() {
           <ExternalLink
             className={`${ctaButton} gap-2 bg-white`}
             href={CRATE_URL}
-            aria-label="crates.io (opens in a new tab)"
+            aria-label="crates.io"
           >
             crates.io
             <span aria-hidden="true">↗</span>
