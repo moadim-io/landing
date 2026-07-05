@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { jsonLd, metadata } from "./layout";
-import { SITE_URL } from "./site";
+import { SITE_URL, REPO_URL, CRATE_URL } from "./site";
 
 describe("root layout metadata", () => {
   it("declares the expected title and description", () => {
@@ -24,6 +24,12 @@ describe("root layout JSON-LD", () => {
       "https://opensource.org/licenses/MIT",
     );
     expect(softwareApplication["@type"]).toBe("SoftwareApplication");
+  });
+
+  it("points its GitHub/crates.io identifiers at the shared site.ts constants", () => {
+    expect(softwareApplication.sameAs).toEqual([REPO_URL, CRATE_URL]);
+    expect(softwareApplication.codeRepository).toBe(REPO_URL);
+    expect(softwareApplication.downloadUrl).toBe(CRATE_URL);
   });
 
   it("declares an Organization node with a logo, referenced by the other nodes", () => {
