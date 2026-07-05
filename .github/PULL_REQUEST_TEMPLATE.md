@@ -14,5 +14,6 @@
 - [ ] `npm run typecheck` passes
 - [ ] `npm test` passes
 - [ ] `npm run build` passes
+- [ ] `npm run verify:export` passes
 - [ ] Screenshots attached for UI/visual changes
 - [ ] Copy stays in sync with the daemon README where it references install/usage
