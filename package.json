@@ -22,7 +22,9 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "verify:export": "node scripts/verify-export.mjs"
+    "verify:export": "node scripts/verify-export.mjs",
+    "changeset": "changeset",
+    "version": "changeset version"
   },
   "dependencies": {
     "next": "16.2.9",
@@ -30,6 +32,7 @@
     "react-dom": "19.2.7"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.0",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
