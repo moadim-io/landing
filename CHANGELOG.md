@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The branded 404 page now reuses `page.tsx`'s shared `panel` constant for its card surface instead of a hand-copied class string, closing the one remaining call site the FAQ-panel single-sourcing (#282) didn't reach.
 - Third-party GitHub Actions across `ci.yml`, `codeql.yml`, `dependency-review.yml`, `link-check.yml`, `actionlint.yml`, and `deploy.yml` pinned to commit SHAs instead of floating version tags, closing a supply-chain tampering vector where a compromised tag could silently change what a workflow runs (#342, #350).
 - `@typescript-eslint/consistent-type-imports` ESLint rule enabled, requiring type-only imports to use `import type` so an erased type doesn't survive into the compiled output as a value import (#16).
 - `eqeqeq` ESLint rule enabled, requiring `===`/`!==` over `==`/`!=` (#335).

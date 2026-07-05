@@ -90,7 +90,10 @@ const ctaButton =
 // 10px hard drop shadow worn by the hero header, the feature grid, the
 // reading-list section, and the FAQ. Extracted (mirroring `ctaButton`) so the
 // panels can't drift apart; each call site appends only its own padding/layout.
-const panel = "border-4 border-black bg-white shadow-[10px_10px_0_0_#000]";
+// Exported so `not-found.tsx`'s 404 card — which wears the exact same surface —
+// reuses it instead of hand-copying the class string (see `faqJsonLd` above
+// for the same export-for-reuse precedent).
+export const panel = "border-4 border-black bg-white shadow-[10px_10px_0_0_#000]";
 
 export default function Home() {
   return (
