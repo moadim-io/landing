@@ -45,7 +45,7 @@ describe("Home", () => {
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { level: 2, name: /mcp · rest · openapi/i }),
+      screen.getByRole("heading", { level: 2, name: /ui · rest · mcp/i }),
     ).toBeInTheDocument();
   });
 
