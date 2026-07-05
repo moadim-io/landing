@@ -32,6 +32,17 @@ describe("Home", () => {
     );
   });
 
+  it("exposes the feature cards as a named landmark region", () => {
+    render(<Home />);
+
+    // Unlike the "On loop engineering" and FAQ sections, this grid has no
+    // visible heading — without an accessible name it'd be an anonymous
+    // <ul> that screen-reader landmark navigation skips right over.
+    expect(
+      screen.getByRole("region", { name: /features/i }),
+    ).toBeInTheDocument();
+  });
+
   it("renders all three feature cards", () => {
     render(<Home />);
 
