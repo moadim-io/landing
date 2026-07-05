@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SITE_URL, REPO_URL } from "./site";
+import { SITE_URL, REPO_URL, CRATE_URL } from "./site";
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
 
@@ -196,6 +196,38 @@ export default function RootLayout({
           </div>
         </header>
         {children}
+        {/* Site footer landmark: a bare <footer> at the top level of <body>
+            (not nested in another sectioning element) maps to the
+            `contentinfo` ARIA landmark, giving assistive-tech users a
+            second top-level region beyond `banner`/`main`. Also the
+            page's only copyright/license line (#28). */}
+        <footer className="mt-auto border-t-4 border-black bg-background">
+          <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-4 px-4 py-6 text-sm font-medium sm:flex-row sm:justify-between sm:px-8">
+            <p>© {new Date().getFullYear()} Moadim. MIT licensed.</p>
+            <nav aria-label="Footer navigation">
+              <ul className="flex items-center gap-6">
+                <li>
+                  <ExternalLink
+                    href={REPO_URL}
+                    className="font-bold uppercase tracking-wide hover:text-accent"
+                    aria-label="GitHub (opens in a new tab)"
+                  >
+                    GitHub
+                  </ExternalLink>
+                </li>
+                <li>
+                  <ExternalLink
+                    href={CRATE_URL}
+                    className="font-bold uppercase tracking-wide hover:text-accent"
+                    aria-label="crates.io (opens in a new tab)"
+                  >
+                    crates.io
+                  </ExternalLink>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </footer>
       </body>
     </html>
   );
