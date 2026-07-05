@@ -14,6 +14,8 @@
     // Single-line Claude Code include directive ("@AGENTS.md"), not prose.
     "CLAUDE.md",
     // GitHub PR template convention starts with an HTML comment, not an H1.
-    ".github/PULL_REQUEST_TEMPLATE.md"
+    ".github/PULL_REQUEST_TEMPLATE.md",
+    // Changesets format: frontmatter followed by a plain prose summary, never an H1.
+    ".changeset/**"
   ]
 }
