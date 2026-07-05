@@ -146,6 +146,19 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        {/* WCAG 2.4.1 Bypass Blocks: a keyboard/screen-reader user landing on
+            any page must be able to jump straight to the main content
+            instead of tabbing through the banner's nav links first. `sr-only`
+            keeps it invisible until it receives focus (Tab is the only way
+            to reach it, so a mouse click can never trigger it — no conflict
+            with the cascade-layer `:focus-visible` outline rule below,
+            since this only toggles layout/visibility, not `outline`). */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:border-4 focus:border-black focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-black focus:uppercase focus:tracking-wide"
+        >
+          Skip to main content
+        </a>
         <JsonLdScript data={jsonLd} />
         {/* Site banner landmark: gives assistive-tech users a top-level `banner`
             region to land on, plus a persistent Moadim wordmark for brand

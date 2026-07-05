@@ -24,4 +24,10 @@ describe("NotFound", () => {
       screen.getByRole("link", { name: /back to home/i }),
     ).toHaveAttribute("href", "/");
   });
+
+  it("exposes #main-content as the skip link's target landmark", () => {
+    render(<NotFound />);
+
+    expect(screen.getByRole("main")).toHaveAttribute("id", "main-content");
+  });
 });
