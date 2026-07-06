@@ -138,7 +138,16 @@ export default function Home() {
               {`cargo install --locked ${CRATE_NAME}`}
             </code>
             <p className="mt-1 text-xs font-medium leading-snug text-white">
-              Requires a Unix-like OS with{" "}
+              {/* `cargo` ships with the Rust toolchain, not the OS — on a
+                  machine without Rust this command fails outright with
+                  `command not found: cargo` (#70). Called out separately from
+                  the Unix/tmux/cron note below, since that one describes a
+                  silent runtime gap (install succeeds, nothing runs), not an
+                  install-time failure. */}
+              Needs the Rust toolchain first (see{" "}
+              <code className="font-mono text-accent">rustup.rs</code>) — cargo
+              is installed by Rust, not the OS. Once Rust is installed, this
+              also requires a Unix-like OS with{" "}
               <code className="font-mono text-accent">tmux</code> and a cron
               daemon (cron / launchd / systemd) — loops fire from your OS crontab
               inside a tmux session, so without them the install succeeds but
