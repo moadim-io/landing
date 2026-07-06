@@ -100,4 +100,9 @@ jobs:
         # e.g. Moadim, cargo, launchd, systemd, crontab, Codex, Hermes,
         # neobrutalist). Scans app/**, *.md, and config files from the repo
         # root; fails the build on a real misspelling in source/content.
-        uses: crate-ci/typos@v1.48.0
+        #
+        # Pinned to a commit SHA, not the floating `v1.48.0` tag — every other
+        # third-party action in these workflows already is (see CHANGELOG
+        # #342/#350); a mutable tag lets a compromised upstream release
+        # silently change what this step runs with repo write access.
+        uses: crate-ci/typos@bee27e3a4fd1ea2111cf90ab89cd076c870fce14 # v1.48.0
