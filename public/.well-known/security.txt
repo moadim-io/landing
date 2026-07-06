@@ -1,0 +1,9 @@
+# Machine-readable vulnerability disclosure contact (RFC 9116).
+# Human-readable policy, scope, and response expectations: see SECURITY.md
+# https://github.com/moadim-io/landing/blob/main/SECURITY.md
+Contact: https://github.com/moadim-io/landing/security/advisories/new
+Contact: mailto:ofek.gabay.he@gmail.com
+Expires: 2027-07-06T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://moadim.io/.well-known/security.txt
+Policy: https://github.com/moadim-io/landing/blob/main/SECURITY.md

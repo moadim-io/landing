@@ -32,6 +32,11 @@ open the repository's **Security** tab and choose **Report a vulnerability**.
 This opens a private advisory visible only to the maintainers. If you cannot use
 that channel, email **<ofek.gabay.he@gmail.com>**.
 
+The same contacts are published machine-readably at
+[`/.well-known/security.txt`](https://moadim.io/.well-known/security.txt)
+([RFC 9116](https://www.rfc-editor.org/rfc/rfc9116)) for scanners and
+security tooling.
+
 Please include:
 
 - the affected URL or build (commit SHA if known),

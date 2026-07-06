@@ -35,6 +35,9 @@ const REQUIRED_FILES = [
   // canonical host and let search engines index duplicate-content mirrors.
   "_redirects",
   "llms.txt",
+  // RFC 9116 vulnerability-disclosure contact (public/.well-known/security.txt)
+  // — a plain public/ file, so it's just as silently droppable as the others above.
+  ".well-known/security.txt",
 ];
 
 const missing = [];
