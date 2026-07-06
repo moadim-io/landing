@@ -22,7 +22,12 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "verify:export": "node scripts/verify-export.mjs"
+    "verify:export": "node scripts/verify-export.mjs",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,mjs}": "eslint --fix --max-warnings 0",
+    "*.md": "markdownlint-cli2 --fix"
   },
   "dependencies": {
     "next": "16.2.9",
@@ -40,7 +45,9 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
     "eslint-plugin-jsx-a11y": "^6.10.2",
+    "husky": "^9.1.7",
     "jsdom": "^29.1.1",
+    "lint-staged": "^17.0.8",
     "markdownlint-cli2": "^0.22.1",
     "tailwindcss": "^4",
     "typescript": "^6",
