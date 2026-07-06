@@ -164,7 +164,7 @@ export default function RootLayout({
               className="text-2xl font-black uppercase tracking-tight"
               aria-label="Moadim home"
             >
-              moadim<span className="text-accent">.</span>
+              moadim.
             </Link>
             {/* Intentionally no per-link focus-ring utility classes on these
                 two links: globals.css declares an unlayered :focus-visible
@@ -182,7 +182,7 @@ export default function RootLayout({
                 <li>
                   <ExternalLink
                     href={`${REPO_URL}#readme`}
-                    className="text-sm font-bold uppercase tracking-wide hover:text-accent"
+                    className="text-sm font-bold uppercase tracking-wide hover:bg-accent"
                     aria-label="Docs (opens in a new tab)"
                   >
                     Docs
@@ -191,7 +191,7 @@ export default function RootLayout({
                 <li>
                   <ExternalLink
                     href={REPO_URL}
-                    className="text-sm font-bold uppercase tracking-wide hover:text-accent"
+                    className="text-sm font-bold uppercase tracking-wide hover:bg-accent"
                     aria-label="GitHub (opens in a new tab)"
                   >
                     GitHub
