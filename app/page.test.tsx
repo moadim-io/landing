@@ -12,6 +12,12 @@ describe("Home", () => {
     ).toBeInTheDocument();
   });
 
+  it("exposes #main-content as the skip link's target landmark", () => {
+    render(<Home />);
+
+    expect(screen.getByRole("main")).toHaveAttribute("id", "main-content");
+  });
+
   it("shows the locked cargo install command for the published crate", () => {
     render(<Home />);
 
