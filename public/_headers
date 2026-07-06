@@ -62,13 +62,20 @@
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
-# Crawler-fetched metadata served from a stable, unhashed URL: robots.txt and
-# the sitemap. These can change on a redeploy, so they can't be immutable — but
-# a one-day cache still spares the origin a re-fetch on every crawl while letting
-# a redeploy propagate within 24h.
+# Crawler-fetched metadata served from a stable, unhashed URL: robots.txt, the
+# sitemap, and the web app manifest (unlike /opengraph-image and /apple-icon,
+# app/manifest.ts's output carries no content-hash query param, confirmed by
+# inspecting the built export). These can change on a redeploy, so they can't
+# be immutable — but a one-day cache still spares the origin a re-fetch on
+# every crawl/install-prompt check while letting a redeploy propagate within
+# 24h. Without this rule, manifest.webmanifest silently fell through to the
+# broad `/*` rule above and was never cached at all.
 /robots.txt
   ! Cache-Control
   Cache-Control: public, max-age=86400
 /sitemap.xml
+  ! Cache-Control
+  Cache-Control: public, max-age=86400
+/manifest.webmanifest
   ! Cache-Control
   Cache-Control: public, max-age=86400
