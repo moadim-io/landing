@@ -62,13 +62,16 @@
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
-# Crawler-fetched metadata served from a stable, unhashed URL: robots.txt and
-# the sitemap. These can change on a redeploy, so they can't be immutable — but
-# a one-day cache still spares the origin a re-fetch on every crawl while letting
-# a redeploy propagate within 24h.
+# Crawler-fetched metadata served from a stable, unhashed URL: robots.txt, the
+# sitemap, and llms.txt (the AI-agent discovery file). These can change on a
+# redeploy, so they can't be immutable — but a one-day cache still spares the
+# origin a re-fetch on every crawl while letting a redeploy propagate within 24h.
 /robots.txt
   ! Cache-Control
   Cache-Control: public, max-age=86400
 /sitemap.xml
+  ! Cache-Control
+  Cache-Control: public, max-age=86400
+/llms.txt
   ! Cache-Control
   Cache-Control: public, max-age=86400
