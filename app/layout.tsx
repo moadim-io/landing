@@ -88,6 +88,12 @@ const organization = {
   // scaffold icon, see #145) — the generated OG card is the closest stand-in
   // for a logo until a real mark ships.
   logo: `${SITE_URL}/opengraph-image`,
+  // The GitHub org is the authoritative profile for the "Moadim" entity
+  // itself (distinct from the SoftwareApplication.sameAs links below, which
+  // point at the *product's* distribution channels) — this is what lets
+  // search engines resolve the Organization node to a known, verifiable
+  // profile instead of an isolated, unconfirmed name.
+  sameAs: ["https://github.com/moadim-io"],
 };
 
 const website = {
