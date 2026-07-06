@@ -26,6 +26,27 @@ const features = [
   },
 ];
 
+// Positions a loop against the two things people reach for first — cron and
+// CI — instead of leaving visitors to guess where it fits (#186).
+const comparisons = [
+  {
+    dimension: "Trigger",
+    body: "Cron fires on a clock, blind to what changed. CI fires on a git event, blind to time. A loop does both: cron-scheduled, and triggerable on demand over REST or MCP.",
+  },
+  {
+    dimension: "What runs",
+    body: "Cron runs a shell command. CI runs a fixed pipeline. A loop runs an AI agent — Claude, Codex, or Hermes — against a prompt, so the work itself can vary tick to tick.",
+  },
+  {
+    dimension: "Isolation",
+    body: "Cron jobs share the host's process tree with no built-in cleanup. CI jobs get an ephemeral cloud runner. A loop launches into a fresh, local workbench every tick, with a watchdog that kills hung runs and reaps finished ones.",
+  },
+  {
+    dimension: "Where it runs",
+    body: "CI runs on a vendor's cloud runner. A loop, like cron, runs entirely on your own machine — no hidden queue, no cloud.",
+  },
+];
+
 const loopEngineeringReads = [
   {
     source: "MindStudio",
@@ -188,6 +209,32 @@ export default function Home() {
             </li>
           ))}
         </ul>
+
+        <section className={panel} aria-labelledby="compare-heading">
+          <h2
+            id="compare-heading"
+            className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent"
+          >
+            Not cron. Not CI.
+          </h2>
+          <dl className="flex flex-col">
+            {comparisons.map((comparison, i) => (
+              <div
+                key={comparison.dimension}
+                className={`flex flex-col gap-2 px-6 py-5 ${
+                  i < comparisons.length - 1 ? "border-b-2 border-black/15" : ""
+                }`}
+              >
+                <dt className="text-base font-black uppercase leading-tight">
+                  {comparison.dimension}
+                </dt>
+                <dd className="text-sm font-medium leading-6">
+                  {comparison.body}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </section>
 
         <section className={panel} aria-labelledby="reads-heading">
           <h2
