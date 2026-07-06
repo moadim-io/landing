@@ -15,7 +15,13 @@ const features = [
   },
   {
     tag: "03",
-    title: "MCP · REST · OpenAPI",
+    // Matches the daemon's own "One port. Three interfaces." framing (UI,
+    // REST, MCP — see its README and public/llms.txt). "OpenAPI" previously
+    // stood in for the third interface here, but OpenAPI is the REST API's
+    // doc format, not one of the three interfaces the daemon actually ships
+    // — it silently dropped the built-in web UI dashboard from the one piece
+    // of on-page copy visitors scan first (see #85).
+    title: "UI · REST · MCP",
     body: "Every loop is an MCP tool and a documented HTTP endpoint — Swagger UI, an iCal feed, and a web UI baked into the daemon.",
   },
 ];
