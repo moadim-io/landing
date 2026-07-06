@@ -1,6 +1,9 @@
+import { CopyButton } from "./CopyButton";
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
 import { CRATE_NAME, CRATE_URL, REPO_URL } from "./site";
+
+const installCommand = `cargo install --locked ${CRATE_NAME}`;
 
 const features = [
   {
@@ -125,18 +128,25 @@ export default function Home() {
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
               Install
             </span>
-            <code className="font-mono text-base text-white sm:text-lg">
-              {/* The shell prompt is decoration: hide it from screen readers and
-                  exclude it from text selection so copying the line yields a
-                  runnable `cargo install --locked moadim`, not
-                  `$ cargo install --locked moadim`. `--locked` installs the
-                  crate's tested Cargo.lock dependency set instead of
-                  re-resolving to the newest semver-compatible versions. */}
-              <span aria-hidden="true" className="select-none text-accent">
-                ${" "}
-              </span>
-              {`cargo install --locked ${CRATE_NAME}`}
-            </code>
+            {/* A span, not a div: page.test.tsx walks up from the install
+                line via `closest("div")` to reach the card that also holds
+                the prerequisite copy below, so this row layout must not
+                introduce an intervening div. */}
+            <span className="flex items-center justify-between gap-3">
+              <code className="font-mono text-base text-white sm:text-lg">
+                {/* The shell prompt is decoration: hide it from screen readers
+                    and exclude it from text selection so copying the line
+                    yields a runnable `cargo install --locked moadim`, not
+                    `$ cargo install --locked moadim`. `--locked` installs the
+                    crate's tested Cargo.lock dependency set instead of
+                    re-resolving to the newest semver-compatible versions. */}
+                <span aria-hidden="true" className="select-none text-accent">
+                  ${" "}
+                </span>
+                {installCommand}
+              </code>
+              <CopyButton text={installCommand} />
+            </span>
             <p className="mt-1 text-xs font-medium leading-snug text-white">
               Requires a Unix-like OS with{" "}
               <code className="font-mono text-accent">tmux</code> and a cron
