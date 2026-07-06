@@ -1,6 +1,7 @@
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { jsonLd, metadata } from "./layout";
-import { SITE_URL } from "./site";
+import RootLayout, { jsonLd, metadata } from "./layout";
+import { CRATE_URL, REPO_URL, SITE_URL } from "./site";
 
 describe("root layout metadata", () => {
   it("declares the expected title and description", () => {
@@ -40,5 +41,26 @@ describe("root layout JSON-LD", () => {
     expect(website["@type"]).toBe("WebSite");
     expect(website.name).toBe("Moadim");
     expect(website.url).toBe(SITE_URL);
+  });
+});
+
+describe("root layout footer", () => {
+  it("renders a contentinfo landmark with a copyright line and the GitHub/crates.io links", () => {
+    render(
+      <RootLayout>
+        <div>page content</div>
+      </RootLayout>,
+    );
+
+    const footer = screen.getByRole("contentinfo");
+    expect(footer.textContent).toMatch(/©\s*\d{4}\s*Moadim/i);
+
+    const footerLinks = within(footer);
+    expect(
+      footerLinks.getByRole("link", { name: /^github/i }),
+    ).toHaveAttribute("href", REPO_URL);
+    expect(
+      footerLinks.getByRole("link", { name: /^crates\.io/i }),
+    ).toHaveAttribute("href", CRATE_URL);
   });
 });
