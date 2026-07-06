@@ -36,6 +36,13 @@ describe("root layout JSON-LD", () => {
     });
   });
 
+  it("links the Organization node to its authoritative GitHub profile via sameAs", () => {
+    // Distinct from SoftwareApplication.sameAs (the product's distribution
+    // channels): this is what lets search engines resolve the "Moadim"
+    // Organization entity to a verifiable external profile.
+    expect(organization.sameAs).toEqual(["https://github.com/moadim-io"]);
+  });
+
   it("declares a WebSite node with the site name and canonical URL", () => {
     expect(website["@type"]).toBe("WebSite");
     expect(website.name).toBe("Moadim");
