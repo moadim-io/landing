@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Shared `<meta name="description">`/Open Graph/Twitter description trimmed from 189 to 159 characters and front-loaded with the core value proposition, so it survives Google's ~155-160 char SERP truncation and Twitter/unfurlers' tighter ~120-125 char clamp instead of being cut mid-sentence (#135).
 - Third-party GitHub Actions across `ci.yml`, `codeql.yml`, `dependency-review.yml`, `link-check.yml`, `actionlint.yml`, and `deploy.yml` pinned to commit SHAs instead of floating version tags, closing a supply-chain tampering vector where a compromised tag could silently change what a workflow runs (#342, #350).
 - `@typescript-eslint/consistent-type-imports` ESLint rule enabled, requiring type-only imports to use `import type` so an erased type doesn't survive into the compiled output as a value import (#16).
 - `eqeqeq` ESLint rule enabled, requiring `===`/`!==` over `==`/`!=` (#335).
