@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `Strict-Transport-Security` header on `public/_headers`, so HTTPS is enforced from a visitor's very first request instead of only after the first redirect (#442).
+- Node.js engine version pinned via `.nvmrc` alongside the existing `package.json` `engines` field, for a reproducible local/CI toolchain (#390).
+- Unit tests guarding `.nvmrc`, `engines.node`, and `CONTRIBUTING.md`'s stated Node version against drifting out of sync with each other (#461).
+- Unit tests guarding the Satori `SATORI_*` brand-color constants (`opengraph-image.tsx`/`apple-icon.tsx`) against drifting from `app/globals.css` (#457).
+- Unit tests covering the `apple-icon` and `manifest.webmanifest` route config (#449).
+- Unit tests covering `public/_headers` and `public/_redirects` deploy config (#448).
+- Unit tests that render the `opengraph-image` card itself, not just assert its route config (#443).
+- Unit tests covering the hero install command's `aria-hidden`/`select-none` shell-prompt decoration (#440).
 - CI: a `Lighthouse` gate (`treosh/lighthouse-ci-action`) that builds the static export and asserts performance ≥0.90, accessibility ≥0.95, best-practices ≥0.95, and SEO ≥0.95 on the landing page — a regression (unoptimized image, dropped alt text, missing meta tag) now fails the PR instead of only surfacing if someone runs Lighthouse by hand (#75).
 - Unit tests for `page.tsx`'s three feature cards and the "On loop engineering" reading list, asserting the reading-list links carry the `nofollow noopener noreferrer` `rel` baseline — previously the only content on the page with no direct test coverage.
 - `verify:export` script (and a matching CI/deploy step) that asserts the static export in `out/` actually contains every file the site depends on — `index.html`, `404.html`, `sitemap.xml`, `robots.txt`, the OG/Twitter images, `favicon.ico`, and `_headers` — so a route or asset that silently drops from a green `next build` fails CI instead of shipping a broken page (#345).
@@ -47,6 +55,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Enabled `noImplicitReturns` and `exactOptionalPropertyTypes` in `tsconfig.json`, completing the project's strict-mode opt-ins (#467, #463).
+- Enabled `@typescript-eslint/no-unnecessary-condition` (#460).
+- `not-found.tsx`'s "Back to home" link now reuses the shared `ctaButton` constant instead of hand-copying its class string (#466).
+- Single-sourced `SITE_TITLE`/`SITE_DESCRIPTION` into `app/site.ts`, extending the existing `SITE_URL`/`REPO_URL` single-source pattern (#458).
 - The branded 404 page now reuses `page.tsx`'s shared `panel` constant for its card surface instead of a hand-copied class string, closing the one remaining call site the FAQ-panel single-sourcing (#282) didn't reach.
 - Third-party GitHub Actions across `ci.yml`, `codeql.yml`, `dependency-review.yml`, `link-check.yml`, `actionlint.yml`, and `deploy.yml` pinned to commit SHAs instead of floating version tags, closing a supply-chain tampering vector where a compromised tag could silently change what a workflow runs (#342, #350).
 - `@typescript-eslint/consistent-type-imports` ESLint rule enabled, requiring type-only imports to use `import type` so an erased type doesn't survive into the compiled output as a value import (#16).
@@ -81,6 +93,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `README.md`'s Node.js prerequisite corrected from the stale "20+" to the actual "22+" (#459); its Project structure listing now also names the `lighthouse.yml` CI workflow (#468).
+- Web app manifest branding synced with the loop-engine rebrand (#451).
+- `verify-export` now catches a required route emitted as a directory instead of a flat file, a class of export breakage the size/existence checks alone missed (#446).
+- `SoftwareApplication` JSON-LD `image` now points at the real `opengraph-image` route (#410).
+- The homepage feature grid gained a named landmark region so assistive-tech users navigating by region can find it (#418).
+- `ExternalLink` now appends its own new-tab suffix to a caller-supplied `aria-label` instead of the suffix being silently dropped when a caller also sets one (#416).
+- The Cloudflare `wrangler-action` commit SHA pin, left truncated by an earlier fix, corrected in a follow-up (#445, #452).
 - `AGENTS.md`'s "Where things live" listing: replaced the stale `app/favicon.ico` entry (that file was replaced by `app/icon.svg` a while ago) with the actual `icon.svg`, `apple-icon.tsx`, and `manifest.ts` routes, and added the previously-undocumented `JsonLdScript.tsx` — the file agents are told to route new JSON-LD through, but that wasn't listed here.
 - `sitemap.xml`'s `lastModified` no longer freezes on a hand-maintained hardcoded date — it now stamps the actual build time, so the sitemap stops claiming every page was last modified on a fixed day forever (#57).
 - Escaped `<` in the FAQ `JSON-LD` before inlining, closing the same `</script>`-breakout sink already fixed for the `SoftwareApplication` JSON-LD (#301).
