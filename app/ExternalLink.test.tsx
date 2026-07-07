@@ -30,4 +30,21 @@ describe("ExternalLink", () => {
 
     expect(screen.getByText("(opens in a new tab)")).toHaveClass("sr-only");
   });
+
+  it("still warns screen-reader users when the caller sets aria-label", () => {
+    // An `aria-label` fully replaces an element's accessible name, so the
+    // visually-hidden "(opens in a new tab)" suffix rendered as a child span
+    // is otherwise silently dropped from the name on any labeled link. The
+    // component must append the suffix to the label itself instead of
+    // relying on every caller to hand-type it.
+    render(
+      <ExternalLink href="https://example.com" aria-label="Example site">
+        Visit
+      </ExternalLink>,
+    );
+
+    expect(
+      screen.getByRole("link", { name: "Example site (opens in a new tab)" }),
+    ).toBeInTheDocument();
+  });
 });
