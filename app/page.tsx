@@ -26,6 +26,42 @@ const features = [
   },
 ];
 
+// Concrete loop examples — each a prompt + schedule + agent triple with its
+// outcome, so a first-time visitor can picture what they'd actually run
+// instead of only reading the abstract "prompt, schedule, agent" pitch above
+// (#178). Kept accurate to the daemon's real capabilities: cron schedules,
+// the three supported agents, and an isolated workbench per run.
+const recipes = [
+  {
+    title: "Auto-triage incoming issues",
+    prompt: "Label new issues, flag likely duplicates, ping for missing repro steps.",
+    schedule: "Every 15 minutes",
+    agent: "Claude",
+    outcome: "New issues arrive labeled and cross-linked before a human looks.",
+  },
+  {
+    title: "Keep dependencies green",
+    prompt: "Review open Dependabot PRs; merge the safe patch/minor bumps.",
+    schedule: "Daily at 09:00",
+    agent: "Codex",
+    outcome: "Low-risk bumps land on their own; majors wait for review.",
+  },
+  {
+    title: "Suggest new issues from code gaps",
+    prompt: "Scan recent diffs for missing tests, stale docs, or unhandled edge cases; file an issue for each.",
+    schedule: "Nightly",
+    agent: "Hermes",
+    outcome: "A backlog of scoped, self-assign-to-approve issues (this is the loop that wrote this section).",
+  },
+  {
+    title: "Draft release notes on a tag",
+    prompt: "Summarize the PRs merged since the last tag into a changelog entry.",
+    schedule: "On every version tag push",
+    agent: "Claude",
+    outcome: "Release notes are drafted before anyone has to write them by hand.",
+  },
+];
+
 const loopEngineeringReads = [
   {
     source: "MindStudio",
@@ -201,6 +237,47 @@ export default function Home() {
               </li>
             ))}
           </ul>
+        </section>
+
+        <section className={panel} aria-labelledby="recipes-heading">
+          <h2
+            id="recipes-heading"
+            className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent"
+          >
+            What you can put on a loop
+          </h2>
+          <ol className="flex flex-col">
+            {recipes.map((recipe, i) => (
+              <li
+                key={recipe.title}
+                className={`flex flex-col gap-3 px-6 py-5 ${
+                  i < recipes.length - 1 ? "border-b-2 border-black/15" : ""
+                }`}
+              >
+                <h3 className="text-base font-black uppercase leading-tight">
+                  {recipe.title}
+                </h3>
+                <dl className="grid grid-cols-1 gap-x-6 gap-y-2 text-sm font-medium leading-6 sm:grid-cols-[max-content_1fr]">
+                  <dt className="font-bold uppercase tracking-wide text-black/60">
+                    Prompt
+                  </dt>
+                  <dd>{recipe.prompt}</dd>
+                  <dt className="font-bold uppercase tracking-wide text-black/60">
+                    Schedule
+                  </dt>
+                  <dd>{recipe.schedule}</dd>
+                  <dt className="font-bold uppercase tracking-wide text-black/60">
+                    Agent
+                  </dt>
+                  <dd>{recipe.agent}</dd>
+                  <dt className="font-bold uppercase tracking-wide text-black/60">
+                    Outcome
+                  </dt>
+                  <dd>{recipe.outcome}</dd>
+                </dl>
+              </li>
+            ))}
+          </ol>
         </section>
 
         <section className={panel} aria-labelledby="reads-heading">
