@@ -13,6 +13,16 @@ describe("root layout metadata", () => {
   it("declares the canonical site URL as the metadata base", () => {
     expect(metadata.metadataBase?.toString()).toBe(`${SITE_URL}/`);
   });
+
+  it("opts into a large image preview instead of Google's small SERP default", () => {
+    expect(metadata.robots).toMatchObject({
+      index: true,
+      follow: true,
+      googleBot: expect.objectContaining({
+        "max-image-preview": "large",
+      }),
+    });
+  });
 });
 
 describe("root layout JSON-LD", () => {

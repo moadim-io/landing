@@ -63,6 +63,22 @@ export const metadata: Metadata = {
     title: "Moadim — Put your agents on a loop",
     description,
   },
+  // Without an explicit <meta name="robots">, Google falls back to a standard
+  // (small) image preview for this page's search result instead of honoring
+  // the large OG/Twitter card declared above. `max-image-preview: large`
+  // opts into the large preview; the rest states the crawling defaults
+  // explicitly so they can't silently change (#143).
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   // Ownership-verification meta tags for Google Search Console / Bing Webmaster
   // Tools. Each tag is emitted only when its build-time token is set, so an
   // unconfigured environment produces no empty/garbage tag.
