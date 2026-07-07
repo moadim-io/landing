@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { jsonLd, metadata, viewport } from "./layout";
 import { SITE_URL } from "./site";
+import { SATORI_BACKGROUND } from "./brand-colors";
 
 describe("root layout metadata", () => {
   it("declares the expected title and description", () => {
@@ -40,7 +41,10 @@ describe("root layout viewport", () => {
   });
 
   it("paints mobile browser chrome in the brand background color", () => {
-    expect(viewport.themeColor).toBe("#f4f1e8");
+    // Assert against the shared constant, not a re-typed literal — a rebrand
+    // that updates SATORI_BACKGROUND without also updating this call site
+    // should fail this test instead of silently drifting.
+    expect(viewport.themeColor).toBe(SATORI_BACKGROUND);
   });
 });
 
