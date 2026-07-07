@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import Home, { faqJsonLd } from "./page";
 import { CRATE_NAME, CRATE_URL, REPO_URL } from "./site";
@@ -99,6 +99,23 @@ describe("Home", () => {
     ).toBeInTheDocument();
   });
 
+  it("positions a loop against cron and CI across the comparison dimensions", () => {
+    render(<Home />);
+
+    const heading = screen.getByRole("heading", {
+      level: 2,
+      name: /not cron\. not ci\./i,
+    });
+    const section = heading.closest("section");
+    if (!section) {
+      throw new Error("expected the comparison heading to sit inside a section");
+    }
+
+    const dimensions = ["Trigger", "What runs", "Isolation", "Where it runs"];
+    const dtElements = within(section).getAllByRole("term");
+    expect(dtElements.map((dt) => dt.textContent)).toEqual(dimensions);
+  });
+
   it("renders the loop-engineering reading list as safe, nofollow external links", () => {
     render(<Home />);
 
@@ -160,8 +177,17 @@ describe("FAQ section", () => {
     const jsonLd = JSON.parse(script?.innerHTML ?? "null");
     expect(jsonLd).toEqual(faqJsonLd);
 
-    const dtElements = screen.getAllByRole("term");
-    const ddElements = screen.getAllByRole("definition");
+    const faqHeading = screen.getByRole("heading", {
+      level: 2,
+      name: /faq/i,
+    });
+    const faqSection = faqHeading.closest("section");
+    if (!faqSection) {
+      throw new Error("expected the FAQ heading to sit inside a section");
+    }
+
+    const dtElements = within(faqSection).getAllByRole("term");
+    const ddElements = within(faqSection).getAllByRole("definition");
     expect(dtElements).toHaveLength(jsonLd.mainEntity.length);
     expect(ddElements).toHaveLength(jsonLd.mainEntity.length);
 
