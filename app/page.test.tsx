@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import Home, { faqJsonLd } from "./page";
 import { CRATE_NAME, CRATE_URL, REPO_URL } from "./site";
@@ -70,6 +70,41 @@ describe("Home", () => {
     ).toBeInTheDocument();
   });
 
+  it("renders each recipe as a titled prompt/schedule/agent/outcome group", () => {
+    render(<Home />);
+
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: /what you can put on a loop/i,
+      }),
+    ).toBeInTheDocument();
+
+    const titles = [
+      "Auto-triage incoming issues",
+      "Keep dependencies green",
+      "Suggest new issues from code gaps",
+      "Draft release notes on a tag",
+    ];
+
+    for (const title of titles) {
+      const heading = screen.getByRole("heading", { level: 3, name: title });
+      expect(heading).toBeInTheDocument();
+
+      const card = heading.closest("li");
+      if (!card) {
+        throw new Error(`expected "${title}" recipe to sit inside a <li>`);
+      }
+      // Every recipe must state all four of its prompt/schedule/agent/outcome
+      // fields — this is the whole point of the section (#178): a visitor
+      // should never see a recipe missing one of the four.
+      expect(within(card).getByText("Prompt")).toBeInTheDocument();
+      expect(within(card).getByText("Schedule")).toBeInTheDocument();
+      expect(within(card).getByText("Agent")).toBeInTheDocument();
+      expect(within(card).getByText("Outcome")).toBeInTheDocument();
+    }
+  });
+
   it("renders the loop-engineering reading list as safe, nofollow external links", () => {
     render(<Home />);
 
@@ -131,8 +166,17 @@ describe("FAQ section", () => {
     const jsonLd = JSON.parse(script?.innerHTML ?? "null");
     expect(jsonLd).toEqual(faqJsonLd);
 
-    const dtElements = screen.getAllByRole("term");
-    const ddElements = screen.getAllByRole("definition");
+    // Scoped to the FAQ section specifically: the Recipes section (#178)
+    // also renders a <dl>, so an unscoped, page-wide term/definition count
+    // would double-count across both sections.
+    const faqSection = screen
+      .getByRole("heading", { level: 2, name: /faq/i })
+      .closest("section");
+    if (!faqSection) {
+      throw new Error("expected the FAQ heading to sit inside a <section>");
+    }
+    const dtElements = within(faqSection).getAllByRole("term");
+    const ddElements = within(faqSection).getAllByRole("definition");
     expect(dtElements).toHaveLength(jsonLd.mainEntity.length);
     expect(ddElements).toHaveLength(jsonLd.mainEntity.length);
 
