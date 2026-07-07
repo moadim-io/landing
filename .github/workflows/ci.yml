@@ -41,6 +41,9 @@ jobs:
       - name: Lint (ESLint)
         run: npm run lint
 
+      - name: Lint (Stylelint)
+        run: npm run lint:css
+
       - name: Typecheck (tsc)
         # next build's own TypeScript pass only covers the app route graph, so it
         # misses files like *.test.ts (see README.md / AGENTS.md / CONTRIBUTING.md).
