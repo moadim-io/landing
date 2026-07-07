@@ -40,14 +40,24 @@ const REQUIRED_FILES = [
 const missing = [];
 for (const file of REQUIRED_FILES) {
   const path = join(OUT_DIR, file);
-  let size = 0;
+  let stats;
   try {
-    size = statSync(path).size;
+    stats = statSync(path);
   } catch {
     missing.push(`${path} (not found)`);
     continue;
   }
-  if (size === 0) {
+  // A directory's `size` is a small, non-zero number of its own (filesystem
+  // metadata, not content), so the `size === 0` check below would silently
+  // pass a required "file" that's actually a directory — e.g. a future
+  // Next.js version emitting a route as `<name>/index.html` instead of a
+  // flat `<name>` file. Checking `isFile()` catches that class of export
+  // breakage too, not just a missing or zero-byte file.
+  if (!stats.isFile()) {
+    missing.push(`${path} (not a file)`);
+    continue;
+  }
+  if (stats.size === 0) {
     missing.push(`${path} (empty)`);
   }
 }
