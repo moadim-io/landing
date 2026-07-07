@@ -61,7 +61,7 @@ const faqs = [
   },
   {
     q: "Which operating systems are supported?",
-    a: "macOS and Linux. Loops are scheduled through the OS crontab; running moadim install registers a launchd (macOS) or systemd (Linux) service that keeps the daemon alive across reboots.",
+    a: "macOS and Linux. Loops are scheduled through the OS crontab and run inside tmux; running moadim install registers a launchd (macOS) or systemd (Linux) service that keeps the daemon alive across reboots. Both crontab and tmux need to be on your PATH, or the install succeeds but nothing runs.",
   },
   {
     q: "How is each run isolated?",
