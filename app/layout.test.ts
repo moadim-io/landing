@@ -26,6 +26,13 @@ describe("root layout JSON-LD", () => {
     expect(softwareApplication["@type"]).toBe("SoftwareApplication");
   });
 
+  it("points its image at the real generated opengraph-image route", () => {
+    // app/opengraph-image.tsx serves the route with no file extension —
+    // asserting this catches drift back to a hardcoded, non-existent
+    // ".../opengraph-image.png" literal that 404s.
+    expect(softwareApplication.image).toBe(`${SITE_URL}/opengraph-image`);
+  });
+
   it("declares an Organization node with a logo, referenced by the other nodes", () => {
     expect(organization["@type"]).toBe("Organization");
     expect(organization.url).toBe(SITE_URL);
