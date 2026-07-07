@@ -22,12 +22,13 @@ npm install
 | Command | What it does |
 | --- | --- |
 | `npm run dev` | Start the local dev server with hot reload at <http://localhost:3000>. |
-| `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript rules). |
+| `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript + `jsx-a11y` recommended rules); fails on any warning (`--max-warnings 0`). |
 | `npm run lint:md` | Lint Markdown files with `markdownlint-cli2`. |
 | `npm run typecheck` | Type-check the whole project with `tsc --noEmit` (catches errors in files `next build`'s own TypeScript pass skips, e.g. `*.test.ts`). |
 | `npm test` | Run the Vitest unit/component test suite once (tests live next to the code they cover, e.g. `app/page.test.tsx`). |
 | `npm run test:watch` | Run the Vitest suite in watch mode. |
 | `npm run build` | Produce the static export in `out/`. |
+| `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship (CI runs this after every build, before deploy). |
 | `npm run start` | Serve the production build locally. |
 | `actionlint` | Lint `.github/workflows/**` YAML (and embedded shell via shellcheck). Install via `brew install actionlint` or see the [actionlint releases](https://github.com/rhysd/actionlint/releases). |
 | `typos` | Spell-check `app/**`, `*.md`, and config files (config: [`_typos.toml`](./_typos.toml)). Install via `cargo install typos-cli` or `brew install typos-cli`, then run `typos` from the repo root. |
@@ -45,6 +46,7 @@ landing content, `globals.css` for styles). Static assets go in `public/`.
    npm run typecheck
    npm test
    npm run build
+   npm run verify:export
    ```
 
 3. If your change touches shipped code (`app/`, `scripts/`, config, etc. —
