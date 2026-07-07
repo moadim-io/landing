@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Unit test rendering `app/apple-icon.tsx`'s `AppleIcon()` component itself, not just asserting its exported route config — mirrors the same coverage `opengraph-image.test.tsx` already had for its identical `next/og`/Satori setup, so a typo in the Satori JSX/inline style tree fails a test instead of only surfacing at `next build` time (#471).
 - `Strict-Transport-Security` header on `public/_headers`, so HTTPS is enforced from a visitor's very first request instead of only after the first redirect (#442).
 - Node.js engine version pinned via `.nvmrc` alongside the existing `package.json` `engines` field, for a reproducible local/CI toolchain (#390).
 - Unit tests guarding `.nvmrc`, `engines.node`, and `CONTRIBUTING.md`'s stated Node version against drifting out of sync with each other (#461).
@@ -93,6 +94,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Restored the accessible `list` role on the nav, feature-grid, and reading-list `<ul>` elements. Tailwind's Preflight resets `list-style: none` on every `<ul>`, which in Safari/VoiceOver also strips the implicit `list`/`listitem` role, so screen-reader users on Safari weren't hearing these regions announced as lists (#470).
 - `README.md`'s Node.js prerequisite corrected from the stale "20+" to the actual "22+" (#459); its Project structure listing now also names the `lighthouse.yml` CI workflow (#468).
 - Web app manifest branding synced with the loop-engine rebrand (#451).
 - `verify-export` now catches a required route emitted as a directory instead of a flat file, a class of export breakage the size/existence checks alone missed (#446).
