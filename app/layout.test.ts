@@ -55,6 +55,12 @@ describe("root layout JSON-LD", () => {
     expect(softwareApplication["@type"]).toBe("SoftwareApplication");
   });
 
+  it("points the SoftwareApplication image at the real opengraph-image route", () => {
+    // The static export emits this route as `opengraph-image` with no extension
+    // (see scripts/verify-export.mjs) — a hardcoded ".png" 404s in production.
+    expect(softwareApplication.image).toBe(`${SITE_URL}/opengraph-image`);
+  });
+
   it("declares an Organization node with a logo, referenced by the other nodes", () => {
     expect(organization["@type"]).toBe("Organization");
     expect(organization.url).toBe(SITE_URL);
