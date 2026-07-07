@@ -176,7 +176,18 @@ export default function RootLayout({
                 the global rule instead, as every other link on the site
                 does. */}
             <nav aria-label="Site navigation">
-              <ul className="flex items-center gap-6">
+              {/* Tailwind's Preflight resets `list-style: none` on every <ul>,
+                  which in Safari/VoiceOver also strips the implicit
+                  `list`/`listitem` role — a long-documented WebKit quirk
+                  (https://www.scottohara.me/blog/2019/01/12/lists-and-safari.html).
+                  `role="list"` restores it in the accessibility tree without
+                  changing anything visually. jsx-a11y flags this as a
+                  "redundant" role since <ul> already implies it per the ARIA
+                  spec — that mapping is correct, WebKit's actual behavior
+                  isn't, so the rule is disabled for this one, deliberate
+                  case. */}
+              {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+              <ul className="flex items-center gap-6" role="list">
                 <li>
                   <ExternalLink
                     href={`${REPO_URL}#readme`}

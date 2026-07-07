@@ -99,6 +99,16 @@ describe("Home", () => {
     ).toBeInTheDocument();
   });
 
+  it("keeps the feature grid and reading list in the accessibility tree's list semantics", () => {
+    // Tailwind's Preflight resets `list-style: none` on every <ul>, which in
+    // Safari/VoiceOver also strips the implicit `list`/`listitem` role (a
+    // long-documented WebKit quirk) unless `role="list"` restores it — see
+    // the matching comment on each <ul> in page.tsx.
+    render(<Home />);
+
+    expect(screen.getAllByRole("list")).toHaveLength(2);
+  });
+
   it("renders the loop-engineering reading list as safe, nofollow external links", () => {
     render(<Home />);
 
