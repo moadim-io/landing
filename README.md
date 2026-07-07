@@ -72,6 +72,8 @@ scripts/
   dependency-review.yml  Flag vulnerable/incompatible-license dependencies on pull requests.
   actionlint.yml         Lint the GitHub Actions workflow files themselves.
   link-check.yml         Lint outbound/internal links in the built export + docs.
+  lighthouse.yml         Gate PRs on Lighthouse performance/accessibility/best-practices/SEO
+                         budgets (see .lighthouserc.json).
 ```
 
 ## Link check
