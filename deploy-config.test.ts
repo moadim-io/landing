@@ -54,6 +54,19 @@ describe("public/_headers", () => {
     );
   });
 
+  it("meets the hstspreload.org submission baseline (2yr max-age, includeSubDomains, preload)", () => {
+    // Nothing asserted the actual Strict-Transport-Security value before —
+    // the baseline-headers test above only checks the *other* four headers
+    // via arrayContaining, so a future edit could drop `preload` (or the
+    // whole header) from `/*` silently, quietly opting the site back out of
+    // preload-list eligibility with no red CI run to catch it.
+    expect(headerRules["/*"]).toEqual(
+      expect.arrayContaining([
+        "Strict-Transport-Security: max-age=63072000; includeSubDomains; preload",
+      ]),
+    );
+  });
+
   it("caches content-hashed assets and metadata images forever", () => {
     for (const path of [
       "/_next/static/*",
