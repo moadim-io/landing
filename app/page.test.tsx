@@ -20,6 +20,24 @@ describe("Home", () => {
     ).toBeInTheDocument();
   });
 
+  it("hides the decorative shell prompt from assistive tech and text selection", () => {
+    // page.tsx's own comment spells out why this matters: the leading `$` is
+    // pure decoration, so it must stay `aria-hidden` (a screen reader
+    // shouldn't announce "dollar sign") and `select-none` (so copying the
+    // install line yields a runnable `cargo install --locked moadim`, not a
+    // `$`-prefixed one a shell would reject). Nothing asserted either
+    // attribute before, so a future edit to the install card could drop
+    // either silently.
+    const { container } = render(<Home />);
+
+    const prompt = container.querySelector(
+      'code span[aria-hidden="true"].select-none',
+    );
+
+    expect(prompt).not.toBeNull();
+    expect(prompt?.textContent?.trim()).toBe("$");
+  });
+
   it("surfaces the Unix/tmux/cron-daemon runtime prerequisite next to the install command", () => {
     render(<Home />);
 
