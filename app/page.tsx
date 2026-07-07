@@ -15,7 +15,13 @@ const features = [
   },
   {
     tag: "03",
-    title: "MCP · REST · OpenAPI",
+    // Matches the daemon's own "One port. Three interfaces." framing (UI,
+    // REST, MCP — see its README and public/llms.txt). "OpenAPI" previously
+    // stood in for the third interface here, but OpenAPI is the REST API's
+    // doc format, not one of the three interfaces the daemon actually ships
+    // — it silently dropped the built-in web UI dashboard from the one piece
+    // of on-page copy visitors scan first (see #85).
+    title: "UI · REST · MCP",
     body: "Every loop is an MCP tool and a documented HTTP endpoint — Swagger UI, an iCal feed, and a web UI baked into the daemon.",
   },
 ];
@@ -90,7 +96,10 @@ const ctaButton =
 // 10px hard drop shadow worn by the hero header, the feature grid, the
 // reading-list section, and the FAQ. Extracted (mirroring `ctaButton`) so the
 // panels can't drift apart; each call site appends only its own padding/layout.
-const panel = "border-4 border-black bg-white shadow-[10px_10px_0_0_#000]";
+// Exported so `not-found.tsx`'s 404 card — which wears the exact same surface —
+// reuses it instead of hand-copying the class string (see `faqJsonLd` above
+// for the same export-for-reuse precedent).
+export const panel = "border-4 border-black bg-white shadow-[10px_10px_0_0_#000]";
 
 export default function Home() {
   return (
@@ -142,7 +151,7 @@ export default function Home() {
           <ExternalLink
             className={`${ctaButton} group gap-3 bg-accent`}
             href={REPO_URL}
-            aria-label="Star moadim on GitHub (opens in a new tab)"
+            aria-label="Star moadim on GitHub"
           >
             <span aria-hidden="true" className="text-lg leading-none">
               ★
@@ -152,36 +161,47 @@ export default function Home() {
           <ExternalLink
             className={`${ctaButton} gap-2 bg-white`}
             href={CRATE_URL}
-            aria-label="crates.io (opens in a new tab)"
+            aria-label="crates.io"
           >
             crates.io
             <span aria-hidden="true">↗</span>
           </ExternalLink>
         </div>
 
-        <ul className={`${panel} grid gap-0 sm:grid-cols-3`}>
-          {features.map((feature, i) => (
-            <li
-              key={feature.title}
-              className={`flex flex-col gap-3 p-6 ${
-                i < features.length - 1
-                  ? "border-b-4 border-black sm:border-b-0 sm:border-r-4"
-                  : ""
-              }`}
-            >
-              <span
-                aria-hidden="true"
-                className="font-mono text-3xl font-black text-accent [-webkit-text-stroke:1px_#000]"
+        {/* Unlike the reading-list and FAQ sections below, this grid has no
+            visible heading of its own — the CTA row above flows straight
+            into it. Without an accessible name it's an anonymous <ul>, so
+            screen-reader users navigating by landmark region jump from the
+            hero straight to "On loop engineering" and never learn a
+            "features" region exists. `aria-label` (rather than
+            `aria-labelledby` + a visible/sr-only <h2>) fixes that without
+            introducing a heading above the per-card <h2> titles, which
+            would otherwise sit at the wrong hierarchy level. */}
+        <section aria-label="Features">
+          <ul className={`${panel} grid gap-0 sm:grid-cols-3`}>
+            {features.map((feature, i) => (
+              <li
+                key={feature.title}
+                className={`flex flex-col gap-3 p-6 ${
+                  i < features.length - 1
+                    ? "border-b-4 border-black sm:border-b-0 sm:border-r-4"
+                    : ""
+                }`}
               >
-                {feature.tag}
-              </span>
-              <h2 className="text-lg font-black uppercase leading-tight">
-                {feature.title}
-              </h2>
-              <p className="text-sm font-medium leading-6">{feature.body}</p>
-            </li>
-          ))}
-        </ul>
+                <span
+                  aria-hidden="true"
+                  className="font-mono text-3xl font-black text-accent [-webkit-text-stroke:1px_#000]"
+                >
+                  {feature.tag}
+                </span>
+                <h2 className="text-lg font-black uppercase leading-tight">
+                  {feature.title}
+                </h2>
+                <p className="text-sm font-medium leading-6">{feature.body}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
 
         <section className={panel} aria-labelledby="reads-heading">
           <h2

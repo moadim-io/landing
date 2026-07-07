@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- CI: a `Lighthouse` gate (`treosh/lighthouse-ci-action`) that builds the static export and asserts performance ≥0.90, accessibility ≥0.95, best-practices ≥0.95, and SEO ≥0.95 on the landing page — a regression (unoptimized image, dropped alt text, missing meta tag) now fails the PR instead of only surfacing if someone runs Lighthouse by hand (#75).
 - Unit tests for `page.tsx`'s three feature cards and the "On loop engineering" reading list, asserting the reading-list links carry the `nofollow noopener noreferrer` `rel` baseline — previously the only content on the page with no direct test coverage.
 - `verify:export` script (and a matching CI/deploy step) that asserts the static export in `out/` actually contains every file the site depends on — `index.html`, `404.html`, `sitemap.xml`, `robots.txt`, the OG/Twitter images, `favicon.ico`, and `_headers` — so a route or asset that silently drops from a green `next build` fails CI instead of shipping a broken page (#345).
 - `JsonLdScript`, a shared component (plus a `toSafeJsonLd` helper) that `layout.tsx` and `page.tsx` both route through to escape JSON-LD before inlining it, with its own dedicated test coverage for the `</script>`-breakout escaping (#352).
@@ -46,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The branded 404 page now reuses `page.tsx`'s shared `panel` constant for its card surface instead of a hand-copied class string, closing the one remaining call site the FAQ-panel single-sourcing (#282) didn't reach.
 - Third-party GitHub Actions across `ci.yml`, `codeql.yml`, `dependency-review.yml`, `link-check.yml`, `actionlint.yml`, and `deploy.yml` pinned to commit SHAs instead of floating version tags, closing a supply-chain tampering vector where a compromised tag could silently change what a workflow runs (#342, #350).
 - `@typescript-eslint/consistent-type-imports` ESLint rule enabled, requiring type-only imports to use `import type` so an erased type doesn't survive into the compiled output as a value import (#16).
 - `eqeqeq` ESLint rule enabled, requiring `===`/`!==` over `==`/`!=` (#335).

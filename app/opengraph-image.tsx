@@ -1,18 +1,15 @@
 import { ImageResponse } from "next/og";
+import {
+  SATORI_ACCENT as ACCENT,
+  SATORI_BACKGROUND as BACKGROUND,
+  SATORI_FOREGROUND as FOREGROUND,
+} from "./brand-colors";
 
 // Static social-share card, generated at build time (compatible with `output: export`).
 export const dynamic = "force-static";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt = "Moadim — Put your agents on a loop";
-
-// Brand tokens mirror app/globals.css (the neobrutalist design language documented in
-// AGENTS.md): cream background, black foreground/borders, accent yellow, thick borders and
-// hard offset shadows with no blur. Kept inline because Satori (next/og) resolves no CSS
-// variables — these literals must stay in sync with globals.css.
-const BACKGROUND = "#f4f1e8";
-const FOREGROUND = "#0a0a0a";
-const ACCENT = "#ffd400";
 
 export default function OpenGraphImage() {
   return new ImageResponse(

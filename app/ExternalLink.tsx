@@ -18,6 +18,14 @@ import type { AnchorHTMLAttributes, ReactNode } from "react";
  *
  * Callers that need extra `rel` tokens (e.g. `nofollow` for third-party blogs)
  * pass them via `relExtra`; the `noopener noreferrer` baseline is always kept.
+ *
+ * `aria-label` gets the same "unreachable by omission" treatment: an
+ * `aria-label` completely replaces an element's accessible name, so the
+ * visually-hidden "(opens in a new tab)" suffix below is silently dropped
+ * from the accessible name on any link that also sets `aria-label` — the
+ * suffix would have to be hand-typed into every such label to not lose the
+ * warning. Appending it here instead means a caller's `aria-label` only ever
+ * needs to describe the link's destination.
  */
 type ExternalLinkProps = Omit<
   AnchorHTMLAttributes<HTMLAnchorElement>,
@@ -33,6 +41,7 @@ export function ExternalLink({
   href,
   relExtra,
   children,
+  "aria-label": ariaLabel,
   ...rest
 }: ExternalLinkProps) {
   const rel = relExtra
@@ -40,7 +49,13 @@ export function ExternalLink({
     : "noopener noreferrer";
 
   return (
-    <a {...rest} href={href} target="_blank" rel={rel}>
+    <a
+      {...rest}
+      href={href}
+      target="_blank"
+      rel={rel}
+      aria-label={ariaLabel ? `${ariaLabel} (opens in a new tab)` : undefined}
+    >
       {children}
       <span className="sr-only">(opens in a new tab)</span>
     </a>

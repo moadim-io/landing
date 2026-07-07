@@ -14,6 +14,13 @@
     // Single-line Claude Code include directive ("@AGENTS.md"), not prose.
     "CLAUDE.md",
     // GitHub PR template convention starts with an HTML comment, not an H1.
-    ".github/PULL_REQUEST_TEMPLATE.md"
+    ".github/PULL_REQUEST_TEMPLATE.md",
+    // Changeset files (.changeset/config.json's format) start with YAML
+    // frontmatter followed by a plain prose summary, never an H1 — every one
+    // trips MD041 (first-line-heading) otherwise. Without this, the
+    // "Markdown lint" CI job fails on any PR that adds a changeset, which the
+    // repo's own changesets tooling (.changeset/config.json) requires of
+    // every source change.
+    ".changeset/**"
   ]
 }

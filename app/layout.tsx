@@ -88,6 +88,12 @@ const organization = {
   // scaffold icon, see #145) — the generated OG card is the closest stand-in
   // for a logo until a real mark ships.
   logo: `${SITE_URL}/opengraph-image`,
+  // The GitHub org is the authoritative profile for the "Moadim" entity
+  // itself (distinct from the SoftwareApplication.sameAs links below, which
+  // point at the *product's* distribution channels) — this is what lets
+  // search engines resolve the Organization node to a known, verifiable
+  // profile instead of an isolated, unconfirmed name.
+  sameAs: ["https://github.com/moadim-io"],
 };
 
 const website = {
@@ -115,8 +121,9 @@ const softwareApplication = {
     "https://crates.io/crates/moadim",
   ],
   license: "https://opensource.org/licenses/MIT",
-  // TODO(#44): reuse a single base-URL source once base-URL centralization lands.
-  image: "https://moadim.io/opengraph-image.png",
+  // Static export emits this route as `opengraph-image` with no extension (see
+  // `scripts/verify-export.mjs`) — the hardcoded ".png" 404'd in production.
+  image: `${SITE_URL}/opengraph-image`,
   codeRepository: "https://github.com/moadim-io/daemon",
   downloadUrl: "https://crates.io/crates/moadim",
   offers: {
@@ -177,7 +184,7 @@ export default function RootLayout({
                   <ExternalLink
                     href={`${REPO_URL}#readme`}
                     className="text-sm font-bold uppercase tracking-wide hover:text-accent"
-                    aria-label="Docs (opens in a new tab)"
+                    aria-label="Docs"
                   >
                     Docs
                   </ExternalLink>
@@ -186,7 +193,7 @@ export default function RootLayout({
                   <ExternalLink
                     href={REPO_URL}
                     className="text-sm font-bold uppercase tracking-wide hover:text-accent"
-                    aria-label="GitHub (opens in a new tab)"
+                    aria-label="GitHub"
                   >
                     GitHub
                   </ExternalLink>

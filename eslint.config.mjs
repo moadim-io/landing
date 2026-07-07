@@ -38,6 +38,13 @@ const eslintConfig = defineConfig([
       // same way. Force the call site to use a non-async callback or
       // handle the promise explicitly.
       "@typescript-eslint/no-misused-promises": "error",
+      // Flag a `?.`/non-null-guard branch whose condition the type checker
+      // already proves can't be nullish (or is always nullish). Such a
+      // check reads as defensive code the type system disagrees with,
+      // masking either a stale guard left over from a type change or a
+      // wrong assumption about what can flow through. Only checkable with
+      // type information, so it lives in this typed-linting block.
+      "@typescript-eslint/no-unnecessary-condition": "error",
     },
   },
   {

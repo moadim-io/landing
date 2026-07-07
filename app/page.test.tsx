@@ -20,6 +20,45 @@ describe("Home", () => {
     ).toBeInTheDocument();
   });
 
+  it("hides the decorative shell prompt from assistive tech and text selection", () => {
+    // page.tsx's own comment spells out why this matters: the leading `$` is
+    // pure decoration, so it must stay `aria-hidden` (a screen reader
+    // shouldn't announce "dollar sign") and `select-none` (so copying the
+    // install line yields a runnable `cargo install --locked moadim`, not a
+    // `$`-prefixed one a shell would reject). Nothing asserted either
+    // attribute before, so a future edit to the install card could drop
+    // either silently.
+    const { container } = render(<Home />);
+
+    const prompt = container.querySelector(
+      'code span[aria-hidden="true"].select-none',
+    );
+
+    expect(prompt).not.toBeNull();
+    expect(prompt?.textContent.trim()).toBe("$");
+  });
+
+  it("surfaces the Unix/tmux/cron-daemon runtime prerequisite next to the install command", () => {
+    render(<Home />);
+
+    // Loops fire from the OS crontab inside a tmux session — without a
+    // Unix-like OS, tmux, and a cron daemon, `cargo install` succeeds but the
+    // daemon never actually runs a loop (#208). This caveat had no test
+    // coverage, so a future edit to the install card could drop it silently.
+    const installLine = screen.getByText(
+      `cargo install --locked ${CRATE_NAME}`,
+    );
+    const installCard = installLine.closest("div");
+
+    if (!installCard) {
+      throw new Error("expected the install command to sit inside a card");
+    }
+
+    expect(installCard.textContent).toMatch(/unix-like os/i);
+    expect(installCard.textContent).toMatch(/\btmux\b/i);
+    expect(installCard.textContent).toMatch(/cron daemon/i);
+  });
+
   it("points the GitHub and crates.io CTAs at the canonical URLs", () => {
     render(<Home />);
 
@@ -30,6 +69,17 @@ describe("Home", () => {
       "href",
       CRATE_URL,
     );
+  });
+
+  it("exposes the feature cards as a named landmark region", () => {
+    render(<Home />);
+
+    // Unlike the "On loop engineering" and FAQ sections, this grid has no
+    // visible heading — without an accessible name it'd be an anonymous
+    // <ul> that screen-reader landmark navigation skips right over.
+    expect(
+      screen.getByRole("region", { name: /features/i }),
+    ).toBeInTheDocument();
   });
 
   it("renders all three feature cards", () => {
@@ -45,7 +95,7 @@ describe("Home", () => {
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { level: 2, name: /mcp · rest · openapi/i }),
+      screen.getByRole("heading", { level: 2, name: /ui · rest · mcp/i }),
     ).toBeInTheDocument();
   });
 
