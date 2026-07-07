@@ -6,13 +6,16 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      // `next/font/google` is a Next.js build-time loader, not a runtime
-      // module — it throws when imported outside `next build`/`next dev`.
-      // Swap in a lightweight stub so files that load Geist fonts (e.g.
-      // `app/layout.tsx`) can be imported in tests. See the mock file for
-      // details.
-      "next/font/google": fileURLToPath(
-        new URL("./test/mocks/next-font-google.ts", import.meta.url),
+      // `geist/font/sans` / `geist/font/mono` wrap `next/font/local`, a
+      // Next.js build-time loader that isn't a plain JS module and throws
+      // when imported outside `next build`/`next dev`. Swap in a lightweight
+      // stub so files that load Geist fonts (e.g. `app/layout.tsx`) can be
+      // imported in tests. See the mock file for details.
+      "geist/font/sans": fileURLToPath(
+        new URL("./test/mocks/geist-font.ts", import.meta.url),
+      ),
+      "geist/font/mono": fileURLToPath(
+        new URL("./test/mocks/geist-font.ts", import.meta.url),
       ),
     },
   },
