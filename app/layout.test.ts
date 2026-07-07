@@ -1,6 +1,21 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { jsonLd, metadata } from "./layout";
 import { SITE_URL } from "./site";
+
+// `verification` is built from env vars read at module load time, so covering
+// each combination requires stubbing the env and re-importing the module
+// fresh rather than asserting against the already-imported `metadata` above.
+// Vars left out of `env` stay unset, matching an unconfigured deploy.
+async function importLayoutWithEnv(env: { google?: string; bing?: string }) {
+  if (env.google !== undefined) {
+    vi.stubEnv("NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION", env.google);
+  }
+  if (env.bing !== undefined) {
+    vi.stubEnv("NEXT_PUBLIC_BING_SITE_VERIFICATION", env.bing);
+  }
+  vi.resetModules();
+  return import("./layout");
+}
 
 describe("root layout metadata", () => {
   it("declares the expected title and description", () => {
@@ -47,5 +62,34 @@ describe("root layout JSON-LD", () => {
     expect(website["@type"]).toBe("WebSite");
     expect(website.name).toBe("Moadim");
     expect(website.url).toBe(SITE_URL);
+  });
+});
+
+describe("search-engine verification metadata", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("omits both tags when neither token is configured", async () => {
+    const { metadata: unconfigured } = await importLayoutWithEnv({});
+    expect(unconfigured.verification).toEqual({ google: undefined });
+  });
+
+  it("emits only the Google tag when just that token is configured", async () => {
+    const { metadata: googleOnly } = await importLayoutWithEnv({
+      google: "google-token",
+    });
+    expect(googleOnly.verification).toEqual({ google: "google-token" });
+  });
+
+  it("emits both tags, nesting Bing under `other`, when both tokens are configured", async () => {
+    const { metadata: both } = await importLayoutWithEnv({
+      google: "google-token",
+      bing: "bing-token",
+    });
+    expect(both.verification).toEqual({
+      google: "google-token",
+      other: { "msvalidate.01": "bing-token" },
+    });
   });
 });
