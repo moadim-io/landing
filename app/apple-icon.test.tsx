@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { contentType, dynamic, size } from "./apple-icon";
+import AppleIcon, { contentType, dynamic, size } from "./apple-icon";
 
 describe("apple-icon route config", () => {
   it("is force-static so it survives `output: export`", () => {
@@ -15,5 +15,19 @@ describe("apple-icon route config", () => {
 
   it("serves the icon as a PNG", () => {
     expect(contentType).toBe("image/png");
+  });
+});
+
+describe("AppleIcon render", () => {
+  // Every test above only asserts the exported config constants — none of
+  // them call the component. A typo in the Satori JSX/inline style tree (an
+  // invalid CSS property, a bad style value) only fails at `next build` time
+  // today, exactly the gap opengraph-image.test.tsx's "render" test already
+  // closes for that route's identical ImageResponse/Satori setup.
+  it("renders the icon without throwing and returns an image response", () => {
+    const response = AppleIcon();
+
+    expect(response).toBeInstanceOf(Response);
+    expect(response.headers.get("content-type")).toBe(contentType);
   });
 });
