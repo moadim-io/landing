@@ -168,29 +168,40 @@ export default function Home() {
           </ExternalLink>
         </div>
 
-        <ul className={`${panel} grid gap-0 sm:grid-cols-3`}>
-          {features.map((feature, i) => (
-            <li
-              key={feature.title}
-              className={`flex flex-col gap-3 p-6 ${
-                i < features.length - 1
-                  ? "border-b-4 border-black sm:border-b-0 sm:border-r-4"
-                  : ""
-              }`}
-            >
-              <span
-                aria-hidden="true"
-                className="font-mono text-3xl font-black text-accent [-webkit-text-stroke:1px_#000]"
+        {/* Unlike the reading-list and FAQ sections below, this grid has no
+            visible heading of its own — the CTA row above flows straight
+            into it. Without an accessible name it's an anonymous <ul>, so
+            screen-reader users navigating by landmark region jump from the
+            hero straight to "On loop engineering" and never learn a
+            "features" region exists. `aria-label` (rather than
+            `aria-labelledby` + a visible/sr-only <h2>) fixes that without
+            introducing a heading above the per-card <h2> titles, which
+            would otherwise sit at the wrong hierarchy level. */}
+        <section aria-label="Features">
+          <ul className={`${panel} grid gap-0 sm:grid-cols-3`}>
+            {features.map((feature, i) => (
+              <li
+                key={feature.title}
+                className={`flex flex-col gap-3 p-6 ${
+                  i < features.length - 1
+                    ? "border-b-4 border-black sm:border-b-0 sm:border-r-4"
+                    : ""
+                }`}
               >
-                {feature.tag}
-              </span>
-              <h2 className="text-lg font-black uppercase leading-tight">
-                {feature.title}
-              </h2>
-              <p className="text-sm font-medium leading-6">{feature.body}</p>
-            </li>
-          ))}
-        </ul>
+                <span
+                  aria-hidden="true"
+                  className="font-mono text-3xl font-black text-accent [-webkit-text-stroke:1px_#000]"
+                >
+                  {feature.tag}
+                </span>
+                <h2 className="text-lg font-black uppercase leading-tight">
+                  {feature.title}
+                </h2>
+                <p className="text-sm font-medium leading-6">{feature.body}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
 
         <section className={panel} aria-labelledby="reads-heading">
           <h2
