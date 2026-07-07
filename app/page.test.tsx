@@ -35,7 +35,7 @@ describe("Home", () => {
     );
 
     expect(prompt).not.toBeNull();
-    expect(prompt?.textContent?.trim()).toBe("$");
+    expect(prompt?.textContent.trim()).toBe("$");
   });
 
   it("surfaces the Unix/tmux/cron-daemon runtime prerequisite next to the install command", () => {
