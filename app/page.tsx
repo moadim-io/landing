@@ -92,7 +92,7 @@ export const faqJsonLd = {
 // home" link — which wears the exact same treatment — reuses it instead of
 // hand-copying the class string (mirroring the `panel` export below).
 export const ctaButton =
-  "flex items-center justify-center border-4 border-black px-8 py-4 text-base font-black uppercase tracking-wide shadow-[6px_6px_0_0_#000] transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#000]";
+  "flex items-center justify-center border-4 border-black px-8 py-4 text-base font-black uppercase tracking-wide shadow-brutal transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-brutal-hover active:translate-x-[2px] active:translate-y-[2px] active:shadow-brutal-active";
 
 // Shared neobrutalist panel surface — the 4px black frame, white fill, and
 // 10px hard drop shadow worn by the hero header, the feature grid, the
@@ -101,7 +101,7 @@ export const ctaButton =
 // Exported so `not-found.tsx`'s 404 card — which wears the exact same surface —
 // reuses it instead of hand-copying the class string (see `faqJsonLd` above
 // for the same export-for-reuse precedent).
-export const panel = "border-4 border-black bg-white shadow-[10px_10px_0_0_#000]";
+export const panel = "border-4 border-black bg-white shadow-brutal-lg";
 
 export default function Home() {
   return (
@@ -126,7 +126,7 @@ export default function Home() {
         </header>
 
         <div className="flex flex-col gap-4 sm:flex-row sm:items-stretch">
-          <div className="flex flex-1 flex-col gap-2 border-4 border-black bg-black p-5 shadow-[6px_6px_0_0_#000]">
+          <div className="flex flex-1 flex-col gap-2 border-4 border-black bg-black p-5 shadow-brutal">
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
               Install
             </span>

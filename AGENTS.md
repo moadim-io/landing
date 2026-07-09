@@ -53,11 +53,12 @@ Neobrutalist. Tokens live in `app/globals.css`:
 | `--foreground` | `#0a0a0a` | text, borders |
 | `--accent` | `#ffd400` | highlights, CTAs, tags |
 
-Conventions: thick `4px` black borders, hard offset shadows
-(`shadow-[10px_10px_0_0_#000]`, no blur), uppercase bold headings, and the Geist Sans / Geist
-Mono fonts loaded via `next/font` in `app/layout.tsx`. Reuse these instead of inventing new
-colors or soft shadows. Keyboard focus is styled centrally in `globals.css` (a solid offset
-`outline`) — don't strip it per-element.
+Conventions: thick `4px` black borders, hard offset shadows (the `shadow-brutal` /
+`shadow-brutal-lg` tokens in `app/globals.css`'s `@theme` block, no blur), uppercase bold
+headings, and the Geist Sans / Geist Mono fonts loaded via `next/font` in `app/layout.tsx`.
+Reuse these instead of inventing new colors, soft shadows, or a raw `shadow-[...]` arbitrary
+value. Keyboard focus is styled centrally in `globals.css` (a solid offset `outline`) — don't
+strip it per-element.
 
 ## Lint rules worth knowing
 
