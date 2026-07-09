@@ -56,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Every `actions/setup-node` step in `ci.yml`, `deploy.yml`, `lighthouse.yml`, and `link-check.yml` now reads the Node version from `.nvmrc` (`node-version-file`) instead of a fifth untested hardcoded `node-version: 22` literal (#477).
 - Enabled `noImplicitReturns` and `exactOptionalPropertyTypes` in `tsconfig.json`, completing the project's strict-mode opt-ins (#467, #463).
 - Enabled `@typescript-eslint/no-unnecessary-condition` (#460).
 - `not-found.tsx`'s "Back to home" link now reuses the shared `ctaButton` constant instead of hand-copying its class string (#466).
@@ -94,6 +95,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `public/llms.txt` — the machine-readable doc AI agents are meant to follow — now uses `cargo install --locked moadim`, matching the hero card's install command instead of the stale unlocked form (#480).
 - Restored the accessible `list` role on the nav, feature-grid, and reading-list `<ul>` elements. Tailwind's Preflight resets `list-style: none` on every `<ul>`, which in Safari/VoiceOver also strips the implicit `list`/`listitem` role, so screen-reader users on Safari weren't hearing these regions announced as lists (#470).
 - `README.md`'s Node.js prerequisite corrected from the stale "20+" to the actual "22+" (#459); its Project structure listing now also names the `lighthouse.yml` CI workflow (#468).
 - Web app manifest branding synced with the loop-engine rebrand (#451).
