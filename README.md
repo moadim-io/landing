@@ -51,6 +51,7 @@ app/
   not-found.tsx         Branded 404 page.
   ExternalLink.tsx      Outbound (new-tab) link wrapper with the safe rel attributes.
   JsonLdScript.tsx      Escapes and inlines JSON-LD structured data as a <script> tag.
+  CloudflareBeacon.tsx  Opt-in, cookieless Cloudflare Web Analytics beacon (see "Analytics" below).
   site.ts               Shared site constants: canonical SITE_URL plus the product's
                          GitHub/crates.io identifiers (REPO_SLUG, REPO_URL, CRATE_NAME,
                          CRATE_URL).
@@ -112,6 +113,17 @@ ownership tokens as build-time environment variables (see [`.env.example`](./.en
 When a variable is set, the build renders the matching `<meta>` tag into the static export;
 when unset, no tag is emitted. These tokens are public (non-secret) identifiers — set them in
 the deploy build environment rather than committing them.
+
+### Analytics (optional)
+
+Set `NEXT_PUBLIC_CF_BEACON_TOKEN` (see [`.env.example`](./.env.example)) to enable
+[Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/) — a cookieless,
+privacy-respecting page-view beacon with no PII, no cross-site tracking, and no consent banner
+required. It's a natural fit since the site already deploys to Cloudflare Pages (see
+"Deploying" above) and needs no extra infrastructure beyond the token.
+
+When the token is unset — the default for local development and forks — `app/CloudflareBeacon.tsx`
+renders nothing and the build emits no analytics script at all.
 
 ## Security
 
