@@ -62,9 +62,15 @@ app/
   favicon.ico           Site favicon.
 public/
   _headers              Cloudflare Pages response headers.
+test/
+  mocks/next-font-google.ts  Vitest stub for the build-time-only `next/font/google` loader.
 scripts/
   verify-export.mjs     Checks the built out/ directory for required routes/files (see
                          `npm run verify:export`).
+next.config.test.ts     Guards next.config.ts's static-export invariants against drift.
+deploy-config.test.ts   Guards public/_headers and public/_redirects against malformed rules.
+node-version.test.ts    Guards .nvmrc, package.json engines.node, and CONTRIBUTING.md against drift.
+llms-txt.test.ts        Guards public/llms.txt's install command against the hero's.
 .github/workflows/
   ci.yml                 Lint, test, build, and verify the export on every PR and push to main.
   deploy.yml             Build + deploy to Cloudflare Pages on push to main.
