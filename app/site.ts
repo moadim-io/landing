@@ -20,6 +20,9 @@ export const REPO_SLUG = "moadim-io/daemon";
 /** Canonical GitHub repository URL, derived from {@link REPO_SLUG}. */
 export const REPO_URL = `https://github.com/${REPO_SLUG}`;
 
+/** Canonical GitHub organization profile URL, derived from {@link REPO_SLUG}'s owner. */
+export const ORG_URL = `https://github.com/${REPO_SLUG.split("/")[0]}`;
+
 /** Published crate name on crates.io (also the `cargo install` argument). */
 export const CRATE_NAME = "moadim";
 

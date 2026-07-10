@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SITE_URL, REPO_URL, SITE_TITLE, SITE_DESCRIPTION } from "./site";
+import { SITE_URL, REPO_URL, ORG_URL, SITE_TITLE, SITE_DESCRIPTION } from "./site";
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
 
@@ -90,7 +90,7 @@ const organization = {
   // point at the *product's* distribution channels) — this is what lets
   // search engines resolve the Organization node to a known, verifiable
   // profile instead of an isolated, unconfirmed name.
-  sameAs: ["https://github.com/moadim-io"],
+  sameAs: [ORG_URL],
 };
 
 const website = {

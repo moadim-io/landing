@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { jsonLd, metadata, viewport } from "./layout";
-import { SITE_URL } from "./site";
+import { ORG_URL, SITE_URL } from "./site";
 
 describe("root layout metadata", () => {
   it("declares the expected title and description", () => {
@@ -75,7 +75,7 @@ describe("root layout JSON-LD", () => {
     // Distinct from SoftwareApplication.sameAs (the product's distribution
     // channels): this is what lets search engines resolve the "Moadim"
     // Organization entity to a verifiable external profile.
-    expect(organization.sameAs).toEqual(["https://github.com/moadim-io"]);
+    expect(organization.sameAs).toEqual([ORG_URL]);
   });
 
   it("declares a WebSite node with the site name and canonical URL", () => {
