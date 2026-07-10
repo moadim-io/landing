@@ -32,6 +32,24 @@ describe("root layout metadata", () => {
       description: metadata.description,
     });
   });
+
+  it("opts into indexing and large Google image/video previews", () => {
+    // Distinct from app/robots.ts (the site-wide robots.txt crawl
+    // directive): this is the per-document <meta name="robots"> tag. With
+    // nothing set here, Google defaults to max-image-preview:standard and
+    // only ever shows a small OG-card thumbnail in Search/Discover. See #143.
+    expect(metadata.robots).toMatchObject({
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+    });
+  });
 });
 
 describe("root layout viewport", () => {
