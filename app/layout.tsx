@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE_URL, REPO_URL, SITE_TITLE, SITE_DESCRIPTION } from "./site";
+import { SATORI_BACKGROUND } from "./brand-colors";
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
 
@@ -34,7 +35,7 @@ export const viewport: Viewport = {
   // pre-paint canvas — in light too, instead of inverting them against the
   // cream `--background`.
   colorScheme: "light",
-  themeColor: "#f4f1e8",
+  themeColor: SATORI_BACKGROUND,
 };
 
 export const metadata: Metadata = {
