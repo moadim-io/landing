@@ -15,7 +15,6 @@ describe("manifest", () => {
     expect(result.description).toBe(SITE_DESCRIPTION);
   });
 
-
   it("is force-static so it survives `output: export`", () => {
     // Metadata routes must opt into static generation under the static
     // export (see AGENTS.md). If this regresses to the Next.js default,

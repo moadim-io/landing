@@ -101,7 +101,8 @@ export const ctaButton =
 // Exported so `not-found.tsx`'s 404 card — which wears the exact same surface —
 // reuses it instead of hand-copying the class string (see `faqJsonLd` above
 // for the same export-for-reuse precedent).
-export const panel = "border-4 border-black bg-white shadow-[10px_10px_0_0_#000]";
+export const panel =
+  "border-4 border-black bg-white shadow-[10px_10px_0_0_#000]";
 
 export default function Home() {
   return (
@@ -114,14 +115,16 @@ export default function Home() {
           <h1 className="text-4xl font-black uppercase leading-[0.95] tracking-tight sm:text-6xl">
             Put your
             <br />
-            <span className="bg-accent box-decoration-clone px-1">agents</span>{" "}
+            <span className="bg-accent box-decoration-clone px-1">
+              agents
+            </span>{" "}
             on a loop.
           </h1>
           <p className="mt-6 max-w-2xl text-lg font-medium leading-7 sm:text-xl">
             Moadim is a loop engine for AI agents. Define a loop — a prompt, a
             schedule, an agent — and it runs Claude, Codex, or Hermes against
-            your repo on every tick, in an isolated workbench, with a watchdog on
-            every run. Loop engineering, not prompting by hand.
+            your repo on every tick, in an isolated workbench, with a watchdog
+            on every run. Loop engineering, not prompting by hand.
           </p>
         </header>
 
@@ -145,9 +148,9 @@ export default function Home() {
             <p className="mt-1 text-xs font-medium leading-snug text-white">
               Requires a Unix-like OS with{" "}
               <code className="font-mono text-accent">tmux</code> and a cron
-              daemon (cron / launchd / systemd) — loops fire from your OS crontab
-              inside a tmux session, so without them the install succeeds but
-              nothing runs.
+              daemon (cron / launchd / systemd) — loops fire from your OS
+              crontab inside a tmux session, so without them the install
+              succeeds but nothing runs.
             </p>
           </div>
           <ExternalLink

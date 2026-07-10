@@ -60,7 +60,10 @@ describe("verify-export", () => {
   it("exits 0 and reports success when every required file is present and non-empty", () => {
     const cwd = makeOutDir();
 
-    const stdout = execFileSync("node", [SCRIPT_PATH], { cwd, encoding: "utf8" });
+    const stdout = execFileSync("node", [SCRIPT_PATH], {
+      cwd,
+      encoding: "utf8",
+    });
 
     expect(stdout).toContain(
       `verify-export: all ${REQUIRED_FILES.length} required export files present.`,
@@ -70,17 +73,17 @@ describe("verify-export", () => {
   it("exits non-zero and names the missing file when one is absent", () => {
     const cwd = makeOutDir({ missing: ["sitemap.xml"] });
 
-    expect(() => execFileSync("node", [SCRIPT_PATH], { cwd, encoding: "utf8" })).toThrow(
-      /sitemap\.xml \(not found\)/,
-    );
+    expect(() =>
+      execFileSync("node", [SCRIPT_PATH], { cwd, encoding: "utf8" }),
+    ).toThrow(/sitemap\.xml \(not found\)/);
   });
 
   it("exits non-zero and names the file when it exists but is empty", () => {
     const cwd = makeOutDir({ empty: ["icon.svg"] });
 
-    expect(() => execFileSync("node", [SCRIPT_PATH], { cwd, encoding: "utf8" })).toThrow(
-      /icon\.svg \(empty\)/,
-    );
+    expect(() =>
+      execFileSync("node", [SCRIPT_PATH], { cwd, encoding: "utf8" }),
+    ).toThrow(/icon\.svg \(empty\)/);
   });
 
   it("exits non-zero when a required path is a directory instead of a file", () => {
@@ -92,8 +95,8 @@ describe("verify-export", () => {
     // 404 for that URL.
     const cwd = makeOutDir({ asDir: ["opengraph-image"] });
 
-    expect(() => execFileSync("node", [SCRIPT_PATH], { cwd, encoding: "utf8" })).toThrow(
-      /opengraph-image \(not a file\)/,
-    );
+    expect(() =>
+      execFileSync("node", [SCRIPT_PATH], { cwd, encoding: "utf8" }),
+    ).toThrow(/opengraph-image \(not a file\)/);
   });
 });

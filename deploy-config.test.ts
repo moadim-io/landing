@@ -89,8 +89,8 @@ describe("public/_redirects", () => {
 
   it("never redirects the canonical apex host itself, to avoid a redirect loop", () => {
     const sources = redirectRules.map(([source]) => source);
-    expect(sources.some((source) => source?.startsWith("https://moadim.io/"))).toBe(
-      false,
-    );
+    expect(
+      sources.some((source) => source?.startsWith("https://moadim.io/")),
+    ).toBe(false);
   });
 });
