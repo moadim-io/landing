@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE_URL, REPO_URL, SITE_TITLE, SITE_DESCRIPTION } from "./site";
+import { CloudflareBeacon } from "./CloudflareBeacon";
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
 
@@ -151,6 +152,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <JsonLdScript data={jsonLd} />
+        <CloudflareBeacon />
         {/* Site banner landmark: gives assistive-tech users a top-level `banner`
             region to land on, plus a persistent Moadim wordmark for brand
             identity. The hero's <header> sits inside <main>, so it does not
