@@ -95,6 +95,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Organization JSON-LD `sameAs` now derived from `app/site.ts`'s `ORG_URL` instead of a hardcoded `"https://github.com/moadim-io"` literal, closing the last stray copy of the GitHub org URL that the earlier `REPO_URL`/`CRATE_URL` single-sourcing (#173) had missed (#484).
+- `README.md`'s Project structure listing named nothing between `app/` and `public/` — the root-level guard tests (`next.config.test.ts`, `deploy-config.test.ts`, `node-version.test.ts`, `llms-txt.test.ts`) and the `test/mocks/` Vitest stub existed with no discoverable entry explaining what each one protects against drifting (#486).
 - `public/llms.txt` — the machine-readable doc AI agents are meant to follow — now uses `cargo install --locked moadim`, matching the hero card's install command instead of the stale unlocked form (#480).
 - Restored the accessible `list` role on the nav, feature-grid, and reading-list `<ul>` elements. Tailwind's Preflight resets `list-style: none` on every `<ul>`, which in Safari/VoiceOver also strips the implicit `list`/`listitem` role, so screen-reader users on Safari weren't hearing these regions announced as lists (#470).
 - `README.md`'s Node.js prerequisite corrected from the stale "20+" to the actual "22+" (#459); its Project structure listing now also names the `lighthouse.yml` CI workflow (#468).
