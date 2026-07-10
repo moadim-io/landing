@@ -108,7 +108,7 @@ Pages, or an S3 bucket behind a CDN works without any of the Cloudflare-specific
 ### Search-engine verification (optional)
 
 To verify the site in **Google Search Console** / **Bing Webmaster Tools**, set the
-ownership tokens as build-time environment variables (see [`.env.example`](./.env.example)):
+ownership tokens as build-time environment variables:
 
 | Variable | Source |
 | --- | --- |
