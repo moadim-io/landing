@@ -73,7 +73,7 @@ describe("Home", () => {
     render(<Home />);
 
     expect(
-      screen.getByRole("link", { name: /star moadim on github/i }),
+      screen.getByRole("link", { name: /star on github/i }),
     ).toHaveAttribute("href", REPO_URL);
     expect(screen.getByRole("link", { name: /crates\.io/i })).toHaveAttribute(
       "href",

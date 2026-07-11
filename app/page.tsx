@@ -167,7 +167,6 @@ export default function Home() {
           <ExternalLink
             className={`${ctaButton} group gap-3 bg-accent`}
             href={REPO_URL}
-            aria-label="Star moadim on GitHub"
           >
             <span aria-hidden="true" className="text-lg leading-none">
               ★
