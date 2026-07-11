@@ -59,6 +59,26 @@ describe("Home", () => {
     expect(installCard.textContent).toMatch(/cron daemon/i);
   });
 
+  it("surfaces the Rust/Cargo prerequisite next to the install command (#70)", () => {
+    render(<Home />);
+
+    // `cargo` ships with the Rust toolchain, not the OS — without Rust
+    // installed, `cargo install --locked moadim` fails outright with
+    // `command not found: cargo`. Distinct from the Unix/tmux/cron note
+    // above (a silent runtime gap), so it needs its own coverage.
+    const installLine = screen.getByText(
+      `cargo install --locked ${CRATE_NAME}`,
+    );
+    const installCard = installLine.closest("div");
+
+    if (!installCard) {
+      throw new Error("expected the install command to sit inside a card");
+    }
+
+    expect(installCard.textContent).toMatch(/rust toolchain/i);
+    expect(installCard.textContent).toMatch(/rustup\.rs/i);
+  });
+
   it("points the GitHub and crates.io CTAs at the canonical URLs", () => {
     render(<Home />);
 
