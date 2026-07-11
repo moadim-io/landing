@@ -20,6 +20,16 @@ describe("Home", () => {
     ).toBeInTheDocument();
   });
 
+  it("surfaces the moadim run step after the install command (#206)", () => {
+    // `cargo install` only compiles and installs the binary — nothing runs
+    // until `moadim` itself is invoked. Without this line the hero's primary
+    // CTA leaves visitors installed but with no daemon running.
+    render(<Home />);
+
+    expect(screen.getByText("moadim", { selector: "code" })).toBeInTheDocument();
+    expect(screen.getByText(/localhost:5784/i)).toBeInTheDocument();
+  });
+
   it("hides the decorative shell prompt from assistive tech and text selection", () => {
     // page.tsx's own comment spells out why this matters: the leading `$` is
     // pure decoration, so it must stay `aria-hidden` (a screen reader
