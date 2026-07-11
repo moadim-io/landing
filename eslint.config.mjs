@@ -1,6 +1,7 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
+import prettierConfig from "eslint-config-prettier";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 
 const eslintConfig = defineConfig([
@@ -94,6 +95,10 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/consistent-type-imports": "error",
     },
   },
+  // Must stay last: disables every ESLint stylistic rule Prettier already
+  // owns (quotes, spacing, wrapping, ...) so the two never disagree about
+  // the same line.
+  prettierConfig,
 ]);
 
 export default eslintConfig;

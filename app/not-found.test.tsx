@@ -30,9 +30,10 @@ describe("NotFound", () => {
   it("offers a working link back to the homepage", () => {
     render(<NotFound />);
 
-    expect(
-      screen.getByRole("link", { name: /back to home/i }),
-    ).toHaveAttribute("href", "/");
+    expect(screen.getByRole("link", { name: /back to home/i })).toHaveAttribute(
+      "href",
+      "/",
+    );
   });
 
   // The 404 card used to hand-copy page.tsx's `panel` surface as a duplicated

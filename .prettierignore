@@ -1,0 +1,10 @@
+out/
+.next/
+node_modules/
+*.lock
+package-lock.json
+# markdownlint-cli2 already owns formatting/linting for Markdown (see
+# .markdownlint-cli2.jsonc) — Prettier's blank-line-around-headings rewrite
+# breaks the "disable-next-line" comment AGENTS.md relies on to suppress
+# MD025 for its auto-managed heading block.
+*.md

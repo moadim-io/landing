@@ -33,8 +33,8 @@ export default function NotFound() {
           This loop ran off the rails.
         </h2>
         <p className="max-w-md text-lg font-medium leading-7">
-          The page you&rsquo;re after doesn&rsquo;t exist — it may have moved, or
-          the link was mistyped.
+          The page you&rsquo;re after doesn&rsquo;t exist — it may have moved,
+          or the link was mistyped.
         </p>
         <Link href="/" className={`${ctaButton} gap-2 bg-accent`}>
           <span aria-hidden="true">←</span>

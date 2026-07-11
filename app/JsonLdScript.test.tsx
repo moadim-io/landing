@@ -37,16 +37,20 @@ describe("JsonLdScript", () => {
     const data = { "@type": "FAQPage", mainEntity: [] as unknown[] };
     const { container } = render(<JsonLdScript data={data} />);
 
-    const script = container.querySelector('script[type="application/ld+json"]');
+    const script = container.querySelector(
+      'script[type="application/ld+json"]',
+    );
     expect(script).not.toBeNull();
     expect(JSON.parse(script?.innerHTML ?? "")).toEqual(data);
   });
 
   it("does not leak a raw < into the rendered markup for malicious content", () => {
-    const malicious = { name: '</script><img src=x onerror=alert(1)>' };
+    const malicious = { name: "</script><img src=x onerror=alert(1)>" };
     const { container } = render(<JsonLdScript data={malicious} />);
 
-    const script = container.querySelector('script[type="application/ld+json"]');
+    const script = container.querySelector(
+      'script[type="application/ld+json"]',
+    );
     expect(script?.innerHTML).not.toContain("<");
     expect(JSON.parse(script?.innerHTML ?? "")).toEqual(malicious);
   });

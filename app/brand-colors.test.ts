@@ -1,6 +1,10 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { SATORI_ACCENT, SATORI_BACKGROUND, SATORI_FOREGROUND } from "./brand-colors";
+import {
+  SATORI_ACCENT,
+  SATORI_BACKGROUND,
+  SATORI_FOREGROUND,
+} from "./brand-colors";
 
 // brand-colors.ts's own docstring warns that its hex literals "must still be
 // kept in sync with `--color-background` / `--color-foreground` /
@@ -13,7 +17,9 @@ import { SATORI_ACCENT, SATORI_BACKGROUND, SATORI_FOREGROUND } from "./brand-col
 const theme = readFileSync("app/globals.css", "utf8");
 
 function themeColor(token: string): string {
-  const match = theme.match(new RegExp(`--color-${token}:\\s*(#[0-9a-fA-F]+);`));
+  const match = theme.match(
+    new RegExp(`--color-${token}:\\s*(#[0-9a-fA-F]+);`),
+  );
   const hex = match?.[1];
   if (!hex) throw new Error(`--color-${token} not found in app/globals.css`);
   return hex;

@@ -1,10 +1,5 @@
 import { describe, expect, it } from "vitest";
-import TwitterImage, {
-  alt,
-  contentType,
-  dynamic,
-  size,
-} from "./twitter-image";
+import TwitterImage, { alt, contentType, dynamic, size } from "./twitter-image";
 import OpenGraphImage, {
   alt as ogAlt,
   contentType as ogContentType,

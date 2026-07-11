@@ -4,7 +4,7 @@
     // Noisy for prose-heavy docs (README/CHANGELOG); not a structural defect.
     "MD013": false,
     // CHANGELOG.md repeats heading text like "### Added" under every version.
-    "MD024": { "siblings_only": true }
+    "MD024": { "siblings_only": true },
   },
   "globs": ["**/*.md"],
   "ignores": [
@@ -21,6 +21,6 @@
     // "Markdown lint" CI job fails on any PR that adds a changeset, which the
     // repo's own changesets tooling (.changeset/config.json) requires of
     // every source change.
-    ".changeset/**"
-  ]
+    ".changeset/**",
+  ],
 }
