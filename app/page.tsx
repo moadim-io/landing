@@ -130,7 +130,7 @@ export default function Home() {
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
               Install
             </span>
-            <code className="font-mono text-base text-white sm:text-lg">
+            <code className="block font-mono text-base text-white sm:text-lg">
               {/* The shell prompt is decoration: hide it from screen readers and
                   exclude it from text selection so copying the line yields a
                   runnable `cargo install --locked moadim`, not
@@ -142,8 +142,22 @@ export default function Home() {
               </span>
               {`cargo install --locked ${CRATE_NAME}`}
             </code>
+            <code className="block font-mono text-base text-white sm:text-lg">
+              {/* `cargo install` only compiles and installs the binary — nothing
+                  runs until `moadim` itself is invoked, so the snippet stopped
+                  one command short of a working daemon (#206). Same
+                  aria-hidden/select-none prompt trick as the install line above. */}
+              <span aria-hidden="true" className="select-none text-accent">
+                ${" "}
+              </span>
+              moadim
+            </code>
             <p className="mt-1 text-xs font-medium leading-snug text-white">
-              Requires a Unix-like OS with{" "}
+              Starts the server in the background at{" "}
+              <code className="font-mono text-accent">
+                http://localhost:5784/
+              </code>
+              . Requires a Unix-like OS with{" "}
               <code className="font-mono text-accent">tmux</code> and a cron
               daemon (cron / launchd / systemd) — loops fire from your OS crontab
               inside a tmux session, so without them the install succeeds but
