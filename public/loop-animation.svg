@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220" width="800" role="img" aria-label="Animated diagram: an agent reads goals from a goals repository and travels to a routines repository where it creates, edits, and removes routines — each routine itself a continuously spinning loop. The routines act on external repositories and tasks, and the resulting progress flows back into the goals.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220" width="800" role="img" aria-label="Animated diagram: an agent reads goals from a goals repository and travels to a routines repository where it creates, edits, and removes routines — each routine itself a small, always-running loop with its own pace. The routines act on external repositories and tasks, and the resulting progress flows back into the goals.">
   <!--
     The "perfecting loop" diagram — the single source of truth. The landing
     page embeds this file via <img> (app/LoopAnimation.tsx), and READMEs
@@ -75,9 +75,9 @@
       animation: loop-anim-new-row 7s ease infinite;
     }
     @keyframes loop-anim-new-row {
-      0% { fill: var(--fg); }
+      0% { fill: transparent; }
       30%, 70% { fill: var(--accent); }
-      92%, 100% { fill: var(--fg); }
+      92%, 100% { fill: transparent; }
     }
     .loop-anim-pulse {
       opacity: 0;
@@ -103,17 +103,26 @@
       88%, 100% { transform: scale(0); }
     }
     /*
-     * Each routine row is itself a running loop: a cycle-arrow glyph
-     * spinning continuously. Per-row speeds (via inline animation-duration)
+     * Each routine row is its own small loop: a rectangular track — a
+     * miniature of the big goals/routines circuit — with a runner square
+     * riding its perimeter. Per-row speeds (via inline animation-duration)
      * suggest different schedules; every period divides the shared 7s cycle
-     * exactly (1.75s / 3.5s / 7s), so all spinners are back at 0deg on the
-     * cycle boundary and the row-shift snap stays pixel-identical.
+     * exactly (1.75s / 3.5s / 7s), so all runners are back at their start
+     * corner on the cycle boundary and the row-shift snap stays
+     * pixel-identical. Keyframe offsets are proportional to the track's
+     * side lengths (140x16, perimeter 312) so the speed along the track is
+     * constant.
      */
-    .loop-anim-spin {
-      animation: loop-anim-spin 3.5s linear infinite;
+    .loop-anim-run {
+      transform: translate(0, 0);
+      animation: loop-anim-run 3.5s linear infinite;
     }
-    @keyframes loop-anim-spin {
-      to { transform: rotate(360deg); }
+    @keyframes loop-anim-run {
+      0% { transform: translate(0, 0); }
+      45% { transform: translate(140px, 0); }
+      50% { transform: translate(140px, 16px); }
+      95% { transform: translate(0, 16px); }
+      100% { transform: translate(0, 0); }
     }
     @media (prefers-reduced-motion: reduce) {
       * { animation: none !important; }
@@ -161,49 +170,34 @@
     <g clip-path="url(#loop-routines-clip)">
       <g class="loop-anim-routines-shift">
         <g>
-          <g transform="translate(484 78)">
-            <g class="loop-anim-spin">
-              <path d="M 0 -6.5 A 6.5 6.5 0 1 1 -6.5 0" fill="none" stroke="var(--fg)" stroke-width="2.5"/>
-              <polygon points="-9.5,0 -3.5,0 -6.5,-5.5" fill="var(--fg)"/>
-            </g>
+          <rect x="478" y="70" width="140" height="16" fill="transparent" stroke="var(--fg)" stroke-width="2"/>
+          <g transform="translate(478 70)">
+            <rect x="-3.5" y="-3.5" width="7" height="7" fill="var(--accent)" stroke="var(--fg)" stroke-width="1.5" class="loop-anim-run"/>
           </g>
-          <rect x="500" y="73" width="118" height="10" fill="var(--fg)"/>
         </g>
         <g>
-          <g transform="translate(484 106)">
-            <g class="loop-anim-spin" style="animation-duration: 7s">
-              <path d="M 0 -6.5 A 6.5 6.5 0 1 1 -6.5 0" fill="none" stroke="var(--fg)" stroke-width="2.5"/>
-              <polygon points="-9.5,0 -3.5,0 -6.5,-5.5" fill="var(--fg)"/>
-            </g>
+          <rect x="478" y="98" width="140" height="16" fill="transparent" stroke="var(--fg)" stroke-width="2"/>
+          <g transform="translate(478 98)">
+            <rect x="-3.5" y="-3.5" width="7" height="7" fill="var(--accent)" stroke="var(--fg)" stroke-width="1.5" class="loop-anim-run" style="animation-duration: 7s"/>
           </g>
-          <rect x="500" y="101" width="118" height="10" fill="var(--fg)"/>
         </g>
         <g>
-          <g transform="translate(484 134)">
-            <g class="loop-anim-spin" style="animation-duration: 1.75s">
-              <path d="M 0 -6.5 A 6.5 6.5 0 1 1 -6.5 0" fill="none" stroke="var(--fg)" stroke-width="2.5"/>
-              <polygon points="-9.5,0 -3.5,0 -6.5,-5.5" fill="var(--fg)"/>
-            </g>
+          <rect x="478" y="126" width="140" height="16" fill="transparent" stroke="var(--fg)" stroke-width="2"/>
+          <g transform="translate(478 126)">
+            <rect x="-3.5" y="-3.5" width="7" height="7" fill="var(--accent)" stroke="var(--fg)" stroke-width="1.5" class="loop-anim-run" style="animation-duration: 1.75s"/>
           </g>
-          <rect x="500" y="129" width="118" height="10" fill="var(--fg)"/>
         </g>
         <g>
-          <g transform="translate(484 162)">
-            <g class="loop-anim-spin">
-              <path d="M 0 -6.5 A 6.5 6.5 0 1 1 -6.5 0" fill="none" stroke="var(--fg)" stroke-width="2.5"/>
-              <polygon points="-9.5,0 -3.5,0 -6.5,-5.5" fill="var(--fg)"/>
-            </g>
+          <rect x="478" y="154" width="140" height="16" fill="transparent" stroke="var(--fg)" stroke-width="2"/>
+          <g transform="translate(478 154)">
+            <rect x="-3.5" y="-3.5" width="7" height="7" fill="var(--accent)" stroke="var(--fg)" stroke-width="1.5" class="loop-anim-run"/>
           </g>
-          <rect x="500" y="157" width="118" height="10" fill="var(--fg)"/>
         </g>
         <g>
-          <g transform="translate(484 190)">
-            <g class="loop-anim-spin" style="animation-duration: 1.75s">
-              <path d="M 0 -6.5 A 6.5 6.5 0 1 1 -6.5 0" fill="none" stroke="var(--fg)" stroke-width="2.5"/>
-              <polygon points="-9.5,0 -3.5,0 -6.5,-5.5" fill="var(--fg)"/>
-            </g>
+          <rect x="478" y="182" width="140" height="16" fill="transparent" stroke="var(--fg)" stroke-width="2" class="loop-anim-new-row"/>
+          <g transform="translate(478 182)">
+            <rect x="-3.5" y="-3.5" width="7" height="7" fill="var(--accent)" stroke="var(--fg)" stroke-width="1.5" class="loop-anim-run" style="animation-duration: 1.75s"/>
           </g>
-          <rect x="500" y="185" width="118" height="10" fill="var(--fg)" class="loop-anim-new-row"/>
         </g>
       </g>
     </g>

@@ -17,7 +17,7 @@ export function LoopAnimation() {
     <div className="overflow-x-auto p-4 sm:p-6">
       <Image
         src="/loop-animation.svg"
-        alt="Animated diagram: an agent reads goals from a goals repository, travels to a routines repository where it creates, edits, and removes routines, the routines act on external repositories and tasks, and the resulting progress flows back into the goals."
+        alt="Animated diagram: an agent reads goals from a goals repository and travels to a routines repository where it creates, edits, and removes routines — each routine itself a small, always-running loop with its own pace. The routines act on external repositories and tasks, and the resulting progress flows back into the goals."
         width={800}
         height={220}
         className="block h-auto w-full min-w-140"
