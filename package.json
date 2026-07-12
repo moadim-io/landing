@@ -13,19 +13,24 @@
   "bugs": {
     "url": "https://github.com/moadim-io/landing/issues"
   },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "npx serve out",
     "lint": "eslint --max-warnings 0",
     "lint:md": "markdownlint-cli2",
+    "lint:html": "html-validate 'out/**/*.html'",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "verify:export": "node scripts/verify-export.mjs"
   },
   "dependencies": {
-    "next": "16.2.9",
+    "next": "16.2.10",
     "react": "19.2.7",
     "react-dom": "19.2.7"
   },
@@ -39,10 +44,11 @@
     "@vitejs/plugin-react": "^6.0.3",
     "@vitest/coverage-v8": "^4.1.9",
     "eslint": "^9",
-    "eslint-config-next": "16.2.9",
+    "eslint-config-next": "16.2.10",
     "eslint-plugin-jsx-a11y": "^6.10.2",
+    "html-validate": "^11.5.5",
     "jsdom": "^29.1.1",
-    "markdownlint-cli2": "^0.22.1",
+    "markdownlint-cli2": "^0.23.0",
     "tailwindcss": "^4",
     "typescript": "^6",
     "vitest": "^4.1.9"

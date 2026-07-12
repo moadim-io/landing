@@ -41,6 +41,13 @@ const eslintConfig = defineConfig([
       // same way. Force the call site to use a non-async callback or
       // handle the promise explicitly.
       "@typescript-eslint/no-misused-promises": "error",
+      // Flag a `?.`/non-null-guard branch whose condition the type checker
+      // already proves can't be nullish (or is always nullish). Such a
+      // check reads as defensive code the type system disagrees with,
+      // masking either a stale guard left over from a type change or a
+      // wrong assumption about what can flow through. Only checkable with
+      // type information, so it lives in this typed-linting block.
+      "@typescript-eslint/no-unnecessary-condition": "error",
     },
   },
   {
@@ -82,6 +89,12 @@ const eslintConfig = defineConfig([
       // `{ null: "ignore" }` keeps the idiomatic `x == null` nullish check
       // (matches both `null` and `undefined`) allowed.
       eqeqeq: ["error", "always", { null: "ignore" }],
+      // Require type-only imports to use `import type`/`import { type X }`.
+      // Without this, a symbol imported only for its type still emits as a
+      // value import in the compiled output — pulling in a module purely
+      // for an erased type instead of dropping the import entirely. See #16.
+      // Auto-fixable via `eslint --fix`.
+      "@typescript-eslint/consistent-type-imports": "error",
     },
   },
 ]);

@@ -9,6 +9,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Hero: a `crates.io` version badge next to the install command, so a visitor can see the current published `moadim` version (and that the crate is actively maintained) without leaving the page — a static `shields.io` badge image, so it never needs a build-time network fetch and can't break the static export (#183).
+- Unit test rendering `app/apple-icon.tsx`'s `AppleIcon()` component itself, not just asserting its exported route config — mirrors the same coverage `opengraph-image.test.tsx` already had for its identical `next/og`/Satori setup, so a typo in the Satori JSX/inline style tree fails a test instead of only surfacing at `next build` time (#471).
+- `Strict-Transport-Security` header on `public/_headers`, so HTTPS is enforced from a visitor's very first request instead of only after the first redirect (#442).
+- Node.js engine version pinned via `.nvmrc` alongside the existing `package.json` `engines` field, for a reproducible local/CI toolchain (#390).
+- Unit tests guarding `.nvmrc`, `engines.node`, and `CONTRIBUTING.md`'s stated Node version against drifting out of sync with each other (#461).
+- Unit tests guarding the Satori `SATORI_*` brand-color constants (`opengraph-image.tsx`/`apple-icon.tsx`) against drifting from `app/globals.css` (#457).
+- Unit tests covering the `apple-icon` and `manifest.webmanifest` route config (#449).
+- Unit tests covering `public/_headers` and `public/_redirects` deploy config (#448).
+- Unit tests that render the `opengraph-image` card itself, not just assert its route config (#443).
+- Unit tests covering the hero install command's `aria-hidden`/`select-none` shell-prompt decoration (#440).
+- CI: a `Lighthouse` gate (`treosh/lighthouse-ci-action`) that builds the static export and asserts performance ≥0.90, accessibility ≥0.95, best-practices ≥0.95, and SEO ≥0.95 on the landing page — a regression (unoptimized image, dropped alt text, missing meta tag) now fails the PR instead of only surfacing if someone runs Lighthouse by hand (#75).
+- Unit tests for `page.tsx`'s three feature cards and the "On loop engineering" reading list, asserting the reading-list links carry the `nofollow noopener noreferrer` `rel` baseline — previously the only content on the page with no direct test coverage.
+- `verify:export` script (and a matching CI/deploy step) that asserts the static export in `out/` actually contains every file the site depends on — `index.html`, `404.html`, `sitemap.xml`, `robots.txt`, the OG/Twitter images, `favicon.ico`, and `_headers` — so a route or asset that silently drops from a green `next build` fails CI instead of shipping a broken page (#345).
+- `JsonLdScript`, a shared component (plus a `toSafeJsonLd` helper) that `layout.tsx` and `page.tsx` both route through to escape JSON-LD before inlining it, with its own dedicated test coverage for the `</script>`-breakout escaping (#352).
+- CI: a `dependency-review` gate (`actions/dependency-review-action`) that fails a PR on a new high/critical-severity advisory or a disallowed dependency license, catching a vulnerable or incompatibly-licensed package before Dependabot ever sees it (#148, #344).
+- CI: a `lychee` link-check gate over the built static export and the root Markdown docs, plus a weekly scheduled run so external link rot is caught even without a code change (#341).
+- CI: a `typos` spell-check gate over `app/**`, Markdown docs, and config files (#347).
+- CI: an `actionlint` gate for `.github/workflows/**` YAML, including embedded shell via shellcheck (#313).
+- CI: a `markdownlint` gate for the repo's Markdown docs (#314).
+- CI: a `lint-and-build` gate (ESLint + `next build`) on every pull request and push to `main` (#308), later extended to run the Vitest suite too (#321).
+- CI: a CodeQL scanning gate for `javascript-typescript` (#331).
+- CI: cancel a superseded CI run when a PR gets a new push, instead of letting stale runs keep holding a runner (#323).
+- CI/deploy: bound the Cloudflare Pages deploy job with `timeout-minutes`, so a hung build/install/`wrangler` call can't hold a runner for hours (#275).
+- CI/deploy: declare a GitHub `production` Environment on the deploy job, so every deploy shows up in the Deployments tab with a link to the live URL and Cloudflare secrets can be scoped to it (#330).
+- CI/deploy: cache `.next/cache` on the deploy job so `next build` can do an incremental build instead of a fully cold one on every push (#327).
+- Persistent "Docs" and "GitHub" navigation links beside the site wordmark in the header banner (#295, #303).
+- `CODE_OF_CONDUCT.md` (Contributor Covenant) (#309).
+- Unit tests for `not-found.tsx`, the branded 404 page (#325).
+- Unit tests for `app/site.ts`'s constant derivations (`REPO_URL`, `CRATE_URL`, etc.) (#340).
 - `.github/workflows/dependency-review.yml`: a PR-time gate (`actions/dependency-review-action`) that fails on a new high/critical-severity advisory or a disallowed dependency license, so a vulnerable or incompatibly-licensed package can't be introduced before Dependabot ever sees it (#148).
 - Unit tests for the `opengraph-image`/`twitter-image` metadata routes, asserting the `force-static` export (required under `output: "export"`), the declared `1200x630` OG dimensions, the `image/png` content type, and that `twitter-image.tsx` genuinely re-exports (not hand-copies) `opengraph-image`'s config and renderer — previously the only two route files in `app/` with no test coverage.
 - Unit tests for `ExternalLink`, covering `target="_blank"` + `rel="noopener noreferrer"` (reverse-tabnabbing protection), the `relExtra` prepend behavior, and the screen-reader "(opens in a new tab)" suffix — none of which had direct coverage before, so a regression in the component itself could pass CI undetected.
@@ -28,6 +57,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Every `actions/setup-node` step in `ci.yml`, `deploy.yml`, `lighthouse.yml`, and `link-check.yml` now reads the Node version from `.nvmrc` (`node-version-file`) instead of a fifth untested hardcoded `node-version: 22` literal (#477).
+- Enabled `noImplicitReturns` and `exactOptionalPropertyTypes` in `tsconfig.json`, completing the project's strict-mode opt-ins (#467, #463).
+- Enabled `@typescript-eslint/no-unnecessary-condition` (#460).
+- `not-found.tsx`'s "Back to home" link now reuses the shared `ctaButton` constant instead of hand-copying its class string (#466).
+- Single-sourced `SITE_TITLE`/`SITE_DESCRIPTION` into `app/site.ts`, extending the existing `SITE_URL`/`REPO_URL` single-source pattern (#458).
+- The branded 404 page now reuses `page.tsx`'s shared `panel` constant for its card surface instead of a hand-copied class string, closing the one remaining call site the FAQ-panel single-sourcing (#282) didn't reach.
+- Third-party GitHub Actions across `ci.yml`, `codeql.yml`, `dependency-review.yml`, `link-check.yml`, `actionlint.yml`, and `deploy.yml` pinned to commit SHAs instead of floating version tags, closing a supply-chain tampering vector where a compromised tag could silently change what a workflow runs (#342, #350).
+- `@typescript-eslint/consistent-type-imports` ESLint rule enabled, requiring type-only imports to use `import type` so an erased type doesn't survive into the compiled output as a value import (#16).
+- `eqeqeq` ESLint rule enabled, requiring `===`/`!==` over `==`/`!=` (#335).
+- `@typescript-eslint/no-explicit-any` enabled as an error (#307).
+- `eslint-plugin-jsx-a11y`'s recommended ruleset enabled at error level (#320).
+- Sitemap `lastModified` bumped to 2026-06-25 and `changeFrequency` set to `weekly` (#306).
+- Generated metadata routes (OG/Twitter images, favicon) given a real, long-lived cache window instead of an implicit no-cache default (#228, #278).
+- `cloudflare/wrangler-action` bumped from v3 to v4 (#114).
+- CI and deploy installs switched to `npm ci` against a regenerated, in-sync lockfile, instead of a re-resolving `npm install` (#328).
+- Production deploys now skip for docs-only pushes (README, CHANGELOG, other workflow files) that can't affect the exported static site (#326).
+- README and `CONTRIBUTING.md` now document the test scripts (`npm test`, `npm run test:watch`) (#333).
 - Enabled type-aware ESLint linting (`parserOptions.projectService`, scoped to `**/*.ts`/`**/*.tsx`) and turned on `@typescript-eslint/no-floating-promises` / `@typescript-eslint/no-misused-promises`, so an unawaited promise or an `async` callback passed where a `void`-returning one is expected now fails `npm run lint` instead of silently swallowing the rejection (#288).
 - Marked the three third-party "On loop engineering" reading-list links `rel="nofollow"` so the homepage stops passing ranking signal out to external commentary domains on every crawl (#233).
 - Tightened TypeScript strictness further by enabling `noImplicitOverride`, completing the opt-in strictness set so class members that override a base member must say so explicitly (#160).
@@ -50,6 +96,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Organization JSON-LD `sameAs` now derived from `app/site.ts`'s `ORG_URL` instead of a hardcoded `"https://github.com/moadim-io"` literal, closing the last stray copy of the GitHub org URL that the earlier `REPO_URL`/`CRATE_URL` single-sourcing (#173) had missed (#484).
+- `README.md`'s Project structure listing named nothing between `app/` and `public/` — the root-level guard tests (`next.config.test.ts`, `deploy-config.test.ts`, `node-version.test.ts`, `llms-txt.test.ts`) and the `test/mocks/` Vitest stub existed with no discoverable entry explaining what each one protects against drifting (#486).
+- `public/llms.txt` — the machine-readable doc AI agents are meant to follow — now uses `cargo install --locked moadim`, matching the hero card's install command instead of the stale unlocked form (#480).
+- Restored the accessible `list` role on the nav, feature-grid, and reading-list `<ul>` elements. Tailwind's Preflight resets `list-style: none` on every `<ul>`, which in Safari/VoiceOver also strips the implicit `list`/`listitem` role, so screen-reader users on Safari weren't hearing these regions announced as lists (#470).
+- `README.md`'s Node.js prerequisite corrected from the stale "20+" to the actual "22+" (#459); its Project structure listing now also names the `lighthouse.yml` CI workflow (#468).
+- Web app manifest branding synced with the loop-engine rebrand (#451).
+- `verify-export` now catches a required route emitted as a directory instead of a flat file, a class of export breakage the size/existence checks alone missed (#446).
+- `SoftwareApplication` JSON-LD `image` now points at the real `opengraph-image` route (#410).
+- The homepage feature grid gained a named landmark region so assistive-tech users navigating by region can find it (#418).
+- `ExternalLink` now appends its own new-tab suffix to a caller-supplied `aria-label` instead of the suffix being silently dropped when a caller also sets one (#416).
+- The Cloudflare `wrangler-action` commit SHA pin, left truncated by an earlier fix, corrected in a follow-up (#445, #452).
+- `AGENTS.md`'s "Where things live" listing: replaced the stale `app/favicon.ico` entry (that file was replaced by `app/icon.svg` a while ago) with the actual `icon.svg`, `apple-icon.tsx`, and `manifest.ts` routes, and added the previously-undocumented `JsonLdScript.tsx` — the file agents are told to route new JSON-LD through, but that wasn't listed here.
+- `sitemap.xml`'s `lastModified` no longer freezes on a hand-maintained hardcoded date — it now stamps the actual build time, so the sitemap stops claiming every page was last modified on a fixed day forever (#57).
+- Escaped `<` in the FAQ `JSON-LD` before inlining, closing the same `</script>`-breakout sink already fixed for the `SoftwareApplication` JSON-LD (#301).
+- Cloudflare Pages deploys are no longer cancelled mid-flight by a newer push to `main`; queued runs now serialize instead, so a killed `wrangler pages deploy` can't leave a half-uploaded deployment (#310).
+- Removed dead `focus-visible` Tailwind utility classes on the header nav links — an unlayered global CSS rule in `globals.css` already always wins the cascade over them, so the per-link classes compiled but never actually rendered (#338).
+- Removed `public/_headers` `Cache-Control` rules that were dead, shadowed by a later, more specific override rule (#334).
 - Removed a byte-for-byte duplicate `@media (prefers-reduced-motion: reduce)` rule in `app/globals.css`, left behind after two separate commits independently fixed the same reduced-motion issue (#89) without either noticing the other's rule was already shipped.
 - Escaped `<` to `<` in the `SoftwareApplication` JSON-LD injected via `dangerouslySetInnerHTML`, closing the `</script>` breakout sink that `JSON.stringify` alone does not guard against (#198).
 - Declared a light `color-scheme` so visitors in OS/browser dark mode no longer get dark-rendered native controls, scrollbars, and a pre-paint flash against the single-theme light design (#293).
@@ -63,3 +126,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a visible keyboard focus indicator on interactive elements so keyboard users can see where they are (WCAG 2.4.7) (#84).
 - Raised the source-label text contrast to meet the WCAG 1.4.3 minimum (#103).
 - Applied the loaded Geist Sans font to body text so typography renders as intended (#7).
+- Enabled `trailingSlash` so the static export emits directory-style routes
+  (`out/<route>/index.html`), giving consistent clean URLs on static hosts and
+  removing the need for `/route` → `/route.html` rewrite rules as pages are added.

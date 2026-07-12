@@ -33,11 +33,14 @@ you edit files under `app/`.
 | --- | --- |
 | `npm run dev` | Start the local dev server with hot reload. |
 | `npm run build` | Produce the static export in `out/`. |
-| `npm run start` | Serve the production build locally. |
+| `npm run start` | Serve the static `out/` build locally (via `serve`) to preview it before deploying. |
 | `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript + `jsx-a11y` recommended rules); fails on any warning (`--max-warnings 0`). |
 | `npm run lint:md` | Lint Markdown files with `markdownlint-cli2`. |
+| `npm run lint:html` | Validate the built `out/**/*.html` with [`html-validate`](https://html-validate.org) (config: [`.htmlvalidate.json`](./.htmlvalidate.json)). Run `npm run build` first. |
+| `npm run typecheck` | Type-check the whole project with `tsc --noEmit` (`next build`'s own TypeScript pass only covers the app route graph, so it misses files like `*.test.ts`). |
 | `npm test` | Run the Vitest unit/component test suite once. |
 | `npm run test:watch` | Run the Vitest suite in watch mode while developing. |
+| `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship; runs after every build in CI. |
 | `typos` | Spell-check `app/**`, `*.md`, and config files with [`typos`](https://github.com/crate-ci/typos) (config: [`_typos.toml`](./_typos.toml)). Not an npm script — install with `cargo install typos-cli` or `brew install typos-cli`, then run `typos` from the repo root. Gated in CI on every PR and push to `main`. |
 
 ## Project structure
@@ -48,8 +51,13 @@ app/
   page.tsx              Landing page content.
   not-found.tsx         Branded 404 page.
   ExternalLink.tsx      Outbound (new-tab) link wrapper with the safe rel attributes.
-  site.ts               Shared site constants (canonical SITE_URL).
+  JsonLdScript.tsx      Escapes and inlines JSON-LD structured data as a <script> tag.
+  site.ts               Shared site constants: canonical SITE_URL plus the product's
+                         GitHub/crates.io identifiers (REPO_SLUG, REPO_URL, CRATE_NAME,
+                         CRATE_URL).
   globals.css           Global styles and Tailwind theme tokens.
+  brand-colors.ts       Satori-safe brand hex constants for opengraph-image.tsx/apple-icon.tsx,
+                        kept in sync with globals.css by hand (a test guards it).
   opengraph-image.tsx   Generated Open Graph social card.
   twitter-image.tsx     Generated Twitter/X social card.
   robots.ts             Generated robots.txt.
@@ -57,9 +65,24 @@ app/
   favicon.ico           Site favicon.
 public/
   _headers              Cloudflare Pages response headers.
+test/
+  mocks/next-font-google.ts  Vitest stub for the build-time-only `next/font/google` loader.
+scripts/
+  verify-export.mjs     Checks the built out/ directory for required routes/files (see
+                         `npm run verify:export`).
+next.config.test.ts     Guards next.config.ts's static-export invariants against drift.
+deploy-config.test.ts   Guards public/_headers and public/_redirects against malformed rules.
+node-version.test.ts    Guards .nvmrc, package.json engines.node, and CONTRIBUTING.md against drift.
+llms-txt.test.ts        Guards public/llms.txt's install command against the hero's.
 .github/workflows/
-  deploy.yml            Build + deploy to Cloudflare Pages on push to main.
-  link-check.yml        Lint outbound/internal links in the built export + docs.
+  ci.yml                 Lint, test, build, and verify the export on every PR and push to main.
+  deploy.yml             Build + deploy to Cloudflare Pages on push to main.
+  codeql.yml             CodeQL static analysis.
+  dependency-review.yml  Flag vulnerable/incompatible-license dependencies on pull requests.
+  actionlint.yml         Lint the GitHub Actions workflow files themselves.
+  link-check.yml         Lint outbound/internal links in the built export + docs.
+  lighthouse.yml         Gate PRs on Lighthouse performance/accessibility/best-practices/SEO
+                         budgets (see .lighthouserc.json).
 ```
 
 ## Link check
@@ -76,11 +99,28 @@ Deployment is automated. Every push to `main` runs
 [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml), which builds the static
 export and publishes `out/` to Cloudflare Pages (project `moadim-landing`) via
 [`wrangler`](https://developers.cloudflare.com/workers/wrangler/). The workflow can also be
-triggered manually from the Actions tab (`workflow_dispatch`).
+triggered manually from the Actions tab (`workflow_dispatch`). After the upload, a smoke-test
+step requests `https://moadim.io` and fails the job if the live site doesn't respond or its
+body no longer mentions "Moadim" — a successful `wrangler` upload alone doesn't prove the
+production URL is actually serving the new build.
 
 Because the build is a fully static export, the same `out/` directory can be served from any
 static host — running `npm run build` locally and uploading `out/` to Vercel, Netlify, GitHub
 Pages, or an S3 bucket behind a CDN works without any of the Cloudflare-specific tooling.
+
+### Search-engine verification (optional)
+
+To verify the site in **Google Search Console** / **Bing Webmaster Tools**, set the
+ownership tokens as build-time environment variables:
+
+| Variable | Source |
+| --- | --- |
+| `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Google Search Console → add property → "HTML tag" method |
+| `NEXT_PUBLIC_BING_SITE_VERIFICATION` | Bing Webmaster Tools → add site → "Meta tag" method |
+
+When a variable is set, the build renders the matching `<meta>` tag into the static export;
+when unset, no tag is emitted. These tokens are public (non-secret) identifiers — set them in
+the deploy build environment rather than committing them.
 
 ## Security
 

@@ -53,7 +53,8 @@ or user data, and no secrets are served to the browser. Reports worth filing
 include:
 
 - **Injection / XSS** in the rendered page, especially the JSON-LD structured
-  data injected via `dangerouslySetInnerHTML` in `app/layout.tsx`.
+  data escaped and injected via `dangerouslySetInnerHTML` in
+  `app/JsonLdScript.tsx` (used by both `app/layout.tsx` and `app/page.tsx`).
 - **Supply-chain risks** in the build: a malicious or compromised npm
   dependency, or a tampered GitHub Actions step that runs with the deploy
   credentials.

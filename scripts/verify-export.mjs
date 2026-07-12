@@ -17,21 +17,47 @@ const REQUIRED_FILES = [
   "robots.txt",
   "opengraph-image",
   "twitter-image",
-  "favicon.ico",
+  // The favicon route: app/favicon.ico was replaced by app/icon.svg (#161), which
+  // Next emits as an `/icon.svg` file, not `/favicon.ico` — this list still named
+  // the old file and has been failing every build ever since (a real `favicon.ico`
+  // never lands in `out/`).
+  "icon.svg",
+  // iOS "Add to Home Screen" / Safari bookmark icon (app/apple-icon.tsx) and the
+  // PWA manifest (app/manifest.ts) both emit real files under `out/` today but
+  // were never added here, so either one silently dropping from a build would
+  // pass this check and CI regardless.
+  "apple-icon",
+  "manifest.webmanifest",
   "_headers",
+  // Cloudflare Pages reads this from the export root to 301 moadim-landing.pages.dev
+  // and www.moadim.io to the canonical host (public/_redirects) — silently dropping
+  // it from a build wouldn't fail `next build`, it would just stop enforcing the
+  // canonical host and let search engines index duplicate-content mirrors.
+  "_redirects",
+  "llms.txt",
 ];
 
 const missing = [];
 for (const file of REQUIRED_FILES) {
   const path = join(OUT_DIR, file);
-  let size = 0;
+  let stats;
   try {
-    size = statSync(path).size;
+    stats = statSync(path);
   } catch {
     missing.push(`${path} (not found)`);
     continue;
   }
-  if (size === 0) {
+  // A directory's `size` is a small, non-zero number of its own (filesystem
+  // metadata, not content), so the `size === 0` check below would silently
+  // pass a required "file" that's actually a directory — e.g. a future
+  // Next.js version emitting a route as `<name>/index.html` instead of a
+  // flat `<name>` file. Checking `isFile()` catches that class of export
+  // breakage too, not just a missing or zero-byte file.
+  if (!stats.isFile()) {
+    missing.push(`${path} (not a file)`);
+    continue;
+  }
+  if (stats.size === 0) {
     missing.push(`${path} (empty)`);
   }
 }

@@ -12,10 +12,40 @@
 # that inherited Cache-Control before setting its own — leaving each path with
 # a single, unambiguous value instead of several comma-joined ones.
 
+# Baseline security headers, applied site-wide. More specific rules below only
+# detach/reset Cache-Control (`! Cache-Control`), so these keep applying to
+# every path — including hashed assets and metadata routes — without repeating
+# them per rule. No CSP here: the JSON-LD <script> (JsonLdScript.tsx) is inline
+# and static-exported with no per-request nonce, so a strict CSP would need
+# 'unsafe-inline' anyway; adding one is a separate, larger effort left for later.
+#
+# - X-Content-Type-Options: stops a browser from MIME-sniffing a response into
+#   an executable type against the served Content-Type.
+# - Referrer-Policy: sends the full referrer to same-origin requests but only
+#   the origin (no path/query) cross-origin, so outbound links don't leak this
+#   site's full URL to third parties.
+# - X-Frame-Options: DENY — the site never needs to be framed, so refuse
+#   clickjacking-style embedding outright.
+# - Permissions-Policy: the site doesn't use these browser APIs; disabling
+#   them denies a compromised third-party script silent access.
+# - Strict-Transport-Security: moadim.io is only ever served over HTTPS (see
+#   the www/.pages.dev -> apex redirects in public/_redirects), but without
+#   this header a visitor's first request to a bare `http://` link or typed
+#   URL still round-trips in plaintext before Cloudflare's edge can apply
+#   that redirect, leaving a window for a network attacker to intercept or
+#   downgrade it. `max-age=63072000` (2 years) + `includeSubDomains` is the
+#   standard baseline (https://hstspreload.org); submitting to the preload
+#   list itself is a separate opt-in step, left for later.
+
 # HTML and everything else: cache but always revalidate, so a redeploy is
 # picked up immediately instead of serving a stale page.
 /*
   Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: geolocation=(), camera=(), microphone=()
+  Strict-Transport-Security: max-age=63072000; includeSubDomains
 
 # Next.js emits content-hashed, immutable assets (JS, CSS, fonts, media) under
 # /_next/static/*. A new build changes the hash (and the URL), so these can be
@@ -41,13 +71,16 @@
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
-# Crawler-fetched metadata served from a stable, unhashed URL: robots.txt and
-# the sitemap. These can change on a redeploy, so they can't be immutable — but
-# a one-day cache still spares the origin a re-fetch on every crawl while letting
-# a redeploy propagate within 24h.
+# Crawler-fetched metadata served from a stable, unhashed URL: robots.txt, the
+# sitemap, and llms.txt (the AI-agent discovery file). These can change on a
+# redeploy, so they can't be immutable — but a one-day cache still spares the
+# origin a re-fetch on every crawl while letting a redeploy propagate within 24h.
 /robots.txt
   ! Cache-Control
   Cache-Control: public, max-age=86400
 /sitemap.xml
+  ! Cache-Control
+  Cache-Control: public, max-age=86400
+/llms.txt
   ! Cache-Control
   Cache-Control: public, max-age=86400

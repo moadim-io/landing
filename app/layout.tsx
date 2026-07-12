@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SITE_URL, REPO_URL } from "./site";
+import { SITE_URL, REPO_URL, ORG_URL, SITE_TITLE, SITE_DESCRIPTION } from "./site";
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
 
@@ -16,8 +16,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const description =
-  "Moadim is an open-source loop engine for AI agents. Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes against your repo on every tick, over MCP and REST.";
+// Search-engine ownership-verification tokens, read at build time so nothing
+// sensitive lands in the repo and the tags can differ per environment. They are
+// public (non-secret) identifiers. When a token is unset, its `<meta>` tag is
+// omitted entirely — see `verification` below. Set these in the deploy build
+// env (e.g. Cloudflare Pages / Actions). See README "Deploying".
+const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
+const bingSiteVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION;
 
 // Paint the mobile browser chrome (address bar / status bar) in the brand
 // page background instead of the default white, so the UI extends the
@@ -35,27 +40,68 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Moadim — Put your agents on a loop",
+    default: SITE_TITLE,
     template: "%s — Moadim",
   },
-  description,
+  description: SITE_DESCRIPTION,
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "Moadim — Put your agents on a loop",
-    description,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     url: SITE_URL,
     siteName: "Moadim",
-    type: "website",
     locale: "en_US",
+    type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Moadim — Put your agents on a loop",
-    description,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  // Ownership-verification meta tags for Google Search Console / Bing Webmaster
+  // Tools. Each tag is emitted only when its build-time token is set, so an
+  // unconfigured environment produces no empty/garbage tag.
+  verification: {
+    google: googleSiteVerification,
+    ...(bingSiteVerification
+      ? { other: { "msvalidate.01": bingSiteVerification } }
+      : {}),
   },
 };
 
-export const jsonLd = {
-  "@context": "https://schema.org",
+// @id anchors so the Organization, WebSite, and SoftwareApplication nodes
+// below can cross-reference each other within the same @graph instead of
+// each carrying a duplicate, divergence-prone copy of the brand identity.
+const organizationId = `${SITE_URL}/#organization`;
+
+const organization = {
+  "@type": "Organization",
+  "@id": organizationId,
+  name: "Moadim",
+  url: SITE_URL,
+  // No dedicated brand mark yet (app/favicon.ico is still the create-next-app
+  // scaffold icon, see #145) — the generated OG card is the closest stand-in
+  // for a logo until a real mark ships.
+  logo: `${SITE_URL}/opengraph-image`,
+  // The GitHub org is the authoritative profile for the "Moadim" entity
+  // itself (distinct from the SoftwareApplication.sameAs links below, which
+  // point at the *product's* distribution channels) — this is what lets
+  // search engines resolve the Organization node to a known, verifiable
+  // profile instead of an isolated, unconfirmed name.
+  sameAs: [ORG_URL],
+};
+
+const website = {
+  "@type": "WebSite",
+  "@id": `${SITE_URL}/#website`,
+  name: "Moadim",
+  url: SITE_URL,
+  publisher: { "@id": organizationId },
+};
+
+const softwareApplication = {
   "@type": "SoftwareApplication",
   name: "Moadim",
   url: SITE_URL,
@@ -66,13 +112,31 @@ export const jsonLd = {
   // FAQ ("macOS and Linux") say the same; advertising Windows here would let
   // search engines surface the app for an unsupported platform.
   operatingSystem: "macOS, Linux",
-  description,
+  description: SITE_DESCRIPTION,
+  sameAs: [
+    "https://github.com/moadim-io/daemon",
+    "https://crates.io/crates/moadim",
+  ],
   license: "https://opensource.org/licenses/MIT",
+  // Static export emits this route as `opengraph-image` with no extension (see
+  // `scripts/verify-export.mjs`) — the hardcoded ".png" 404'd in production.
+  image: `${SITE_URL}/opengraph-image`,
+  codeRepository: "https://github.com/moadim-io/daemon",
+  downloadUrl: "https://crates.io/crates/moadim",
   offers: {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
   },
+  publisher: { "@id": organizationId },
+};
+
+export const jsonLd: {
+  "@context": string;
+  "@graph": [typeof organization, typeof website, typeof softwareApplication];
+} = {
+  "@context": "https://schema.org",
+  "@graph": [organization, website, softwareApplication],
 };
 
 export default function RootLayout({
@@ -112,12 +176,23 @@ export default function RootLayout({
                 the global rule instead, as every other link on the site
                 does. */}
             <nav aria-label="Site navigation">
-              <ul className="flex items-center gap-6">
+              {/* Tailwind's Preflight resets `list-style: none` on every <ul>,
+                  which in Safari/VoiceOver also strips the implicit
+                  `list`/`listitem` role — a long-documented WebKit quirk
+                  (https://www.scottohara.me/blog/2019/01/12/lists-and-safari.html).
+                  `role="list"` restores it in the accessibility tree without
+                  changing anything visually. jsx-a11y flags this as a
+                  "redundant" role since <ul> already implies it per the ARIA
+                  spec — that mapping is correct, WebKit's actual behavior
+                  isn't, so the rule is disabled for this one, deliberate
+                  case. */}
+              {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+              <ul className="flex items-center gap-6" role="list">
                 <li>
                   <ExternalLink
                     href={`${REPO_URL}#readme`}
                     className="text-sm font-bold uppercase tracking-wide hover:text-accent"
-                    aria-label="Docs (opens in a new tab)"
+                    aria-label="Docs"
                   >
                     Docs
                   </ExternalLink>
@@ -126,7 +201,7 @@ export default function RootLayout({
                   <ExternalLink
                     href={REPO_URL}
                     className="text-sm font-bold uppercase tracking-wide hover:text-accent"
-                    aria-label="GitHub (opens in a new tab)"
+                    aria-label="GitHub"
                   >
                     GitHub
                   </ExternalLink>
