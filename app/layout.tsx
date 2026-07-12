@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SITE_URL, REPO_URL } from "./site";
+import { SITE_URL, REPO_URL, ORG_URL, SITE_TITLE, SITE_DESCRIPTION } from "./site";
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
 
@@ -15,9 +15,6 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
-const description =
-  "Moadim is an open-source loop engine for AI agents. Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes against your repo on every tick, over MCP and REST.";
 
 // Search-engine ownership-verification tokens, read at build time so nothing
 // sensitive lands in the repo and the tags can differ per environment. They are
@@ -43,16 +40,16 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Moadim — Put your agents on a loop",
+    default: SITE_TITLE,
     template: "%s — Moadim",
   },
-  description,
+  description: SITE_DESCRIPTION,
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Moadim — Put your agents on a loop",
-    description,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     url: SITE_URL,
     siteName: "Moadim",
     locale: "en_US",
@@ -60,8 +57,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Moadim — Put your agents on a loop",
-    description,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
   },
   // Ownership-verification meta tags for Google Search Console / Bing Webmaster
   // Tools. Each tag is emitted only when its build-time token is set, so an
@@ -93,7 +90,7 @@ const organization = {
   // point at the *product's* distribution channels) — this is what lets
   // search engines resolve the Organization node to a known, verifiable
   // profile instead of an isolated, unconfirmed name.
-  sameAs: ["https://github.com/moadim-io"],
+  sameAs: [ORG_URL],
 };
 
 const website = {
@@ -115,7 +112,7 @@ const softwareApplication = {
   // FAQ ("macOS and Linux") say the same; advertising Windows here would let
   // search engines surface the app for an unsupported platform.
   operatingSystem: "macOS, Linux",
-  description,
+  description: SITE_DESCRIPTION,
   sameAs: [
     "https://github.com/moadim-io/daemon",
     "https://crates.io/crates/moadim",
@@ -179,7 +176,18 @@ export default function RootLayout({
                 the global rule instead, as every other link on the site
                 does. */}
             <nav aria-label="Site navigation">
-              <ul className="flex items-center gap-6">
+              {/* Tailwind's Preflight resets `list-style: none` on every <ul>,
+                  which in Safari/VoiceOver also strips the implicit
+                  `list`/`listitem` role — a long-documented WebKit quirk
+                  (https://www.scottohara.me/blog/2019/01/12/lists-and-safari.html).
+                  `role="list"` restores it in the accessibility tree without
+                  changing anything visually. jsx-a11y flags this as a
+                  "redundant" role since <ul> already implies it per the ARIA
+                  spec — that mapping is correct, WebKit's actual behavior
+                  isn't, so the rule is disabled for this one, deliberate
+                  case. */}
+              {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+              <ul className="flex items-center gap-6" role="list">
                 <li>
                   <ExternalLink
                     href={`${REPO_URL}#readme`}

@@ -12,7 +12,7 @@ Every loop is exposed three ways: as an MCP tool, as a documented REST endpoint
 (OpenAPI/Swagger UI), and through a web UI baked into the daemon. An iCal feed
 publishes upcoming runs.
 
-Install: `cargo install moadim`
+Install: `cargo install --locked moadim`
 
 Platform: Unix-only (macOS and Linux). The daemon depends on `crontab`, `tmux`,
 and a launchd/systemd service; installation bails on unsupported platforms
@@ -27,5 +27,5 @@ and a launchd/systemd service; installation bails on unsupported platforms
 ## Links
 
 - [Product source (daemon)](https://github.com/moadim-io/daemon): the Rust MCP/REST server that runs the loops.
-- [crates.io](https://crates.io/crates/moadim): published crate (`cargo install moadim`).
+- [crates.io](https://crates.io/crates/moadim): published crate (`cargo install --locked moadim`).
 - [Landing site](https://moadim.io): project home page.

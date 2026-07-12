@@ -1,13 +1,13 @@
 import type { MetadataRoute } from "next";
+import { SITE_TITLE, SITE_DESCRIPTION } from "./site";
 
 export const dynamic = "force-static";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Moadim — Put your agents on a loop",
+    name: SITE_TITLE,
     short_name: "Moadim",
-    description:
-      "Moadim is an open-source loop engine for AI agents. Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes against your repo on every tick, over MCP and REST.",
+    description: SITE_DESCRIPTION,
     start_url: "/",
     display: "standalone",
     background_color: "#f4f1e8",
