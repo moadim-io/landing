@@ -81,6 +81,16 @@ describe("Home", () => {
     );
   });
 
+  it("renders the loop diagram panel between the CTAs and the features", () => {
+    render(<Home />);
+
+    // The diagram itself is covered by LoopAnimation.test.tsx; here we only
+    // assert the page actually mounts it inside a named landmark section.
+    const section = screen.getByRole("region", { name: /the loop/i });
+
+    expect(section.querySelector('svg[role="img"]')).not.toBeNull();
+  });
+
   it("exposes the feature cards as a named landmark region", () => {
     render(<Home />);
 

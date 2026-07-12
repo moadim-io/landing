@@ -8,6 +8,8 @@ The marketing/landing site for **Moadim**, an open-source loop engine for AI age
 Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes
 against your repo on every tick, over MCP and REST.
 
+![Animated diagram of the Moadim loop: an agent reads a goals repository, refines the routines in a routines repository, the routines act on external repositories and tasks, and progress flows back into the goals](./public/loop-animation.svg)
+
 - **Live site:** <https://moadim.io>
 - **Product source:** <https://github.com/moadim-io/daemon>
 
@@ -52,6 +54,8 @@ app/
   not-found.tsx         Branded 404 page.
   ExternalLink.tsx      Outbound (new-tab) link wrapper with the safe rel attributes.
   JsonLdScript.tsx      Escapes and inlines JSON-LD structured data as a <script> tag.
+  LoopAnimation.tsx     Animated "perfecting loop" SVG diagram (goals repo ↔ routines
+                        repo); its CSS keyframes live in globals.css (a test guards it).
   site.ts               Shared site constants: canonical SITE_URL plus the product's
                          GitHub/crates.io identifiers (REPO_SLUG, REPO_URL, CRATE_NAME,
                          CRATE_URL).
@@ -65,6 +69,9 @@ app/
   favicon.ico           Site favicon.
 public/
   _headers              Cloudflare Pages response headers.
+  loop-animation.svg    Self-contained animated loop diagram (embedded above and served at
+                        moadim.io/loop-animation.svg for hotlinking from other READMEs);
+                        kept in sync with app/LoopAnimation.tsx by hand (a test guards it).
 test/
   mocks/next-font-google.ts  Vitest stub for the build-time-only `next/font/google` loader.
 scripts/
