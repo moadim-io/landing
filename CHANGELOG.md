@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Hero: a `crates.io` version badge next to the install command, so a visitor can see the current published `moadim` version (and that the crate is actively maintained) without leaving the page — a static `shields.io` badge image, so it never needs a build-time network fetch and can't break the static export (#183).
 - Unit test rendering `app/apple-icon.tsx`'s `AppleIcon()` component itself, not just asserting its exported route config — mirrors the same coverage `opengraph-image.test.tsx` already had for its identical `next/og`/Satori setup, so a typo in the Satori JSX/inline style tree fails a test instead of only surfacing at `next build` time (#471).
 - `Strict-Transport-Security` header on `public/_headers`, so HTTPS is enforced from a visitor's very first request instead of only after the first redirect (#442).
 - Node.js engine version pinned via `.nvmrc` alongside the existing `package.json` `engines` field, for a reproducible local/CI toolchain (#390).

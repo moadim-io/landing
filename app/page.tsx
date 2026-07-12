@@ -182,6 +182,26 @@ export default function Home() {
             crates.io
             <span aria-hidden="true">↗</span>
           </ExternalLink>
+          <ExternalLink
+            className="flex items-center justify-center border-4 border-black bg-white p-2 shadow-[6px_6px_0_0_#000]"
+            href={CRATE_URL}
+            aria-label="Latest published moadim release"
+          >
+            {/* A static shields.io badge — it renders the current crates.io
+                version at request time, so it never needs a build-time fetch
+                (and never breaks the build if crates.io is unreachable at
+                build time). next/image needs a configured remote loader for
+                arbitrary external hosts, which isn't worth wiring up for one
+                badge image, so this is a deliberate exception to the
+                next/no-img-element rule. See #183. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`}
+              alt="moadim version on crates.io"
+              width={104}
+              height={20}
+            />
+          </ExternalLink>
         </div>
 
         {/* Unlike the reading-list and FAQ sections below, this grid has no
