@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { panel } from "./page";
+import { ctaButton, panel } from "./page";
 
 export const metadata: Metadata = {
   title: "Page not found",
@@ -14,8 +14,9 @@ export const metadata: Metadata = {
 // Branded 404 for the static export. Without this route Next.js ships its
 // default unstyled "404 | This page could not be found" page, which breaks the
 // neobrutalist look the moment a visitor hits a stale or mistyped URL. Reuses
-// `page.tsx`'s `panel` surface (instead of hand-copying the class string) so
-// the off-ramp can't visually drift from the rest of the site.
+// `page.tsx`'s `panel` surface and `ctaButton` treatment (instead of
+// hand-copying the class strings) so the off-ramp can't visually drift from
+// the rest of the site.
 export default function NotFound() {
   return (
     <div className="flex flex-1 flex-col items-center justify-center px-4 py-10 sm:px-8 sm:py-16">
@@ -35,10 +36,7 @@ export default function NotFound() {
           The page you&rsquo;re after doesn&rsquo;t exist — it may have moved, or
           the link was mistyped.
         </p>
-        <Link
-          href="/"
-          className="flex items-center justify-center gap-2 border-4 border-black bg-accent px-8 py-4 text-base font-black uppercase tracking-wide shadow-[6px_6px_0_0_#000] transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#000]"
-        >
+        <Link href="/" className={`${ctaButton} gap-2 bg-accent`}>
           <span aria-hidden="true">←</span>
           Back to home
         </Link>

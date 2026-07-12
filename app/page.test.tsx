@@ -20,6 +20,16 @@ describe("Home", () => {
     ).toBeInTheDocument();
   });
 
+  it("surfaces the moadim run step after the install command (#206)", () => {
+    // `cargo install` only compiles and installs the binary — nothing runs
+    // until `moadim` itself is invoked. Without this line the hero's primary
+    // CTA leaves visitors installed but with no daemon running.
+    render(<Home />);
+
+    expect(screen.getByText("moadim", { selector: "code" })).toBeInTheDocument();
+    expect(screen.getByText(/localhost:5784/i)).toBeInTheDocument();
+  });
+
   it("hides the decorative shell prompt from assistive tech and text selection", () => {
     // page.tsx's own comment spells out why this matters: the leading `$` is
     // pure decoration, so it must stay `aria-hidden` (a screen reader
@@ -97,6 +107,16 @@ describe("Home", () => {
     expect(
       screen.getByRole("heading", { level: 2, name: /ui · rest · mcp/i }),
     ).toBeInTheDocument();
+  });
+
+  it("keeps the feature grid and reading list in the accessibility tree's list semantics", () => {
+    // Tailwind's Preflight resets `list-style: none` on every <ul>, which in
+    // Safari/VoiceOver also strips the implicit `list`/`listitem` role (a
+    // long-documented WebKit quirk) unless `role="list"` restores it — see
+    // the matching comment on each <ul> in page.tsx.
+    render(<Home />);
+
+    expect(screen.getAllByRole("list")).toHaveLength(2);
   });
 
   it("renders the loop-engineering reading list as safe, nofollow external links", () => {

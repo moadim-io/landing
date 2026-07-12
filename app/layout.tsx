@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SITE_URL, REPO_URL, SITE_TITLE, SITE_DESCRIPTION } from "./site";
+import { SITE_URL, REPO_URL, ORG_URL, SITE_TITLE, SITE_DESCRIPTION } from "./site";
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
 
@@ -90,7 +90,7 @@ const organization = {
   // point at the *product's* distribution channels) — this is what lets
   // search engines resolve the Organization node to a known, verifiable
   // profile instead of an isolated, unconfirmed name.
-  sameAs: ["https://github.com/moadim-io"],
+  sameAs: [ORG_URL],
 };
 
 const website = {
@@ -176,7 +176,18 @@ export default function RootLayout({
                 the global rule instead, as every other link on the site
                 does. */}
             <nav aria-label="Site navigation">
-              <ul className="flex items-center gap-6">
+              {/* Tailwind's Preflight resets `list-style: none` on every <ul>,
+                  which in Safari/VoiceOver also strips the implicit
+                  `list`/`listitem` role — a long-documented WebKit quirk
+                  (https://www.scottohara.me/blog/2019/01/12/lists-and-safari.html).
+                  `role="list"` restores it in the accessibility tree without
+                  changing anything visually. jsx-a11y flags this as a
+                  "redundant" role since <ul> already implies it per the ARIA
+                  spec — that mapping is correct, WebKit's actual behavior
+                  isn't, so the rule is disabled for this one, deliberate
+                  case. */}
+              {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+              <ul className="flex items-center gap-6" role="list">
                 <li>
                   <ExternalLink
                     href={`${REPO_URL}#readme`}
