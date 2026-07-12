@@ -1,5 +1,6 @@
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
+import { LoopAnimation } from "./LoopAnimation";
 import { CRATE_NAME, CRATE_URL, REPO_URL } from "./site";
 
 const features = [
@@ -203,6 +204,16 @@ export default function Home() {
             />
           </ExternalLink>
         </div>
+
+        <section className={panel} aria-labelledby="loop-heading">
+          <h2
+            id="loop-heading"
+            className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent"
+          >
+            The loop
+          </h2>
+          <LoopAnimation />
+        </section>
 
         {/* Unlike the reading-list and FAQ sections below, this grid has no
             visible heading of its own — the CTA row above flows straight

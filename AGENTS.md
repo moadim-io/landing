@@ -77,6 +77,7 @@ app/
   not-found.tsx         Branded 404 route (statically prerendered).
   ExternalLink.tsx      Outbound (new-tab) link wrapper — use it for any link that leaves the site, not a raw `<a target="_blank">`.
   JsonLdScript.tsx      Escapes and inlines JSON-LD structured data as a `<script>` tag — route any new JSON-LD through this instead of `dangerouslySetInnerHTML` directly.
+  LoopAnimation.tsx     Thin wrapper embedding the animated loop diagram. The drawing itself lives in `public/loop-animation.svg` — the single source of truth, also hotlinked from READMEs; edit that file, not this one, to change the diagram (a test guards its palette against globals.css).
   site.ts               Single source of truth for product identifiers: SITE_URL plus the GitHub/crates.io slugs and URLs (REPO_SLUG, REPO_URL, CRATE_NAME, CRATE_URL). Import these — don't hardcode the origin or the github.com / crates.io links.
   globals.css           Theme tokens + global styles.
   brand-colors.ts       Satori-safe brand hex constants for opengraph-image.tsx/apple-icon.tsx — keep in sync with globals.css by hand (a test guards it).
