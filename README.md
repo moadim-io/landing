@@ -56,6 +56,8 @@ app/
                          GitHub/crates.io identifiers (REPO_SLUG, REPO_URL, CRATE_NAME,
                          CRATE_URL).
   globals.css           Global styles and Tailwind theme tokens.
+  brand-colors.ts       Satori-safe brand hex constants for opengraph-image.tsx/apple-icon.tsx,
+                        kept in sync with globals.css by hand (a test guards it).
   opengraph-image.tsx   Generated Open Graph social card.
   twitter-image.tsx     Generated Twitter/X social card.
   robots.ts             Generated robots.txt.

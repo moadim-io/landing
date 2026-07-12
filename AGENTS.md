@@ -79,6 +79,7 @@ app/
   JsonLdScript.tsx      Escapes and inlines JSON-LD structured data as a `<script>` tag — route any new JSON-LD through this instead of `dangerouslySetInnerHTML` directly.
   site.ts               Single source of truth for product identifiers: SITE_URL plus the GitHub/crates.io slugs and URLs (REPO_SLUG, REPO_URL, CRATE_NAME, CRATE_URL). Import these — don't hardcode the origin or the github.com / crates.io links.
   globals.css           Theme tokens + global styles.
+  brand-colors.ts       Satori-safe brand hex constants for opengraph-image.tsx/apple-icon.tsx — keep in sync with globals.css by hand (a test guards it).
   icon.svg              Site favicon (SVG, file-based metadata route).
   apple-icon.tsx        Generated Apple touch icon (file-based metadata route).
   manifest.ts           /manifest.webmanifest (force-static).
