@@ -8,7 +8,7 @@ The marketing/landing site for **Moadim**, an open-source loop engine for AI age
 Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes
 against your repo on every tick, over MCP and REST.
 
-![Animated diagram of the Moadim loop: an agent reads a goals repository, refines the routines in a routines repository, the routines act on external repositories and tasks, and progress flows back into the goals](./public/loop-animation.svg)
+![Animated diagram of the Moadim loop: an agent reads a goals repository and refines the routines in a routines repository — each routine its own small, always-running loop — the routines act on external repositories and tasks, and progress flows back into the goals](./public/loop-animation.svg)
 
 - **Live site:** <https://moadim.io>
 - **Product source:** <https://github.com/moadim-io/daemon>
