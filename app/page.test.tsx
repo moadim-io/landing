@@ -88,7 +88,9 @@ describe("Home", () => {
     // assert the page actually mounts it inside a named landmark section.
     const section = screen.getByRole("region", { name: /the loop/i });
 
-    expect(section.querySelector('svg[role="img"]')).not.toBeNull();
+    expect(
+      section.querySelector('img[src="/loop-animation.svg"]'),
+    ).not.toBeNull();
   });
 
   it("exposes the feature cards as a named landmark region", () => {

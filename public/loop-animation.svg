@@ -1,14 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220" width="800" role="img" aria-label="Animated diagram: an agent reads goals from a goals repository, travels to a routines repository where it creates, edits, and removes routines, the routines act on external repositories and tasks, and the resulting progress flows back into the goals.">
   <!--
-    Standalone, self-contained copy of the landing page's "perfecting loop"
-    diagram (app/LoopAnimation.tsx + the loop-anim-* keyframes in
-    app/globals.css), for embedding where the site's CSS isn't available —
-    e.g. GitHub READMEs, which render SVG through <img> and do run embedded
-    CSS animations (but allow no external fonts, scripts, or resources).
+    The "perfecting loop" diagram — the single source of truth. The landing
+    page embeds this file via <img> (app/LoopAnimation.tsx), and READMEs
+    hotlink it (GitHub renders README SVGs through <img> too, and does run
+    embedded CSS animations — but allows no external fonts, scripts, or
+    resources, which is why everything is self-contained here).
 
     Colors are the brand tokens from app/globals.css, restated as literals
     (same deal as app/brand-colors.ts); loop-animation-svg.test.ts guards
-    both the palette and the keyframe set against drift.
+    the palette and the animation wiring against drift.
+
+    Seamless loop: the routine rows are identical and 28px apart; the row
+    group ends the cycle at translateY(-28px) and snaps back to 0 on a
+    pixel-identical frame (the new row's accent fill fades back to the
+    foreground color before the boundary).
 
     One shared 7s cycle: goal flash (agent reads) -> agent rides the top rail
     -> a new routine slides in -> pulses hit the external satellites (commit

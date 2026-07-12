@@ -54,8 +54,8 @@ app/
   not-found.tsx         Branded 404 page.
   ExternalLink.tsx      Outbound (new-tab) link wrapper with the safe rel attributes.
   JsonLdScript.tsx      Escapes and inlines JSON-LD structured data as a <script> tag.
-  LoopAnimation.tsx     Animated "perfecting loop" SVG diagram (goals repo ↔ routines
-                        repo); its CSS keyframes live in globals.css (a test guards it).
+  LoopAnimation.tsx     Thin wrapper embedding public/loop-animation.svg on the landing
+                        page — edit the SVG, not this component, to change the diagram.
   site.ts               Shared site constants: canonical SITE_URL plus the product's
                          GitHub/crates.io identifiers (REPO_SLUG, REPO_URL, CRATE_NAME,
                          CRATE_URL).
@@ -69,9 +69,10 @@ app/
   favicon.ico           Site favicon.
 public/
   _headers              Cloudflare Pages response headers.
-  loop-animation.svg    Self-contained animated loop diagram (embedded above and served at
-                        moadim.io/loop-animation.svg for hotlinking from other READMEs);
-                        kept in sync with app/LoopAnimation.tsx by hand (a test guards it).
+  loop-animation.svg    The animated loop diagram — single source of truth, self-contained
+                        (embedded CSS + palette). Rendered on the landing page via
+                        app/LoopAnimation.tsx, embedded above, and served at
+                        moadim.io/loop-animation.svg for hotlinking from other READMEs.
 test/
   mocks/next-font-google.ts  Vitest stub for the build-time-only `next/font/google` loader.
 scripts/

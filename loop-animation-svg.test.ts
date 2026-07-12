@@ -1,24 +1,17 @@
 import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
-// public/loop-animation.svg is a standalone, self-contained copy of the
-// landing page's loop diagram (app/LoopAnimation.tsx + the loop-anim-*
-// keyframes in app/globals.css) so it can be embedded in READMEs, where the
-// site's stylesheet isn't available. Nothing but convention ties the copies
-// together — these tests make palette or choreography drift fail loudly
-// instead of shipping a README diagram that no longer matches the site
-// (mirroring how brand-colors.test.ts guards its own hand-synced literals).
+// public/loop-animation.svg is the single source of truth for the loop
+// diagram: the landing page embeds it via <img> (app/LoopAnimation.tsx) and
+// READMEs hotlink it. Because it renders inside <img> with no access to the
+// site's stylesheet, it restates the brand palette and carries its own
+// animation CSS — these tests guard those hand-synced pieces against drift
+// (mirroring how brand-colors.test.ts guards its own literals).
 
-const svg = readFileSync(
-  join(__dirname, "public", "loop-animation.svg"),
-  "utf8",
-);
-const css = readFileSync(join(__dirname, "app", "globals.css"), "utf8");
-
-function keyframeNames(source: string): Set<string> {
-  return new Set(source.match(/@keyframes (loop-anim-[a-z-]+)/g));
-}
+// Paths are cwd-relative (vitest runs from the repo root), matching
+// brand-colors.test.ts.
+const svg = readFileSync("public/loop-animation.svg", "utf8");
+const css = readFileSync("app/globals.css", "utf8");
 
 function themeColor(token: string): string {
   const value = css.match(
@@ -50,18 +43,21 @@ describe("public/loop-animation.svg", () => {
     }
   });
 
-  it("carries the same animation choreography as globals.css", () => {
-    const svgKeyframes = keyframeNames(svg);
-    const cssKeyframes = keyframeNames(css);
+  it("defines a @keyframes block for every animation class it uses", () => {
+    const classes = new Set(
+      [...svg.matchAll(/class="(loop-anim-[a-z-]+)"/g)].map((m) => m[1]),
+    );
+    const keyframes = new Set(
+      [...svg.matchAll(/@keyframes (loop-anim-[a-z-]+)/g)].map((m) => m[1]),
+    );
 
-    expect(svgKeyframes.size).toBeGreaterThan(0);
-    expect(svgKeyframes).toEqual(cssKeyframes);
+    expect(classes.size).toBeGreaterThan(0);
+    expect(classes).toEqual(keyframes);
   });
 
   it("freezes into a static diagram under prefers-reduced-motion", () => {
-    // The site relies on the global reduced-motion rule in globals.css; the
-    // standalone SVG has to ship its own equivalent since it renders inside
-    // <img> with no access to the page stylesheet.
+    // The site's global reduced-motion rule can't reach inside an <img>, so
+    // the SVG has to ship its own equivalent.
     expect(svg).toMatch(/prefers-reduced-motion:\s*reduce/);
   });
 
