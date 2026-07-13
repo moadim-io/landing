@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `app/error.tsx` and `app/global-error.tsx` branded App Router error boundaries, reusing `not-found.tsx`'s `panel`/`ctaButton` tokens with a `reset()` retry action, so a thrown render error no longer falls through to Next.js's default unstyled "Application error" overlay (#475).
+- `metadata.robots` on the root layout declaring `max-image-preview: large` (distinct from the site-wide `robots.txt`), so Google Search/Discover can show the existing OG-card investment at full size instead of a small default thumbnail (#143, #490).
+- `appleWebApp` (capable, title, light status bar) and `formatDetection.telephone: false` metadata, so an "Add to Home Screen" install launches chromeless under the Moadim name and mobile Safari stops rewriting identifier/version strings into tap-to-call links (#289).
+- `app/icon-svg.test.ts`, asserting every hex literal in `app/icon.svg` (the favicon) is one of the two theme colors from `globals.css`, mirroring the same drift guard already in place for `brand-colors.ts` and `loop-animation.svg` (#513).
+- Unit test covering `ORG_URL`'s derivation from `REPO_SLUG`, previously only exercised indirectly via the Organization JSON-LD `sameAs` assertion (#488).
 - Animated SVG diagram of the Moadim loop ("The loop" panel between the CTA row and the features grid): an agent square rides a circuit between a GOALS repo and a ROUTINES repo, and each routine row in the ROUTINES card is itself a small loop with its own accent runner riding a miniature track at its own pace — the same visual grammar at two scales (#507, #508).
 - `lychee` link-check now globs `public/llms.txt`'s built output (`out/llms.txt`) too, closing a gap where the workflow's own name ("Link check: built export + docs") implied coverage the glob pattern never actually matched (#504).
 - Hero: a `crates.io` version badge next to the install command, so a visitor can see the current published `moadim` version (and that the crate is actively maintained) without leaving the page — a static `shields.io` badge image, so it never needs a build-time network fetch and can't break the static export (#183).
@@ -59,6 +64,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The crates.io version badge now uses the shared `shadow-brutal` token instead of a raw `shadow-[6px_6px_0_0_#000]` arbitrary value — the last call site not yet on the shared shadow tokens — plus test coverage for the badge link (#519).
+- `Strict-Transport-Security` now carries the `preload` directive alongside `max-age`/`includeSubDomains`, clearing the way for a `moadim.io` submission to browsers' built-in HSTS preload lists (#472).
 - Extracted the repeated `border-4`/`shadow-[Npx_Npx_0_0_#000]` recipe used at every panel/CTA call site (header, install card, features grid, reads section, FAQ, `ctaButton`) into `shadow-brutal` / `shadow-brutal-hover` / `shadow-brutal-active` / `shadow-brutal-lg` tokens in `app/globals.css`'s `@theme` block, so "the brutalist card" has one definition instead of drifting per call site (#213, #483).
 - Every `actions/setup-node` step in `ci.yml`, `deploy.yml`, `lighthouse.yml`, and `link-check.yml` now reads the Node version from `.nvmrc` (`node-version-file`) instead of a fifth untested hardcoded `node-version: 22` literal (#477).
 - Enabled `noImplicitReturns` and `exactOptionalPropertyTypes` in `tsconfig.json`, completing the project's strict-mode opt-ins (#467, #463).
@@ -99,6 +106,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `SITE_DESCRIPTION` shortened from 189 to 116 characters, front-loading "open-source loop engine for AI agents" so the value proposition survives Google SERP (~155-160 char) and Twitter/social-unfurler (~120-125 char) truncation instead of being cut off mid-sentence (#135).
+- `app/manifest.ts`'s `icons` entry pointed at `/favicon.ico`, a file the static export never emits (`app/favicon.ico` was replaced by `app/icon.svg` in #161) — "Add to Home Screen"/PWA installs referenced a 404'ing icon (#516).
+- Collapsed a duplicate `:root` palette-alias block in `app/globals.css`, left behind after two independent "single-source the palette" changes each added the same block without noticing the other already existed (#518).
+- The homepage feature cards are now grouped under a visually-hidden `<h2 id="features-heading">` (via `aria-labelledby`, with card titles demoted to `<h3>`) instead of three unlabeled top-level `<h2>` siblings of "On loop engineering" (#214, #515).
+- `opengraph-image.tsx`/`twitter-image.tsx`'s `alt` text now reuses `site.ts`'s `SITE_TITLE` instead of an independently hardcoded copy of the site title (#512).
+- `public/_headers` now declares `Content-Type: image/png` for the extensionless `opengraph-image`/`twitter-image`/`apple-icon` routes, so a host that infers MIME type from the file extension no longer serves them as `application/octet-stream` and breaks OG/Twitter unfurls and the iOS home-screen icon (#473).
+- `brand-colors.ts`'s docstring corrected to note the `globals.css` sync is test-enforced (`brand-colors.test.ts`), not "kept by hand" as it previously claimed (#499).
+- `CONTRIBUTING.md`'s "Submitting a change" checklist and `.github/PULL_REQUEST_TEMPLATE.md` now list `npm run lint:html`, which `AGENTS.md` already required before opening a PR (#496).
 - `LoopAnimation.tsx`'s `next/image` usage swapped for a plain `<img>` — `next/image` unconditionally injects a `style="color:transparent"` attribute that tripped `npm run lint:html`'s `no-inline-style` rule against the built static export (#509).
 - Both `README.md` and `AGENTS.md`'s "Project structure" / "Where things live" listings named nothing for `app/brand-colors.ts`, despite it single-sourcing the Satori-safe brand hex constants and having its own guard test — a real onboarding gap for anyone skimming that list (#503).
 - Hero install card now surfaces the missing `moadim` run step (`cargo install --locked moadim && moadim`) instead of stopping at `cargo install`, which only compiles and installs the binary — nothing starts the daemon or its web UI until `moadim` is also run (#500).
