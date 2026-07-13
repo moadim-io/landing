@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   CRATE_NAME,
   CRATE_URL,
+  ORG_URL,
   REPO_SLUG,
   REPO_URL,
   SITE_URL,
@@ -17,6 +18,16 @@ describe("site", () => {
   it("derives REPO_URL from REPO_SLUG", () => {
     expect(REPO_SLUG).toMatch(/^[^/]+\/[^/]+$/);
     expect(REPO_URL).toBe(`https://github.com/${REPO_SLUG}`);
+  });
+
+  it("derives ORG_URL from REPO_SLUG's owner segment", () => {
+    // Guards the `.split("/")[0]` derivation itself, not just layout.tsx's
+    // use of the result: layout.test.ts only asserts the Organization JSON-LD
+    // `sameAs` matches whatever ORG_URL happens to be, so it stays green even
+    // if this slicing logic regressed to point at the wrong segment or a
+    // full repo URL instead of the org profile.
+    expect(ORG_URL).toBe(`https://github.com/${REPO_SLUG.split("/")[0]}`);
+    expect(ORG_URL).toBe("https://github.com/moadim-io");
   });
 
   it("derives CRATE_URL from CRATE_NAME", () => {
