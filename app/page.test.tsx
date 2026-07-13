@@ -81,6 +81,25 @@ describe("Home", () => {
     );
   });
 
+  it("links the crates.io version badge at the published crate and uses the shared shadow token", () => {
+    render(<Home />);
+
+    const badgeLink = screen.getByRole("link", {
+      name: /latest published moadim release/i,
+    });
+
+    expect(badgeLink).toHaveAttribute("href", CRATE_URL);
+    expect(badgeLink.className).toContain("shadow-brutal");
+    expect(badgeLink.className).not.toMatch(/shadow-\[/);
+
+    const badgeImg = badgeLink.querySelector("img");
+    expect(badgeImg).toHaveAttribute(
+      "src",
+      `https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`,
+    );
+    expect(badgeImg).toHaveAttribute("alt", "moadim version on crates.io");
+  });
+
   it("renders the loop diagram panel between the CTAs and the features", () => {
     render(<Home />);
 

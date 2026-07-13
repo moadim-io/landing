@@ -184,7 +184,7 @@ export default function Home() {
             <span aria-hidden="true">↗</span>
           </ExternalLink>
           <ExternalLink
-            className="flex items-center justify-center border-4 border-black bg-white p-2 shadow-[6px_6px_0_0_#000]"
+            className="flex items-center justify-center border-4 border-black bg-white p-2 shadow-brutal"
             href={CRATE_URL}
             aria-label="Latest published moadim release"
           >
