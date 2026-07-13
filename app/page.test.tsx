@@ -27,7 +27,13 @@ describe("Home", () => {
     render(<Home />);
 
     expect(screen.getByText("moadim", { selector: "code" })).toBeInTheDocument();
-    expect(screen.getByText(/localhost:5784/i)).toBeInTheDocument();
+
+    // Scoped to the install card: the quickstart section below also mentions
+    // `localhost:5784` (in its REST example), so an unscoped query is ambiguous.
+    const installCard = screen
+      .getByText("moadim", { selector: "code" })
+      .closest("div");
+    expect(installCard?.textContent).toMatch(/localhost:5784/i);
   });
 
   it("hides the decorative shell prompt from assistive tech and text selection", () => {
@@ -110,6 +116,24 @@ describe("Home", () => {
     expect(
       section.querySelector('img[src="/loop-animation.svg"]'),
     ).not.toBeNull();
+  });
+
+  it("shows a REST and an MCP quickstart example, each accurate against the daemon's real surface", () => {
+    // The install card only gets the daemon running — nothing on the page
+    // previously showed what calling it over REST or MCP actually looks
+    // like (#67). Both snippets are verified against the daemon repo:
+    // `GET /api/v1/routines` (src/commands.rs) and the `list_routines` MCP
+    // tool (src/routes/mcp.rs).
+    render(<Home />);
+
+    const section = screen.getByRole("region", { name: /quickstart/i });
+
+    expect(section.textContent).toContain(
+      "curl http://localhost:5784/api/v1/routines",
+    );
+    expect(section.textContent).toMatch(
+      /"name":\s*"list_routines",\s*"arguments":\s*{}/,
+    );
   });
 
   it("exposes the feature cards as a named landmark region", () => {
