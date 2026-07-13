@@ -47,6 +47,23 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  // Explicit indexability + large-image-preview opt-in. With nothing set,
+  // Google's default (`max-image-preview:standard`) only ever shows a small
+  // thumbnail of the Open Graph card in Search/Discover, regardless of how
+  // much the card itself is invested in. This is a per-document <meta
+  // name="robots"> directive — distinct from `app/robots.ts`, which emits
+  // the site-wide robots.txt crawl directive. See #143.
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
