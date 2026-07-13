@@ -1,5 +1,6 @@
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
+import { LoopAnimation } from "./LoopAnimation";
 import { CRATE_NAME, CRATE_URL, REPO_URL } from "./site";
 
 const features = [
@@ -92,7 +93,7 @@ export const faqJsonLd = {
 // home" link — which wears the exact same treatment — reuses it instead of
 // hand-copying the class string (mirroring the `panel` export below).
 export const ctaButton =
-  "flex items-center justify-center border-4 border-black px-8 py-4 text-base font-black uppercase tracking-wide shadow-[6px_6px_0_0_#000] transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#000]";
+  "flex items-center justify-center border-4 border-black px-8 py-4 text-base font-black uppercase tracking-wide shadow-brutal transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-brutal-hover active:translate-x-[2px] active:translate-y-[2px] active:shadow-brutal-active";
 
 // Shared neobrutalist panel surface — the 4px black frame, white fill, and
 // 10px hard drop shadow worn by the hero header, the feature grid, the
@@ -101,7 +102,7 @@ export const ctaButton =
 // Exported so `not-found.tsx`'s 404 card — which wears the exact same surface —
 // reuses it instead of hand-copying the class string (see `faqJsonLd` above
 // for the same export-for-reuse precedent).
-export const panel = "border-4 border-black bg-white shadow-[10px_10px_0_0_#000]";
+export const panel = "border-4 border-black bg-white shadow-brutal-lg";
 
 export default function Home() {
   return (
@@ -126,11 +127,11 @@ export default function Home() {
         </header>
 
         <div className="flex flex-col gap-4 sm:flex-row sm:items-stretch">
-          <div className="flex flex-1 flex-col gap-2 border-4 border-black bg-black p-5 shadow-[6px_6px_0_0_#000]">
+          <div className="flex flex-1 flex-col gap-2 border-4 border-black bg-black p-5 shadow-brutal">
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
               Install
             </span>
-            <code className="font-mono text-base text-white sm:text-lg">
+            <code className="block font-mono text-base text-white sm:text-lg">
               {/* The shell prompt is decoration: hide it from screen readers and
                   exclude it from text selection so copying the line yields a
                   runnable `cargo install --locked moadim`, not
@@ -142,8 +143,22 @@ export default function Home() {
               </span>
               {`cargo install --locked ${CRATE_NAME}`}
             </code>
+            <code className="block font-mono text-base text-white sm:text-lg">
+              {/* `cargo install` only compiles and installs the binary — nothing
+                  runs until `moadim` itself is invoked, so the snippet stopped
+                  one command short of a working daemon (#206). Same
+                  aria-hidden/select-none prompt trick as the install line above. */}
+              <span aria-hidden="true" className="select-none text-accent">
+                ${" "}
+              </span>
+              moadim
+            </code>
             <p className="mt-1 text-xs font-medium leading-snug text-white">
-              Requires a Unix-like OS with{" "}
+              Starts the server in the background at{" "}
+              <code className="font-mono text-accent">
+                http://localhost:5784/
+              </code>
+              . Requires a Unix-like OS with{" "}
               <code className="font-mono text-accent">tmux</code> and a cron
               daemon (cron / launchd / systemd) — loops fire from your OS crontab
               inside a tmux session, so without them the install succeeds but
@@ -168,7 +183,37 @@ export default function Home() {
             crates.io
             <span aria-hidden="true">↗</span>
           </ExternalLink>
+          <ExternalLink
+            className="flex items-center justify-center border-4 border-black bg-white p-2 shadow-[6px_6px_0_0_#000]"
+            href={CRATE_URL}
+            aria-label="Latest published moadim release"
+          >
+            {/* A static shields.io badge — it renders the current crates.io
+                version at request time, so it never needs a build-time fetch
+                (and never breaks the build if crates.io is unreachable at
+                build time). next/image needs a configured remote loader for
+                arbitrary external hosts, which isn't worth wiring up for one
+                badge image, so this is a deliberate exception to the
+                next/no-img-element rule. See #183. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`}
+              alt="moadim version on crates.io"
+              width={104}
+              height={20}
+            />
+          </ExternalLink>
         </div>
+
+        <section className={panel} aria-labelledby="loop-heading">
+          <h2
+            id="loop-heading"
+            className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent"
+          >
+            The loop
+          </h2>
+          <LoopAnimation />
+        </section>
 
         {/* Unlike the reading-list and FAQ sections below, this grid has no
             visible heading of its own — the CTA row above flows straight

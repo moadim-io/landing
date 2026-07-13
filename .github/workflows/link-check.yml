@@ -49,5 +49,6 @@ jobs:
             --no-progress
             --root-dir "${{ github.workspace }}/out"
             './out/**/*.html'
+            './out/llms.txt'
             './*.md'
           fail: true
