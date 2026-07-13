@@ -64,12 +64,24 @@
 # bytes change, the bytes at any given URL are immutable — so an unfurl bot or
 # crawler can cache them forever instead of re-fetching from the origin on every
 # request. Without this they fall under the broad `max-age=0` rule above.
+#
+# These routes also need an explicit Content-Type: the static export writes
+# them as extensionless files (`out/opengraph-image`, not `opengraph-image.png`),
+# so a host that infers MIME type from the file extension serves them as
+# application/octet-stream instead of the image/png each route.tsx declares via
+# `contentType`, breaking OG/Twitter unfurls and the iOS home-screen icon.
 /opengraph-image
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
+  Content-Type: image/png
 /twitter-image
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
+  Content-Type: image/png
+/apple-icon
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
+  Content-Type: image/png
 /favicon.ico
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
