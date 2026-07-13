@@ -108,16 +108,28 @@ describe("Home", () => {
     render(<Home />);
 
     expect(
-      screen.getByRole("heading", { level: 2, name: /a loop runs an agent/i }),
+      screen.getByRole("heading", { level: 3, name: /a loop runs an agent/i }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("heading", {
-        level: 2,
+        level: 3,
         name: /runs locally, survives reboot/i,
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { level: 2, name: /ui · rest · mcp/i }),
+      screen.getByRole("heading", { level: 3, name: /ui · rest · mcp/i }),
+    ).toBeInTheDocument();
+  });
+
+  it("groups the feature cards under a labelled, level-2 section heading", () => {
+    // The three card titles are demoted to <h3> precisely so a <h2> can sit
+    // above them in the outline (hero <h1> -> section <h2> -> card <h3>)
+    // instead of leaving them as unlabeled peers of "The loop" / "On loop
+    // engineering". See #214.
+    render(<Home />);
+
+    expect(
+      screen.getByRole("heading", { level: 2, name: /^features$/i }),
     ).toBeInTheDocument();
   });
 
