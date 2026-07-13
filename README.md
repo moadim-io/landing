@@ -88,7 +88,7 @@ node-version.test.ts    Guards .nvmrc, package.json engines.node, and CONTRIBUTI
 llms-txt.test.ts        Guards public/llms.txt's install command against the hero's.
 .github/workflows/
   ci.yml                 Lint, test, build, and verify the export on every PR and push to main.
-  deploy.yml             Build + deploy to Cloudflare Pages on push to main.
+  deploy.yml             Build + deploy to Cloudflare Pages: production on push to main, a preview on pull requests.
   codeql.yml             CodeQL static analysis.
   dependency-review.yml  Flag vulnerable/incompatible-license dependencies on pull requests.
   actionlint.yml         Lint the GitHub Actions workflow files themselves.
@@ -115,6 +115,11 @@ triggered manually from the Actions tab (`workflow_dispatch`). After the upload,
 step requests `https://moadim.io` and fails the job if the live site doesn't respond or its
 body no longer mentions "Moadim" — a successful `wrangler` upload alone doesn't prove the
 production URL is actually serving the new build.
+
+Pull requests get their own Cloudflare Pages preview instead: the same workflow builds the
+export and deploys it to a per-branch preview URL (production is untouched), and posts the
+preview link to the job summary and a sticky PR comment. Previews only run for PRs from
+branches in this repo — forked PRs don't have access to the Cloudflare secrets.
 
 Because the build is a fully static export, the same `out/` directory can be served from any
 static host — running `npm run build` locally and uploading `out/` to Vercel, Netlify, GitHub
