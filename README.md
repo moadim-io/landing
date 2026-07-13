@@ -52,6 +52,10 @@ app/
   layout.tsx            Root layout, fonts, site metadata (SEO / Open Graph), JSON-LD.
   page.tsx              Landing page content.
   not-found.tsx         Branded 404 page.
+  error.tsx             Branded error boundary for errors thrown inside the root layout's
+                        children (the "Try again" screen for the rest of the app).
+  global-error.tsx      Root-layout error boundary — supplies its own <html>/<body> for the
+                        rare case where the root layout itself throws.
   ExternalLink.tsx      Outbound (new-tab) link wrapper with the safe rel attributes.
   JsonLdScript.tsx      Escapes and inlines JSON-LD structured data as a <script> tag.
   LoopAnimation.tsx     Thin wrapper embedding public/loop-animation.svg on the landing
