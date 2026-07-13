@@ -33,9 +33,12 @@
 #   this header a visitor's first request to a bare `http://` link or typed
 #   URL still round-trips in plaintext before Cloudflare's edge can apply
 #   that redirect, leaving a window for a network attacker to intercept or
-#   downgrade it. `max-age=63072000` (2 years) + `includeSubDomains` is the
-#   standard baseline (https://hstspreload.org); submitting to the preload
-#   list itself is a separate opt-in step, left for later.
+#   downgrade it. `max-age=63072000` (2 years) + `includeSubDomains` +
+#   `preload` meets the https://hstspreload.org submission requirements —
+#   the browser only honors `preload` for domains actually baked into its
+#   shipped list, so carrying the directive ahead of submission is inert,
+#   not premature. Submitting the domain to the list is a separate, manual
+#   opt-in step outside this repo.
 
 # HTML and everything else: cache but always revalidate, so a redeploy is
 # picked up immediately instead of serving a stale page.
@@ -45,7 +48,7 @@
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
   Permissions-Policy: geolocation=(), camera=(), microphone=()
-  Strict-Transport-Security: max-age=63072000; includeSubDomains
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
 
 # Next.js emits content-hashed, immutable assets (JS, CSS, fonts, media) under
 # /_next/static/*. A new build changes the hash (and the URL), so these can be
