@@ -81,6 +81,31 @@ describe("Home", () => {
     );
   });
 
+  it("renders the crates.io version badge as a safe external link with stable dimensions", () => {
+    // The badge is a static shields.io <img>, not next/image (see page.tsx's
+    // comment on why) — nothing asserted its src/alt/dimensions before, so a
+    // future edit (e.g. renaming CRATE_NAME, or dropping width/height and
+    // reintroducing layout shift) could regress silently.
+    render(<Home />);
+
+    const link = screen.getByRole("link", {
+      name: /latest published moadim release/i,
+    });
+    expect(link).toHaveAttribute("href", CRATE_URL);
+    expect(link).toHaveAttribute("target", "_blank");
+    expect(link.getAttribute("rel") ?? "").toContain("noopener");
+
+    const badge = link.querySelector("img");
+    expect(badge).not.toBeNull();
+    expect(badge).toHaveAttribute(
+      "src",
+      `https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`,
+    );
+    expect(badge).toHaveAttribute("alt", "moadim version on crates.io");
+    expect(badge).toHaveAttribute("width", "104");
+    expect(badge).toHaveAttribute("height", "20");
+  });
+
   it("renders the loop diagram panel between the CTAs and the features", () => {
     render(<Home />);
 
