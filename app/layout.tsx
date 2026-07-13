@@ -47,6 +47,23 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  // Explicit indexability + large-image-preview opt-in. With nothing set,
+  // Google's default (`max-image-preview:standard`) only ever shows a small
+  // thumbnail of the Open Graph card in Search/Discover, regardless of how
+  // much the card itself is invested in. This is a per-document <meta
+  // name="robots"> directive — distinct from `app/robots.ts`, which emits
+  // the site-wide robots.txt crawl directive. See #143.
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
@@ -68,6 +85,21 @@ export const metadata: Metadata = {
     ...(bingSiteVerification
       ? { other: { "msvalidate.01": bingSiteVerification } }
       : {}),
+  },
+  // iOS home-screen / standalone presentation. When the site is added to the
+  // home screen, launch it chromeless under the Moadim name with a status bar
+  // that matches the neobrutalist light palette (emits
+  // `apple-mobile-web-app-*` meta tags) instead of Safari's defaults.
+  appleWebApp: {
+    capable: true,
+    title: "Moadim",
+    statusBarStyle: "default",
+  },
+  // The copy carries no phone numbers, yet mobile Safari heuristically turns
+  // version-like and identifier strings (e.g. `moadim-io/daemon`) into tap-to-
+  // call links. Opt out so no body text is silently rewritten into a `tel:`.
+  formatDetection: {
+    telephone: false,
   },
 };
 

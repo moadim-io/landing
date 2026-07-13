@@ -1,5 +1,6 @@
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
+import { LoopAnimation } from "./LoopAnimation";
 import { CRATE_NAME, CRATE_URL, REPO_URL } from "./site";
 
 const features = [
@@ -204,16 +205,27 @@ export default function Home() {
           </ExternalLink>
         </div>
 
+        <section className={panel} aria-labelledby="loop-heading">
+          <h2
+            id="loop-heading"
+            className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent"
+          >
+            The loop
+          </h2>
+          <LoopAnimation />
+        </section>
+
         {/* Unlike the reading-list and FAQ sections below, this grid has no
             visible heading of its own — the CTA row above flows straight
-            into it. Without an accessible name it's an anonymous <ul>, so
-            screen-reader users navigating by landmark region jump from the
-            hero straight to "On loop engineering" and never learn a
-            "features" region exists. `aria-label` (rather than
-            `aria-labelledby` + a visible/sr-only <h2>) fixes that without
-            introducing a heading above the per-card <h2> titles, which
-            would otherwise sit at the wrong hierarchy level. */}
-        <section aria-label="Features">
+            into it. A visually-hidden <h2> + `aria-labelledby` gives the
+            section both an accessible name and a real place in the heading
+            outline (hero <h1> -> section <h2> -> per-card <h3>), instead of
+            leaving the three card titles as unlabeled <h2> siblings of "The
+            loop" / "On loop engineering". See #214. */}
+        <section aria-labelledby="features-heading">
+          <h2 id="features-heading" className="sr-only">
+            Features
+          </h2>
           {/* Tailwind's Preflight resets `list-style: none` on every <ul>,
               which in Safari/VoiceOver also strips the implicit
               `list`/`listitem` role — a long-documented WebKit quirk
@@ -240,9 +252,9 @@ export default function Home() {
                 >
                   {feature.tag}
                 </span>
-                <h2 className="text-lg font-black uppercase leading-tight">
+                <h3 className="text-lg font-black uppercase leading-tight">
                   {feature.title}
-                </h2>
+                </h3>
                 <p className="text-sm font-medium leading-6">{feature.body}</p>
               </li>
             ))}
