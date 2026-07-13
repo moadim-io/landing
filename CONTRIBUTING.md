@@ -48,6 +48,7 @@ landing content, `globals.css` for styles). Static assets go in `public/`.
    npm test
    npm run build
    npm run verify:export
+   npm run lint:html
    ```
 
 3. If your change touches shipped code (`app/`, `scripts/`, config, etc. —
