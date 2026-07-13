@@ -39,4 +39,13 @@ describe("site", () => {
     expect(SITE_TITLE.length).toBeGreaterThan(0);
     expect(SITE_DESCRIPTION.length).toBeGreaterThan(0);
   });
+
+  it("keeps SITE_DESCRIPTION within the social-card truncation budget (#135)", () => {
+    // Twitter/X and most link-unfurlers clamp social-card descriptions at
+    // ~120-125 characters — the tighter of the two display budgets this
+    // string is reused across (Google SERP snippets allow ~155-160). Guards
+    // against the description silently regrowing past the point where every
+    // surface reusing it verbatim would start truncating.
+    expect(SITE_DESCRIPTION.length).toBeLessThanOrEqual(125);
+  });
 });
