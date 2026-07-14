@@ -23,14 +23,16 @@ This version has breaking changes — APIs, conventions, and file structure may 
 | `npm run build` | Static export to `out/`. Run this to validate a change end-to-end. |
 | `npm run start` | Serve the production build locally. |
 | `npm run lint` | ESLint (Next core-web-vitals + TypeScript). |
+| `npm run lint:md` | Lint Markdown files with `markdownlint-cli2`. |
 | `npm run typecheck` | `tsc --noEmit` over the whole project — catches errors in files `next build`'s own TypeScript pass skips, e.g. `*.test.ts`. |
 | `npm run test` | Vitest unit/component tests (`*.test.ts`/`*.test.tsx` next to the code they cover). |
 | `npm run test:watch` | Vitest in watch mode. |
+| `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship. Requires `npm run build` first. |
 | `npm run lint:html` | Validate `out/**/*.html` with `html-validate` (config: `.htmlvalidate.json`). Requires `npm run build` first. |
 
-Before opening a PR, make sure `npm run lint`, `npm run typecheck`, `npm run test`,
-`npm run build`, **and** `npm run lint:html` all pass — the build is the real gate, since
-static export surfaces errors `dev` tolerates.
+Before opening a PR, make sure `npm run lint`, `npm run lint:md`, `npm run typecheck`,
+`npm run test`, `npm run build`, `npm run verify:export`, **and** `npm run lint:html` all
+pass — the build is the real gate, since static export surfaces errors `dev` tolerates.
 
 ## Static-export constraint (read before adding features)
 
