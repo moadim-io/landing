@@ -113,9 +113,11 @@ const organization = {
   "@id": organizationId,
   name: "Moadim",
   url: SITE_URL,
-  // No dedicated brand mark yet (app/favicon.ico is still the create-next-app
-  // scaffold icon, see #145) — the generated OG card is the closest stand-in
-  // for a logo until a real mark ships.
+  // app/icon.svg is Moadim's brand mark today (it replaced the
+  // create-next-app scaffold favicon back in #161), but it's an SVG and
+  // Google's structured-data guidelines for the Logo rich result only
+  // support raster formats (JPG/PNG/WebP) — the generated OG card, already
+  // a raster PNG, is used here instead.
   logo: `${SITE_URL}/opengraph-image`,
   // The GitHub org is the authoritative profile for the "Moadim" entity
   // itself (distinct from the SoftwareApplication.sameAs links below, which
