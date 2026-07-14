@@ -21,6 +21,11 @@ describe("Node version pinning", () => {
   it("documents the same version in CONTRIBUTING.md's prerequisites", () => {
     expect(contributing).toContain(`Node.js ${nvmrc}+`);
   });
+
+  it("pins @types/node to the same major as .nvmrc", () => {
+    const major = packageJson.devDependencies["@types/node"].match(/\d+/)?.[0];
+    expect(major).toBe(nvmrc);
+  });
 });
 
 // Every `actions/setup-node` step used to also hardcode `node-version: 22` —
