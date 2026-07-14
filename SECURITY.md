@@ -32,6 +32,10 @@ open the repository's **Security** tab and choose **Report a vulnerability**.
 This opens a private advisory visible only to the maintainers. If you cannot use
 that channel, email **<ofek.gabay.he@gmail.com>**.
 
+The same contact is published machine-readably at `/.well-known/security.txt`
+on the live site ([RFC 9116](https://www.rfc-editor.org/rfc/rfc9116)) for
+scanners and tooling that look for it there.
+
 Please include:
 
 - the affected URL or build (commit SHA if known),

@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 
 // This script gates every production deploy (see .github/workflows/deploy.yml's
@@ -26,6 +26,7 @@ const REQUIRED_FILES = [
   "_headers",
   "_redirects",
   "llms.txt",
+  ".well-known/security.txt",
 ];
 
 let workDir: string | undefined;
@@ -44,7 +45,11 @@ function makeOutDir({
       mkdirSync(join(outDir, file), { recursive: true });
       continue;
     }
-    writeFileSync(join(outDir, file), empty.includes(file) ? "" : "content");
+    const filePath = join(outDir, file);
+    // A couple of required paths (e.g. ".well-known/security.txt") nest under a
+    // subdirectory that doesn't exist yet — writeFileSync doesn't create it.
+    mkdirSync(dirname(filePath), { recursive: true });
+    writeFileSync(filePath, empty.includes(file) ? "" : "content");
   }
   return workDir;
 }
