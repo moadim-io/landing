@@ -50,6 +50,29 @@ describe("root layout metadata", () => {
       },
     });
   });
+
+  it("declares a self-referencing canonical URL", () => {
+    // Without this, search engines have no signal that "/" is the
+    // authoritative URL for the homepage's content.
+    expect(metadata.alternates?.canonical).toBe("/");
+  });
+
+  it("configures a chromeless, branded iOS home-screen presentation", () => {
+    // Silently regressing any of these fields falls back to Safari's default
+    // "Add to Home Screen" chrome/title instead of the standalone Moadim app
+    // experience these three fields opt into.
+    expect(metadata.appleWebApp).toMatchObject({
+      capable: true,
+      title: "Moadim",
+      statusBarStyle: "default",
+    });
+  });
+
+  it("opts identifier-like body text out of iOS's tap-to-call rewriting", () => {
+    // Without this, mobile Safari heuristically turns strings like
+    // "moadim-io/daemon" into tap-to-call `tel:` links.
+    expect(metadata.formatDetection).toEqual({ telephone: false });
+  });
 });
 
 describe("root layout viewport", () => {
