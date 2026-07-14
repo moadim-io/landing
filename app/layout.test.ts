@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { jsonLd, metadata, viewport } from "./layout";
-import { SITE_URL } from "./site";
+import { ORG_URL, SITE_URL } from "./site";
 
 describe("root layout metadata", () => {
   it("declares the expected title and description", () => {
@@ -30,6 +30,24 @@ describe("root layout metadata", () => {
       card: "summary_large_image",
       title: "Moadim — Put your agents on a loop",
       description: metadata.description,
+    });
+  });
+
+  it("opts into indexing and large Google image/video previews", () => {
+    // Distinct from app/robots.ts (the site-wide robots.txt crawl
+    // directive): this is the per-document <meta name="robots"> tag. With
+    // nothing set here, Google defaults to max-image-preview:standard and
+    // only ever shows a small OG-card thumbnail in Search/Discover. See #143.
+    expect(metadata.robots).toMatchObject({
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
     });
   });
 });
@@ -75,7 +93,7 @@ describe("root layout JSON-LD", () => {
     // Distinct from SoftwareApplication.sameAs (the product's distribution
     // channels): this is what lets search engines resolve the "Moadim"
     // Organization entity to a verifiable external profile.
-    expect(organization.sameAs).toEqual(["https://github.com/moadim-io"]);
+    expect(organization.sameAs).toEqual([ORG_URL]);
   });
 
   it("declares a WebSite node with the site name and canonical URL", () => {

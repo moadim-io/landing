@@ -8,6 +8,8 @@ The marketing/landing site for **Moadim**, an open-source loop engine for AI age
 Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes
 against your repo on every tick, over MCP and REST.
 
+![Animated diagram of the Moadim loop: an agent reads a goals repository and refines the routines in a routines repository — each routine its own small, always-running loop — the routines act on external repositories and tasks, and progress flows back into the goals](./public/loop-animation.svg)
+
 - **Live site:** <https://moadim.io>
 - **Product source:** <https://github.com/moadim-io/daemon>
 
@@ -36,6 +38,7 @@ you edit files under `app/`.
 | `npm run start` | Serve the static `out/` build locally (via `serve`) to preview it before deploying. |
 | `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript + `jsx-a11y` recommended rules); fails on any warning (`--max-warnings 0`). |
 | `npm run lint:md` | Lint Markdown files with `markdownlint-cli2`. |
+| `npm run lint:html` | Validate the built `out/**/*.html` with [`html-validate`](https://html-validate.org) (config: [`.htmlvalidate.json`](./.htmlvalidate.json)). Run `npm run build` first. |
 | `npm run typecheck` | Type-check the whole project with `tsc --noEmit` (`next build`'s own TypeScript pass only covers the app route graph, so it misses files like `*.test.ts`). |
 | `npm test` | Run the Vitest unit/component test suite once. |
 | `npm run test:watch` | Run the Vitest suite in watch mode while developing. |
@@ -49,12 +52,20 @@ app/
   layout.tsx            Root layout, fonts, site metadata (SEO / Open Graph), JSON-LD.
   page.tsx              Landing page content.
   not-found.tsx         Branded 404 page.
+  error.tsx             Branded error boundary for errors thrown inside the root layout's
+                        children (the "Try again" screen for the rest of the app).
+  global-error.tsx      Root-layout error boundary — supplies its own <html>/<body> for the
+                        rare case where the root layout itself throws.
   ExternalLink.tsx      Outbound (new-tab) link wrapper with the safe rel attributes.
   JsonLdScript.tsx      Escapes and inlines JSON-LD structured data as a <script> tag.
+  LoopAnimation.tsx     Thin wrapper embedding public/loop-animation.svg on the landing
+                        page — edit the SVG, not this component, to change the diagram.
   site.ts               Shared site constants: canonical SITE_URL plus the product's
                          GitHub/crates.io identifiers (REPO_SLUG, REPO_URL, CRATE_NAME,
                          CRATE_URL).
   globals.css           Global styles and Tailwind theme tokens.
+  brand-colors.ts       Satori-safe brand hex constants for opengraph-image.tsx/apple-icon.tsx,
+                        kept in sync with globals.css by hand (a test guards it).
   opengraph-image.tsx   Generated Open Graph social card.
   twitter-image.tsx     Generated Twitter/X social card.
   robots.ts             Generated robots.txt.
@@ -62,9 +73,19 @@ app/
   favicon.ico           Site favicon.
 public/
   _headers              Cloudflare Pages response headers.
+  loop-animation.svg    The animated loop diagram — single source of truth, self-contained
+                        (embedded CSS + palette). Rendered on the landing page via
+                        app/LoopAnimation.tsx, embedded above, and served at
+                        moadim.io/loop-animation.svg for hotlinking from other READMEs.
+test/
+  mocks/next-font-google.ts  Vitest stub for the build-time-only `next/font/google` loader.
 scripts/
   verify-export.mjs     Checks the built out/ directory for required routes/files (see
                          `npm run verify:export`).
+next.config.test.ts     Guards next.config.ts's static-export invariants against drift.
+deploy-config.test.ts   Guards public/_headers and public/_redirects against malformed rules.
+node-version.test.ts    Guards .nvmrc, package.json engines.node, and CONTRIBUTING.md against drift.
+llms-txt.test.ts        Guards public/llms.txt's install command against the hero's.
 .github/workflows/
   ci.yml                 Lint, test, build, and verify the export on every PR and push to main.
   deploy.yml             Build + deploy to Cloudflare Pages on push to main.
@@ -102,7 +123,7 @@ Pages, or an S3 bucket behind a CDN works without any of the Cloudflare-specific
 ### Search-engine verification (optional)
 
 To verify the site in **Google Search Console** / **Bing Webmaster Tools**, set the
-ownership tokens as build-time environment variables (see [`.env.example`](./.env.example)):
+ownership tokens as build-time environment variables:
 
 | Variable | Source |
 | --- | --- |
