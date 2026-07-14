@@ -99,3 +99,14 @@
 /llms.txt
   ! Cache-Control
   Cache-Control: public, max-age=86400
+
+# public/loop-animation.svg: another stable, unhashed URL (a plain public/
+# file, not a content-hashed build asset) that can change on a redeploy, so —
+# like the crawler-fetched metadata above — it can't be immutable. It's also
+# hotlinked from external READMEs (see AGENTS.md / README.md), not just
+# embedded on this page, so leaving it on the broad max-age=0 rule forces
+# every one of those external fetches to revalidate with this origin instead
+# of using a short-lived cache.
+/loop-animation.svg
+  ! Cache-Control
+  Cache-Control: public, max-age=86400

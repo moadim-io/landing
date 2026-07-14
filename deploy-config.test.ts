@@ -97,6 +97,19 @@ describe("public/_headers", () => {
       ]);
     }
   });
+
+  it("gives the hotlinked loop-animation.svg a one-day cache, not the no-cache baseline", () => {
+    // Unlike /opengraph-image, /twitter-image, and /apple-icon above, this is a
+    // plain public/ file with no content-hash query param — so, like the
+    // crawler-fetched metadata group, it can change on a redeploy and can't be
+    // marked immutable. Without an explicit rule it silently falls through to
+    // the broad `/*` max-age=0 baseline, forcing every hotlinked fetch from an
+    // external README to revalidate on every load.
+    expect(headerRules["/loop-animation.svg"]).toEqual([
+      "! Cache-Control",
+      "Cache-Control: public, max-age=86400",
+    ]);
+  });
 });
 
 describe("public/_redirects", () => {
