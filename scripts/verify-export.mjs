@@ -35,6 +35,11 @@ const REQUIRED_FILES = [
   // canonical host and let search engines index duplicate-content mirrors.
   "_redirects",
   "llms.txt",
+  // RFC 9116 vulnerability-disclosure contact (#74). Scanners and researchers
+  // request this exact path; a build that silently dropped it would leave
+  // moadim.io with no documented, machine-readable way to report a security
+  // issue instead of a loud CI failure.
+  ".well-known/security.txt",
 ];
 
 const missing = [];
