@@ -35,6 +35,12 @@ const REQUIRED_FILES = [
   // canonical host and let search engines index duplicate-content mirrors.
   "_redirects",
   "llms.txt",
+  // app/LoopAnimation.tsx embeds this as the homepage's sole "The loop" visual and
+  // README.md hotlinks it from moadim.io directly — it was never added here, so it
+  // silently dropping from a build (e.g. a public/ copy failure `next build` doesn't
+  // notice) would break both the hero content and every external README hotlink with
+  // zero CI signal.
+  "loop-animation.svg",
 ];
 
 const missing = [];
