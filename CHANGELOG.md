@@ -99,6 +99,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `public/llms.txt` claimed a single install command "registers a launchd/systemd service so they survive logout and reboot" — the same reboot-persistence overclaim already corrected on the page itself (the separate `moadim install` step, #238), never propagated to this file.
 - `README.md`'s "Project structure" listing named nothing for `app/error.tsx` or `app/global-error.tsx` — both error boundaries existed with their own test coverage but no discoverable entry explaining what each one is for.
 - `LoopAnimation.tsx`'s `next/image` usage swapped for a plain `<img>` — `next/image` unconditionally injects a `style="color:transparent"` attribute that tripped `npm run lint:html`'s `no-inline-style` rule against the built static export (#509).
 - Both `README.md` and `AGENTS.md`'s "Project structure" / "Where things live" listings named nothing for `app/brand-colors.ts`, despite it single-sourcing the Satori-safe brand hex constants and having its own guard test — a real onboarding gap for anyone skimming that list (#503).
