@@ -27,6 +27,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 | `npm run typecheck` | `tsc --noEmit` over the whole project — catches errors in files `next build`'s own TypeScript pass skips, e.g. `*.test.ts`. |
 | `npm run test` | Vitest unit/component tests (`*.test.ts`/`*.test.tsx` next to the code they cover). |
 | `npm run test:watch` | Vitest in watch mode. |
+| `npm run test:coverage` | Vitest with a `text`/`html`/`json-summary` coverage report over `app/**` (HTML report at `coverage/index.html`). |
 | `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship. Requires `npm run build` first. |
 | `npm run lint:html` | Validate `out/**/*.html` with `html-validate` (config: `.htmlvalidate.json`). Requires `npm run build` first. |
 
