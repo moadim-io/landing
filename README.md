@@ -66,11 +66,13 @@ app/
   globals.css           Global styles and Tailwind theme tokens.
   brand-colors.ts       Satori-safe brand hex constants for opengraph-image.tsx/apple-icon.tsx,
                         kept in sync with globals.css by hand (a test guards it).
+  icon.svg              Site favicon (SVG, file-based metadata route).
+  apple-icon.tsx        Generated Apple touch icon (file-based metadata route).
   opengraph-image.tsx   Generated Open Graph social card.
   twitter-image.tsx     Generated Twitter/X social card.
+  manifest.ts           Generated /manifest.webmanifest (PWA manifest).
   robots.ts             Generated robots.txt.
   sitemap.ts            Generated sitemap.xml.
-  favicon.ico           Site favicon.
 public/
   _headers              Cloudflare Pages response headers.
   loop-animation.svg    The animated loop diagram — single source of truth, self-contained
