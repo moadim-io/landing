@@ -32,6 +32,47 @@ describe("root layout metadata", () => {
       description: metadata.description,
     });
   });
+
+  it("opts into indexing and large Google image/video previews", () => {
+    // Distinct from app/robots.ts (the site-wide robots.txt crawl
+    // directive): this is the per-document <meta name="robots"> tag. With
+    // nothing set here, Google defaults to max-image-preview:standard and
+    // only ever shows a small OG-card thumbnail in Search/Discover. See #143.
+    expect(metadata.robots).toMatchObject({
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+    });
+  });
+
+  it("declares a self-referencing canonical URL", () => {
+    // Without this, search engines have no signal that "/" is the
+    // authoritative URL for the homepage's content.
+    expect(metadata.alternates?.canonical).toBe("/");
+  });
+
+  it("configures a chromeless, branded iOS home-screen presentation", () => {
+    // Silently regressing any of these fields falls back to Safari's default
+    // "Add to Home Screen" chrome/title instead of the standalone Moadim app
+    // experience these three fields opt into.
+    expect(metadata.appleWebApp).toMatchObject({
+      capable: true,
+      title: "Moadim",
+      statusBarStyle: "default",
+    });
+  });
+
+  it("opts identifier-like body text out of iOS's tap-to-call rewriting", () => {
+    // Without this, mobile Safari heuristically turns strings like
+    // "moadim-io/daemon" into tap-to-call `tel:` links.
+    expect(metadata.formatDetection).toEqual({ telephone: false });
+  });
 });
 
 describe("root layout viewport", () => {

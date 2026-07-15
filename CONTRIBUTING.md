@@ -10,7 +10,7 @@ CSS**, shipped as a fully static export (`output: "export"`).
 ## Prerequisites
 
 - **Node.js 22+** (see `.nvmrc` / `package.json` `engines`) and npm (the repo targets
-  `@types/node` v26).
+  `@types/node` v22).
 
 ## Setup
 
@@ -48,6 +48,7 @@ landing content, `globals.css` for styles). Static assets go in `public/`.
    npm test
    npm run build
    npm run verify:export
+   npm run lint:html
    ```
 
 3. If your change touches shipped code (`app/`, `scripts/`, config, etc. —

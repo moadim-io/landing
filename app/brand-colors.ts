@@ -11,8 +11,9 @@
  * means a rebrand is a one-line change instead of a hunt across every
  * Satori route for a stray literal that fell out of sync.
  *
- * These must still be kept in sync with `--color-background` /
- * `--color-foreground` / `--color-accent` in `app/globals.css` by hand.
+ * `brand-colors.test.ts` parses `app/globals.css`'s `@theme` block and
+ * asserts these stay in sync with `--color-background` / `--color-foreground`
+ * / `--color-accent` — a drift fails `npm test`, not just a manual check.
  */
 export const SATORI_BACKGROUND = "#f4f1e8";
 export const SATORI_FOREGROUND = "#0a0a0a";

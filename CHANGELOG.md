@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Animated SVG diagram of the Moadim loop ("The loop" panel between the CTA row and the features grid): an agent square rides a circuit between a GOALS repo and a ROUTINES repo, and each routine row in the ROUTINES card is itself a small loop with its own accent runner riding a miniature track at its own pace — the same visual grammar at two scales (#507, #508).
+- `lychee` link-check now globs `public/llms.txt`'s built output (`out/llms.txt`) too, closing a gap where the workflow's own name ("Link check: built export + docs") implied coverage the glob pattern never actually matched (#504).
+- Hero: a `crates.io` version badge next to the install command, so a visitor can see the current published `moadim` version (and that the crate is actively maintained) without leaving the page — a static `shields.io` badge image, so it never needs a build-time network fetch and can't break the static export (#183).
 - Unit test rendering `app/apple-icon.tsx`'s `AppleIcon()` component itself, not just asserting its exported route config — mirrors the same coverage `opengraph-image.test.tsx` already had for its identical `next/og`/Satori setup, so a typo in the Satori JSX/inline style tree fails a test instead of only surfacing at `next build` time (#471).
 - `Strict-Transport-Security` header on `public/_headers`, so HTTPS is enforced from a visitor's very first request instead of only after the first redirect (#442).
 - Node.js engine version pinned via `.nvmrc` alongside the existing `package.json` `engines` field, for a reproducible local/CI toolchain (#390).
@@ -56,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Extracted the repeated `border-4`/`shadow-[Npx_Npx_0_0_#000]` recipe used at every panel/CTA call site (header, install card, features grid, reads section, FAQ, `ctaButton`) into `shadow-brutal` / `shadow-brutal-hover` / `shadow-brutal-active` / `shadow-brutal-lg` tokens in `app/globals.css`'s `@theme` block, so "the brutalist card" has one definition instead of drifting per call site (#213, #483).
 - Every `actions/setup-node` step in `ci.yml`, `deploy.yml`, `lighthouse.yml`, and `link-check.yml` now reads the Node version from `.nvmrc` (`node-version-file`) instead of a fifth untested hardcoded `node-version: 22` literal (#477).
 - Enabled `noImplicitReturns` and `exactOptionalPropertyTypes` in `tsconfig.json`, completing the project's strict-mode opt-ins (#467, #463).
 - Enabled `@typescript-eslint/no-unnecessary-condition` (#460).
@@ -95,6 +99,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `public/llms.txt` claimed a single install command "registers a launchd/systemd service so they survive logout and reboot" — the same reboot-persistence overclaim already corrected on the page itself (the separate `moadim install` step, #238), never propagated to this file.
+- `README.md`'s "Project structure" listing named nothing for `app/error.tsx` or `app/global-error.tsx` — both error boundaries existed with their own test coverage but no discoverable entry explaining what each one is for.
+- `LoopAnimation.tsx`'s `next/image` usage swapped for a plain `<img>` — `next/image` unconditionally injects a `style="color:transparent"` attribute that tripped `npm run lint:html`'s `no-inline-style` rule against the built static export (#509).
+- Both `README.md` and `AGENTS.md`'s "Project structure" / "Where things live" listings named nothing for `app/brand-colors.ts`, despite it single-sourcing the Satori-safe brand hex constants and having its own guard test — a real onboarding gap for anyone skimming that list (#503).
+- Hero install card now surfaces the missing `moadim` run step (`cargo install --locked moadim && moadim`) instead of stopping at `cargo install`, which only compiles and installs the binary — nothing starts the daemon or its web UI until `moadim` is also run (#500).
 - Organization JSON-LD `sameAs` now derived from `app/site.ts`'s `ORG_URL` instead of a hardcoded `"https://github.com/moadim-io"` literal, closing the last stray copy of the GitHub org URL that the earlier `REPO_URL`/`CRATE_URL` single-sourcing (#173) had missed (#484).
 - `README.md`'s Project structure listing named nothing between `app/` and `public/` — the root-level guard tests (`next.config.test.ts`, `deploy-config.test.ts`, `node-version.test.ts`, `llms-txt.test.ts`) and the `test/mocks/` Vitest stub existed with no discoverable entry explaining what each one protects against drifting (#486).
 - `public/llms.txt` — the machine-readable doc AI agents are meant to follow — now uses `cargo install --locked moadim`, matching the hero card's install command instead of the stale unlocked form (#480).

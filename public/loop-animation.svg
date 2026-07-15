@@ -1,0 +1,251 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220" width="800" role="img" aria-label="Animated diagram: an agent reads goals from a goals repository and travels to a routines repository where it creates, edits, and removes routines — each routine itself a small, always-running loop with its own pace. The routines act on external repositories and tasks, and the resulting progress flows back into the goals.">
+  <!--
+    The "perfecting loop" diagram — the single source of truth. The landing
+    page embeds this file via <img> (app/LoopAnimation.tsx), and READMEs
+    hotlink it (GitHub renders README SVGs through <img> too, and does run
+    embedded CSS animations — but allows no external fonts, scripts, or
+    resources, which is why everything is self-contained here).
+
+    Colors are the brand tokens from app/globals.css, restated as literals
+    (same deal as app/brand-colors.ts); loop-animation-svg.test.ts guards
+    the palette and the animation wiring against drift.
+
+    Seamless loop: the routine rows are identical and 28px apart; the row
+    group ends the cycle at translateY(-28px) and snaps back to 0 on a
+    pixel-identical frame (the new row's accent fill fades back to the
+    foreground color before the boundary).
+
+    One shared 7s cycle: goal flash (agent reads) -> agent rides the top rail
+    -> a new routine slides in -> pulses hit the external satellites (commit
+    lands, task gets checked) -> agent rides back -> a goal bar ticks
+    forward. Every animated element's base styles equal its 0% keyframe, so
+    prefers-reduced-motion freezes it into a static drawing.
+  -->
+  <title>The Moadim loop: goals in, refined routines out, progress back</title>
+  <style>
+    svg {
+      --fg: #0a0a0a;
+      --accent: #ffd400;
+      --bg: #f4f1e8;
+    }
+    text {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-weight: 800;
+    }
+    .loop-anim-agent {
+      transform: translate(240px, 72px);
+      animation: loop-anim-agent 7s linear infinite;
+    }
+    @keyframes loop-anim-agent {
+      0%, 8% { transform: translate(240px, 72px); }
+      28%, 58% { transform: translate(444px, 72px); }
+      63% { transform: translate(444px, 148px); }
+      83% { transform: translate(240px, 148px); }
+      88%, 100% { transform: translate(240px, 72px); }
+    }
+    .loop-anim-goal-flash {
+      opacity: 0;
+      animation: loop-anim-goal-flash 7s ease infinite;
+    }
+    @keyframes loop-anim-goal-flash {
+      0%, 100% { opacity: 0; }
+      4%, 10% { opacity: 1; }
+      16% { opacity: 0; }
+    }
+    .loop-anim-goal-tick {
+      transform-box: fill-box;
+      transform-origin: left center;
+      transform: scaleX(1.28);
+      animation: loop-anim-goal-tick 7s ease-in-out infinite;
+    }
+    @keyframes loop-anim-goal-tick {
+      0% { transform: scaleX(1.28); }
+      20%, 86% { transform: scaleX(1); }
+      94%, 100% { transform: scaleX(1.28); }
+    }
+    .loop-anim-routines-shift {
+      transform: translateY(0);
+      animation: loop-anim-routines-shift 7s ease infinite;
+    }
+    @keyframes loop-anim-routines-shift {
+      0%, 34% { transform: translateY(0); }
+      44%, 100% { transform: translateY(-28px); }
+    }
+    .loop-anim-new-row {
+      animation: loop-anim-new-row 7s ease infinite;
+    }
+    @keyframes loop-anim-new-row {
+      0% { fill: transparent; }
+      30%, 70% { fill: var(--accent); }
+      92%, 100% { fill: transparent; }
+    }
+    .loop-anim-pulse {
+      opacity: 0;
+      transform: translateX(0);
+      animation: loop-anim-pulse 7s linear infinite;
+    }
+    @keyframes loop-anim-pulse {
+      0%, 48% { transform: translateX(0); opacity: 0; }
+      50% { opacity: 1; }
+      58% { transform: translateX(40px); opacity: 1; }
+      60%, 100% { transform: translateX(40px); opacity: 0; }
+    }
+    .loop-anim-pop {
+      transform-box: fill-box;
+      transform-origin: center;
+      transform: scale(0);
+      animation: loop-anim-pop 7s ease infinite;
+    }
+    @keyframes loop-anim-pop {
+      0%, 56% { transform: scale(0); }
+      61% { transform: scale(1.2); }
+      64%, 80% { transform: scale(1); }
+      88%, 100% { transform: scale(0); }
+    }
+    /*
+     * Each routine row is its own small loop: a rectangular track — a
+     * miniature of the big goals/routines circuit — with a runner square
+     * riding its perimeter. Per-row speeds (via inline animation-duration)
+     * suggest different schedules; every period divides the shared 7s cycle
+     * exactly (1.75s / 3.5s / 7s), so all runners are back at their start
+     * corner on the cycle boundary and the row-shift snap stays
+     * pixel-identical. Keyframe offsets are proportional to the track's
+     * side lengths (140x16, perimeter 312) so the speed along the track is
+     * constant.
+     */
+    .loop-anim-run {
+      transform: translate(0, 0);
+      animation: loop-anim-run 3.5s linear infinite;
+    }
+    @keyframes loop-anim-run {
+      0% { transform: translate(0, 0); }
+      45% { transform: translate(140px, 0); }
+      50% { transform: translate(140px, 16px); }
+      95% { transform: translate(0, 16px); }
+      100% { transform: translate(0, 0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; }
+    }
+  </style>
+
+  <rect width="800" height="220" fill="var(--bg)"/>
+
+  <defs>
+    <clipPath id="loop-routines-clip">
+      <rect x="464" y="62" width="188" height="116"/>
+    </clipPath>
+  </defs>
+
+  <!-- GOALS repo card -->
+  <g>
+    <rect x="42" y="30" width="192" height="172" fill="var(--fg)"/>
+    <rect x="36" y="24" width="192" height="172" fill="#fff"/>
+    <rect x="36" y="24" width="192" height="34" fill="var(--fg)"/>
+    <text x="52" y="47" font-size="13" letter-spacing="2" fill="var(--accent)">GOALS</text>
+    <rect x="48" y="64" width="168" height="24" fill="var(--accent)" class="loop-anim-goal-flash"/>
+    <rect x="56" y="70" width="152" height="12" fill="var(--fg)" opacity="0.1"/>
+    <rect x="56" y="70" width="88" height="12" fill="var(--accent)" stroke="var(--fg)" stroke-width="2" class="loop-anim-goal-tick"/>
+    <rect x="56" y="100" width="152" height="12" fill="var(--fg)" opacity="0.1"/>
+    <rect x="56" y="100" width="128" height="12" fill="var(--accent)" stroke="var(--fg)" stroke-width="2"/>
+    <rect x="56" y="130" width="152" height="12" fill="var(--fg)" opacity="0.1"/>
+    <rect x="56" y="130" width="48" height="12" fill="var(--accent)" stroke="var(--fg)" stroke-width="2"/>
+    <rect x="36" y="24" width="192" height="172" fill="none" stroke="var(--fg)" stroke-width="4"/>
+  </g>
+
+  <!-- loop rails -->
+  <text x="340" y="58" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="3" fill="var(--fg)" opacity="0.6">REFINE</text>
+  <line x1="234" y1="72" x2="440" y2="72" stroke="var(--fg)" stroke-width="4"/>
+  <polygon points="440,64 454,72 440,80" fill="var(--fg)"/>
+  <text x="340" y="170" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="3" fill="var(--fg)" opacity="0.6">PROGRESS</text>
+  <line x1="244" y1="148" x2="456" y2="148" stroke="var(--fg)" stroke-width="4"/>
+  <polygon points="244,140 230,148 244,156" fill="var(--fg)"/>
+
+  <!-- ROUTINES repo card -->
+  <g>
+    <rect x="466" y="30" width="196" height="172" fill="var(--fg)"/>
+    <rect x="460" y="24" width="196" height="172" fill="#fff"/>
+    <rect x="460" y="24" width="196" height="34" fill="var(--fg)"/>
+    <text x="476" y="47" font-size="13" letter-spacing="2" fill="var(--accent)">ROUTINES</text>
+    <g clip-path="url(#loop-routines-clip)">
+      <g class="loop-anim-routines-shift">
+        <g>
+          <rect x="478" y="70" width="140" height="16" fill="transparent" stroke="var(--fg)" stroke-width="2"/>
+          <g transform="translate(478 70)">
+            <rect x="-3.5" y="-3.5" width="7" height="7" fill="var(--accent)" stroke="var(--fg)" stroke-width="1.5" class="loop-anim-run"/>
+          </g>
+        </g>
+        <g>
+          <rect x="478" y="98" width="140" height="16" fill="transparent" stroke="var(--fg)" stroke-width="2"/>
+          <g transform="translate(478 98)">
+            <rect x="-3.5" y="-3.5" width="7" height="7" fill="var(--accent)" stroke="var(--fg)" stroke-width="1.5" class="loop-anim-run" style="animation-duration: 7s"/>
+          </g>
+        </g>
+        <g>
+          <rect x="478" y="126" width="140" height="16" fill="transparent" stroke="var(--fg)" stroke-width="2"/>
+          <g transform="translate(478 126)">
+            <rect x="-3.5" y="-3.5" width="7" height="7" fill="var(--accent)" stroke="var(--fg)" stroke-width="1.5" class="loop-anim-run" style="animation-duration: 1.75s"/>
+          </g>
+        </g>
+        <g>
+          <rect x="478" y="154" width="140" height="16" fill="transparent" stroke="var(--fg)" stroke-width="2"/>
+          <g transform="translate(478 154)">
+            <rect x="-3.5" y="-3.5" width="7" height="7" fill="var(--accent)" stroke="var(--fg)" stroke-width="1.5" class="loop-anim-run"/>
+          </g>
+        </g>
+        <g>
+          <rect x="478" y="182" width="140" height="16" fill="transparent" stroke="var(--fg)" stroke-width="2" class="loop-anim-new-row"/>
+          <g transform="translate(478 182)">
+            <rect x="-3.5" y="-3.5" width="7" height="7" fill="var(--accent)" stroke="var(--fg)" stroke-width="1.5" class="loop-anim-run" style="animation-duration: 1.75s"/>
+          </g>
+        </g>
+      </g>
+    </g>
+    <rect x="460" y="24" width="196" height="172" fill="none" stroke="var(--fg)" stroke-width="4"/>
+  </g>
+
+  <!-- external satellites (dashed = outside the system) -->
+  <text x="738" y="30" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="3" fill="var(--fg)" opacity="0.6">EXTERNAL</text>
+  <line x1="658" y1="84" x2="698" y2="84" stroke="var(--fg)" stroke-width="2.5" stroke-dasharray="6 6"/>
+  <line x1="658" y1="164" x2="698" y2="164" stroke="var(--fg)" stroke-width="2.5" stroke-dasharray="6 6"/>
+  <g transform="translate(656 84)">
+    <circle r="5" fill="var(--accent)" stroke="var(--fg)" stroke-width="2" class="loop-anim-pulse"/>
+  </g>
+  <g transform="translate(656 164)">
+    <circle r="5" fill="var(--accent)" stroke="var(--fg)" stroke-width="2" class="loop-anim-pulse"/>
+  </g>
+
+  <!-- external repo: a commit history that gains a commit -->
+  <g>
+    <rect x="704" y="44" width="76" height="72" fill="var(--fg)"/>
+    <rect x="700" y="40" width="76" height="72" fill="#fff"/>
+    <rect x="700" y="40" width="76" height="20" fill="var(--fg)"/>
+    <text x="708" y="54" font-size="10" letter-spacing="1.5" fill="var(--accent)">REPO</text>
+    <line x1="712" y1="86" x2="766" y2="86" stroke="var(--fg)" stroke-width="2"/>
+    <circle cx="720" cy="86" r="4" fill="var(--fg)"/>
+    <circle cx="736" cy="86" r="4" fill="var(--fg)"/>
+    <circle cx="754" cy="86" r="5.5" fill="var(--accent)" stroke="var(--fg)" stroke-width="2" class="loop-anim-pop"/>
+    <rect x="700" y="40" width="76" height="72" fill="none" stroke="var(--fg)" stroke-width="4"/>
+  </g>
+
+  <!-- external tasks: a checklist that gains a check -->
+  <g>
+    <rect x="704" y="140" width="76" height="60" fill="var(--fg)"/>
+    <rect x="700" y="136" width="76" height="60" fill="#fff"/>
+    <rect x="700" y="136" width="76" height="20" fill="var(--fg)"/>
+    <text x="708" y="150" font-size="10" letter-spacing="1.5" fill="var(--accent)">TASKS</text>
+    <rect x="710" y="162" width="12" height="12" fill="#fff" stroke="var(--fg)" stroke-width="2.5"/>
+    <path d="M712.5 168 l3 3.5 5 -6" fill="none" stroke="var(--fg)" stroke-width="2.5"/>
+    <rect x="730" y="165" width="36" height="7" fill="var(--fg)" opacity="0.7"/>
+    <rect x="710" y="180" width="12" height="12" fill="#fff" stroke="var(--fg)" stroke-width="2.5"/>
+    <path d="M712.5 186 l3 3.5 5 -6" fill="none" stroke="var(--fg)" stroke-width="2.5" class="loop-anim-pop"/>
+    <rect x="730" y="183" width="36" height="7" fill="var(--fg)" opacity="0.7"/>
+    <rect x="700" y="136" width="76" height="60" fill="none" stroke="var(--fg)" stroke-width="4"/>
+  </g>
+
+  <!-- the agent: a black unit-of-work square riding the rails -->
+  <g class="loop-anim-agent">
+    <rect x="-9" y="-9" width="18" height="18" fill="var(--fg)"/>
+    <rect x="-3" y="-3" width="6" height="6" fill="var(--accent)"/>
+  </g>
+</svg>
