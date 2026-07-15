@@ -184,6 +184,14 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        {/* The hero's crates.io version badge (app/page.tsx) is an eagerly
+            loaded, above-the-fold <img> from img.shields.io — a cross-origin
+            host the browser otherwise can't start DNS/TCP/TLS negotiation
+            with until it parses that far into the document. Warming the
+            connection up front shaves that latency off an LCP-adjacent
+            resource. React 19 hoists <link> elements to <head> regardless of
+            where they're rendered in the tree. */}
+        <link rel="preconnect" href="https://img.shields.io" />
         <JsonLdScript data={jsonLd} />
         {/* Site banner landmark: gives assistive-tech users a top-level `banner`
             region to land on, plus a persistent Moadim wordmark for brand
