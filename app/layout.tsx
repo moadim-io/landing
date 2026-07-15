@@ -5,6 +5,7 @@ import "./globals.css";
 import { SITE_URL, REPO_URL, ORG_URL, SITE_TITLE, SITE_DESCRIPTION } from "./site";
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
+import { SATORI_BACKGROUND } from "./brand-colors";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,7 +27,11 @@ const bingSiteVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION;
 
 // Paint the mobile browser chrome (address bar / status bar) in the brand
 // page background instead of the default white, so the UI extends the
-// neobrutalist palette edge-to-edge. Matches `--background` in globals.css.
+// neobrutalist palette edge-to-edge. Sourced from `SATORI_BACKGROUND`
+// (app/brand-colors.ts), which `brand-colors.test.ts` already guards against
+// drifting from `--color-background` in globals.css — reusing it here means
+// this value can't silently fall out of sync the way a second hardcoded
+// `"#f4f1e8"` literal could.
 export const viewport: Viewport = {
   // The site is a single light-mode neobrutalist palette with no dark theme.
   // Declaring `light` emits <meta name="color-scheme" content="light">, so a
@@ -34,7 +39,7 @@ export const viewport: Viewport = {
   // pre-paint canvas — in light too, instead of inverting them against the
   // cream `--background`.
   colorScheme: "light",
-  themeColor: "#f4f1e8",
+  themeColor: SATORI_BACKGROUND,
 };
 
 export const metadata: Metadata = {

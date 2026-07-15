@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { jsonLd, metadata, viewport } from "./layout";
+import { SATORI_BACKGROUND } from "./brand-colors";
 import { ORG_URL, SITE_URL } from "./site";
 
 describe("root layout metadata", () => {
@@ -81,7 +82,13 @@ describe("root layout viewport", () => {
   });
 
   it("paints mobile browser chrome in the brand background color", () => {
-    expect(viewport.themeColor).toBe("#f4f1e8");
+    // Asserted against the shared SATORI_BACKGROUND constant (itself guarded
+    // against drifting from --color-background by brand-colors.test.ts),
+    // not a re-typed "#f4f1e8" literal — a rebrand that updates
+    // brand-colors.ts should fail this test the moment layout.tsx stops
+    // importing it, rather than silently shipping a stale browser-chrome
+    // color.
+    expect(viewport.themeColor).toBe(SATORI_BACKGROUND);
   });
 });
 
