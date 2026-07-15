@@ -82,10 +82,12 @@ test/
 scripts/
   verify-export.mjs     Checks the built out/ directory for required routes/files (see
                          `npm run verify:export`).
-next.config.test.ts     Guards next.config.ts's static-export invariants against drift.
-deploy-config.test.ts   Guards public/_headers and public/_redirects against malformed rules.
-node-version.test.ts    Guards .nvmrc, package.json engines.node, and CONTRIBUTING.md against drift.
-llms-txt.test.ts        Guards public/llms.txt's install command against the hero's.
+next.config.test.ts      Guards next.config.ts's static-export invariants against drift.
+deploy-config.test.ts    Guards public/_headers and public/_redirects against malformed rules.
+node-version.test.ts     Guards .nvmrc, package.json engines.node, and CONTRIBUTING.md against drift.
+llms-txt.test.ts         Guards public/llms.txt's install command against the hero's.
+loop-animation-svg.test.ts  Guards public/loop-animation.svg's hand-synced palette and animation
+                          CSS against drifting from app/globals.css.
 .github/workflows/
   ci.yml                 Lint, test, build, and verify the export on every PR and push to main.
   deploy.yml             Build + deploy to Cloudflare Pages: production on push to main, a preview on pull requests.
