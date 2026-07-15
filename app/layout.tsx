@@ -5,6 +5,7 @@ import "./globals.css";
 import { SITE_URL, REPO_URL, ORG_URL, SITE_TITLE, SITE_DESCRIPTION } from "./site";
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
+import { SkipLink } from "./SkipLink";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -184,6 +185,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <SkipLink />
         <JsonLdScript data={jsonLd} />
         {/* Site banner landmark: gives assistive-tech users a top-level `banner`
             region to land on, plus a persistent Moadim wordmark for brand
