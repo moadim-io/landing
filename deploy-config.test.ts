@@ -68,7 +68,7 @@ describe("public/_headers", () => {
   });
 
   it("caches content-hashed assets and metadata images forever", () => {
-    for (const path of ["/_next/static/*", "/favicon.ico"]) {
+    for (const path of ["/_next/static/*", "/icon.svg"]) {
       expect(headerRules[path]).toEqual([
         "! Cache-Control",
         "Cache-Control: public, max-age=31536000, immutable",
@@ -77,7 +77,7 @@ describe("public/_headers", () => {
   });
 
   it("caches and declares the image/png type for generated metadata images", () => {
-    // Unlike /_next/static/* and /favicon.ico above, these ship as extensionless
+    // Unlike /_next/static/* and /icon.svg above, these ship as extensionless
     // files from the static export, so a host can't infer their MIME type from
     // the file extension — Content-Type must be set explicitly here.
     for (const path of ["/opengraph-image", "/twitter-image", "/apple-icon"]) {
