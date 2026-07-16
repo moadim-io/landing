@@ -115,7 +115,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- `README.md`'s "Project structure" `.github/workflows/` listing never named `scorecard.yml` (#550) or `visual-regression.yml` (#561), despite both being real, currently-running CI workflows.
+- `README.md`'s "Project structure" `.github/workflows/` listing never named `scorecard.yml` (added in #550) or `visual-regression.yml` (added in #561), despite both being real, currently-running CI workflows (#570).
 - `AGENTS.md` and `README.md`'s file listings never named `app/SkipLink.tsx`, despite it being rendered from `layout.tsx` since #547 (#558).
 - `CODE_OF_CONDUCT.md`'s Attribution links pointed at Contributor Covenant URLs that 301-redirect instead of their canonical destinations (#555).
 - `README.md`'s "Project structure" section still listed the removed `app/favicon.ico` instead of the actual `app/icon.svg` route (#553).
