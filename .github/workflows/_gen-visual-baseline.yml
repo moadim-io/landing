@@ -5,7 +5,8 @@ name: (temp) Generate visual regression baseline
 # the committed PNGs don't mismatch CI's font rendering. Deleted once the
 # baseline this run produces is committed — see #192.
 on:
-  workflow_dispatch:
+  push:
+    branches: [fix/issue-192-visual-regression]
 
 jobs:
   gen-baseline:
