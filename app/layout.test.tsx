@@ -1,6 +1,7 @@
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { jsonLd, metadata, viewport } from "./layout";
-import { ORG_URL, SITE_URL } from "./site";
+import RootLayout, { jsonLd, metadata, viewport } from "./layout";
+import { ORG_URL, REPO_URL, SITE_URL } from "./site";
 
 describe("root layout metadata", () => {
   it("declares the expected title and description", () => {
@@ -123,5 +124,76 @@ describe("root layout JSON-LD", () => {
     expect(website["@type"]).toBe("WebSite");
     expect(website.name).toBe("Moadim");
     expect(website.url).toBe(SITE_URL);
+  });
+});
+
+// The rest of this file only ever imports RootLayout's exported metadata/
+// jsonLd/viewport objects — the component itself (the <html>/<body> shell,
+// the banner landmark, the wordmark link, and the Docs/GitHub nav) had no
+// render coverage, so a regression there (a dropped landmark, a broken nav
+// href, {children} no longer rendering) could pass CI undetected.
+describe("root layout render", () => {
+  it("renders the html element in English", () => {
+    render(
+      <RootLayout>
+        <p>page content</p>
+      </RootLayout>,
+    );
+
+    expect(document.documentElement.lang).toBe("en");
+  });
+
+  it("gives assistive tech a banner landmark with a link back home", () => {
+    render(
+      <RootLayout>
+        <p>page content</p>
+      </RootLayout>,
+    );
+
+    const homeLink = screen.getByRole("link", { name: "Moadim home" });
+    // <header> only exposes the implicit `banner` landmark role when it
+    // isn't nested inside <main>/<article>/etc. — querying by that role
+    // (not just the <header> tag) guards against that silently changing.
+    expect(screen.getByRole("banner")).toContainElement(homeLink);
+    expect(homeLink).toHaveAttribute("href", "/");
+  });
+
+  it("links Docs and GitHub to the daemon repo as safe outbound links", () => {
+    render(
+      <RootLayout>
+        <p>page content</p>
+      </RootLayout>,
+    );
+
+    const docsLink = screen.getByRole("link", { name: /docs/i });
+    expect(docsLink).toHaveAttribute("href", `${REPO_URL}#readme`);
+    expect(docsLink).toHaveAttribute("target", "_blank");
+    expect(docsLink).toHaveAttribute("rel", "noopener noreferrer");
+
+    const githubLink = screen.getByRole("link", { name: /^github/i });
+    expect(githubLink).toHaveAttribute("href", REPO_URL);
+    expect(githubLink).toHaveAttribute("target", "_blank");
+  });
+
+  it("renders the skip-to-content link", () => {
+    render(
+      <RootLayout>
+        <p>page content</p>
+      </RootLayout>,
+    );
+
+    expect(
+      screen.getByRole("link", { name: /skip to content/i }),
+    ).toHaveAttribute("href", "#main");
+  });
+
+  it("renders its children", () => {
+    render(
+      <RootLayout>
+        <p>page content</p>
+      </RootLayout>,
+    );
+
+    expect(screen.getByText("page content")).toBeInTheDocument();
   });
 });
