@@ -23,6 +23,7 @@
     "lint": "eslint --max-warnings 0",
     "lint:md": "markdownlint-cli2",
     "lint:html": "html-validate 'out/**/*.html'",
+    "lint:css": "stylelint 'app/**/*.css'",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -51,6 +52,8 @@
     "html-validate": "^11.5.5",
     "jsdom": "^29.1.1",
     "markdownlint-cli2": "^0.23.0",
+    "stylelint": "^17.14.0",
+    "stylelint-config-standard": "^40.0.0",
     "tailwindcss": "^4",
     "typescript": "^6",
     "vitest": "^4.1.9"

@@ -30,10 +30,12 @@ This version has breaking changes — APIs, conventions, and file structure may 
 | `npm run test:coverage` | Vitest with a `text`/`html`/`json-summary` coverage report over `app/**` (HTML report at `coverage/index.html`). |
 | `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship. Requires `npm run build` first. |
 | `npm run lint:html` | Validate `out/**/*.html` with `html-validate` (config: `.htmlvalidate.json`). Requires `npm run build` first. |
+| `npm run lint:css` | Lint `app/**/*.css` with Stylelint (config: `.stylelintrc.json`). |
 
-Before opening a PR, make sure `npm run lint`, `npm run lint:md`, `npm run typecheck`,
-`npm run test`, `npm run build`, `npm run verify:export`, **and** `npm run lint:html` all
-pass — the build is the real gate, since static export surfaces errors `dev` tolerates.
+Before opening a PR, make sure `npm run lint`, `npm run lint:md`, `npm run lint:css`,
+`npm run typecheck`, `npm run test`, `npm run build`, `npm run verify:export`, **and**
+`npm run lint:html` all pass — the build is the real gate, since static export surfaces
+errors `dev` tolerates.
 
 ## Static-export constraint (read before adding features)
 
