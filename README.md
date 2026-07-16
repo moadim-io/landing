@@ -45,6 +45,7 @@ you edit files under `app/`.
 | `npm run test:watch` | Run the Vitest suite in watch mode while developing. |
 | `npm run test:coverage` | Run the Vitest suite once with a `text`/`html`/`json-summary` coverage report over `app/**` (HTML report at `coverage/index.html`). |
 | `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship; runs after every build in CI. |
+| `npm run test:visual` | Run the Playwright visual-regression suite against the built `out/` export (run `npm run build` first). Compares homepage screenshots at mobile/desktop viewports against the committed baselines in `e2e/visual.spec.ts-snapshots/`. Update baselines after an intentional visual change with `npm run test:visual -- --update-snapshots`. |
 | `typos` | Spell-check `app/**`, `*.md`, and config files with [`typos`](https://github.com/crate-ci/typos) (config: [`_typos.toml`](./_typos.toml)). Not an npm script — install with `cargo install typos-cli` or `brew install typos-cli`, then run `typos` from the repo root. Gated in CI on every PR and push to `main`. |
 
 ## Project structure
