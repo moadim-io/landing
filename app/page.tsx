@@ -1,7 +1,7 @@
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
 import { LoopAnimation } from "./LoopAnimation";
-import { CRATE_NAME, CRATE_URL, REPO_URL } from "./site";
+import { CRATE_NAME, CRATE_URL, REPO_SLUG, REPO_URL } from "./site";
 
 const features = [
   {
@@ -174,6 +174,27 @@ export default function Home() {
               ★
             </span>
             Star on GitHub
+          </ExternalLink>
+          <ExternalLink
+            className="flex items-center justify-center border-4 border-black bg-white p-2 shadow-brutal"
+            href={REPO_URL}
+            aria-label="moadim GitHub star count"
+          >
+            {/* Live star count as social proof next to the "Star on GitHub" CTA
+                (#162) — a shields.io badge, same deliberate exception as the
+                crates.io version badge below: it renders the current count at
+                request time (no build-time fetch, no token, no client JS, and
+                it can't go stale between deploys the way a build-time-baked
+                count would), and next/image needs a configured remote loader
+                for arbitrary external hosts, which isn't worth wiring up for
+                one badge image. See #183 for the identical precedent. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`https://img.shields.io/github/stars/${REPO_SLUG}?style=flat&label=stars`}
+              alt="moadim GitHub star count"
+              width={104}
+              height={20}
+            />
           </ExternalLink>
           <ExternalLink
             className={`${ctaButton} gap-2 bg-white`}

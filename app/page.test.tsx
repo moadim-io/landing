@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import Home, { faqJsonLd } from "./page";
-import { CRATE_NAME, CRATE_URL, REPO_URL } from "./site";
+import { CRATE_NAME, CRATE_URL, REPO_SLUG, REPO_URL } from "./site";
 
 describe("Home", () => {
   it("renders the hero headline", () => {
@@ -98,6 +98,24 @@ describe("Home", () => {
       `https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`,
     );
     expect(badgeImg).toHaveAttribute("alt", "moadim version on crates.io");
+  });
+
+  it("shows a live GitHub star count badge next to the Star on GitHub CTA (#162)", () => {
+    render(<Home />);
+
+    const badgeLink = screen.getByRole("link", {
+      name: /moadim github star count/i,
+    });
+
+    expect(badgeLink).toHaveAttribute("href", REPO_URL);
+    expect(badgeLink.className).toContain("shadow-brutal");
+
+    const badgeImg = badgeLink.querySelector("img");
+    expect(badgeImg).toHaveAttribute(
+      "src",
+      `https://img.shields.io/github/stars/${REPO_SLUG}?style=flat&label=stars`,
+    );
+    expect(badgeImg).toHaveAttribute("alt", "moadim GitHub star count");
   });
 
   it("renders the loop diagram panel between the CTAs and the features", () => {
