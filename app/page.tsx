@@ -1,5 +1,6 @@
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
+import { LoopAnimation } from "./LoopAnimation";
 import { CRATE_NAME, CRATE_URL, REPO_URL } from "./site";
 
 const features = [
@@ -106,7 +107,7 @@ export const panel = "border-4 border-black bg-white shadow-brutal-lg";
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col items-center px-4 py-10 sm:px-8 sm:py-16">
-      <main className="flex w-full max-w-4xl flex-1 flex-col gap-10">
+      <main id="main" className="flex w-full max-w-4xl flex-1 flex-col gap-10">
         <header className={`${panel} p-6 sm:p-10`}>
           <p className="mb-6 inline-block border-2 border-black bg-accent px-3 py-1 text-xs font-bold uppercase tracking-[0.2em]">
             Open source · Loop engine
@@ -183,7 +184,7 @@ export default function Home() {
             <span aria-hidden="true">↗</span>
           </ExternalLink>
           <ExternalLink
-            className="flex items-center justify-center border-4 border-black bg-white p-2 shadow-[6px_6px_0_0_#000]"
+            className="flex items-center justify-center border-4 border-black bg-white p-2 shadow-brutal"
             href={CRATE_URL}
             aria-label="Latest published moadim release"
           >
@@ -193,27 +194,53 @@ export default function Home() {
                 build time). next/image needs a configured remote loader for
                 arbitrary external hosts, which isn't worth wiring up for one
                 badge image, so this is a deliberate exception to the
-                next/no-img-element rule. See #183. */}
+                next/no-img-element rule. See #183.
+
+                `fetchPriority="low"` opts this <img> out of React DOM's
+                automatic image preloading (any eager <img> without it gets a
+                `<link rel="preload" as="image" fetchpriority="high">` hoisted
+                into <head> - see react-dom's `pushImg` in
+                react-dom-server.edge.development.js). That auto-preload spends
+                the page's earliest, highest-priority network slot on a
+                decorative third-party (img.shields.io) badge - a fresh
+                DNS+TLS negotiation racing the self-hosted Geist fonts and
+                critical CSS for bandwidth - for an image that isn't the LCP
+                candidate (the hero heading text is). Marking it low-priority
+                keeps it eager (no loading="lazy" layout-shift risk, since it's
+                in the initial viewport) while telling the browser/React it
+                can wait behind what actually matters for first paint. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={`https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`}
               alt="moadim version on crates.io"
               width={104}
               height={20}
+              fetchPriority="low"
             />
           </ExternalLink>
         </div>
 
+        <section className={panel} aria-labelledby="loop-heading">
+          <h2
+            id="loop-heading"
+            className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent"
+          >
+            The loop
+          </h2>
+          <LoopAnimation />
+        </section>
+
         {/* Unlike the reading-list and FAQ sections below, this grid has no
             visible heading of its own — the CTA row above flows straight
-            into it. Without an accessible name it's an anonymous <ul>, so
-            screen-reader users navigating by landmark region jump from the
-            hero straight to "On loop engineering" and never learn a
-            "features" region exists. `aria-label` (rather than
-            `aria-labelledby` + a visible/sr-only <h2>) fixes that without
-            introducing a heading above the per-card <h2> titles, which
-            would otherwise sit at the wrong hierarchy level. */}
-        <section aria-label="Features">
+            into it. A visually-hidden <h2> + `aria-labelledby` gives the
+            section both an accessible name and a real place in the heading
+            outline (hero <h1> -> section <h2> -> per-card <h3>), instead of
+            leaving the three card titles as unlabeled <h2> siblings of "The
+            loop" / "On loop engineering". See #214. */}
+        <section aria-labelledby="features-heading">
+          <h2 id="features-heading" className="sr-only">
+            Features
+          </h2>
           {/* Tailwind's Preflight resets `list-style: none` on every <ul>,
               which in Safari/VoiceOver also strips the implicit
               `list`/`listitem` role — a long-documented WebKit quirk
@@ -240,9 +267,9 @@ export default function Home() {
                 >
                   {feature.tag}
                 </span>
-                <h2 className="text-lg font-black uppercase leading-tight">
+                <h3 className="text-lg font-black uppercase leading-tight">
                   {feature.title}
-                </h2>
+                </h3>
                 <p className="text-sm font-medium leading-6">{feature.body}</p>
               </li>
             ))}
