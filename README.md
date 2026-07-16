@@ -103,10 +103,15 @@ loop-animation-svg.test.ts  Guards public/loop-animation.svg's hand-synced palet
   deploy.yml             Build + deploy to Cloudflare Pages: production on push to main, a preview on pull requests.
   codeql.yml             CodeQL static analysis.
   dependency-review.yml  Flag vulnerable/incompatible-license dependencies on pull requests.
+  scorecard.yml          OpenSSF Scorecard: grades the repo's whole security posture (token
+                         permissions, branch protection, pinned dependencies, etc.) weekly and
+                         on push to main.
   actionlint.yml         Lint the GitHub Actions workflow files themselves.
   link-check.yml         Lint outbound/internal links in the built export + docs.
   lighthouse.yml         Gate PRs on Lighthouse performance/accessibility/best-practices/SEO
                          budgets (see .lighthouserc.json).
+  visual-regression.yml  Playwright screenshot diff against the committed baselines in
+                         e2e/visual.spec.ts-snapshots/ (see `npm run test:visual`).
 ```
 
 ## Link check
