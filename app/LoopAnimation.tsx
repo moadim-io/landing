@@ -17,7 +17,21 @@
 
 export function LoopAnimation() {
   return (
-    <div className="overflow-x-auto p-4 sm:p-6">
+    // `min-w-140` on the <img> below (560px) forces this diagram wider than
+    // its container below the sm breakpoint, so `overflow-x-auto` makes it a
+    // horizontally scrollable region on every phone-width viewport (as low
+    // as 335px of visible content out of 592px total at 375px wide — the
+    // ROUTINES/EXTERNAL half of the diagram is cropped off by default). A
+    // plain scrollable <div> is only in the *pointer* tab order — without an
+    // explicit `tabIndex`, a keyboard-only visitor can never focus it to
+    // scroll with the arrow keys and see the cropped half at all (axe-core's
+    // "scrollable-region-focusable" check / WCAG 2.1.1 Keyboard).
+    <div
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- this non-interactive <div> is the one thing on the page with scrollable overflow, so it needs to be the keyboard focus target per the axe-core scrollable-region-focusable fix.
+      tabIndex={0}
+      aria-label="The loop diagram, scrollable"
+      className="overflow-x-auto p-4 sm:p-6"
+    >
       {/* eslint-disable-next-line @next/next/no-img-element -- see comment above: next/image adds no value for this unoptimized static SVG and injects an inline style that fails html-validate. */}
       <img
         src="/loop-animation.svg"
