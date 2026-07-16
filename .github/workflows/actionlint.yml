@@ -21,6 +21,11 @@ jobs:
 
       - name: Run actionlint
         # shellcheck is enabled by default and lints embedded `run:` steps.
-        uses: docker://rhysd/actionlint:1.7.12
+        # Pinned to the image digest, not the floating `1.7.12` tag — every
+        # other third-party action across these workflows is already pinned
+        # this way (SHA for actions/*, digest for this Docker action) to
+        # close the same supply-chain tampering vector a mutable tag leaves
+        # open; this one was missed when the gate was added in #313.
+        uses: docker://rhysd/actionlint@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667 # 1.7.12
         with:
           args: -color
