@@ -1,5 +1,6 @@
+import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { jsonLd, metadata, viewport } from "./layout";
+import RootLayout, { jsonLd, metadata, viewport } from "./layout";
 import { ORG_URL, SITE_URL } from "./site";
 
 describe("root layout metadata", () => {
@@ -72,6 +73,26 @@ describe("root layout metadata", () => {
     // Without this, mobile Safari heuristically turns strings like
     // "moadim-io/daemon" into tap-to-call `tel:` links.
     expect(metadata.formatDetection).toEqual({ telephone: false });
+  });
+});
+
+describe("root layout head", () => {
+  it("preconnects to the shields.io host the hero's version badge loads from", () => {
+    // app/page.tsx's hero renders an eager, above-the-fold <img> from
+    // img.shields.io — warming up the connection up front shaves DNS/TCP/TLS
+    // negotiation off that LCP-adjacent resource. React 19 hoists a rendered
+    // <link> into the real document <head> rather than leaving it in RTL's
+    // container div, so assert against document.head instead.
+    render(
+      <RootLayout>
+        <div />
+      </RootLayout>,
+    );
+
+    const preconnect = document.head.querySelector(
+      'link[rel="preconnect"][href="https://img.shields.io"]',
+    );
+    expect(preconnect).not.toBeNull();
   });
 });
 
