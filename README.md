@@ -42,6 +42,7 @@ you edit files under `app/`.
 | `npm run typecheck` | Type-check the whole project with `tsc --noEmit` (`next build`'s own TypeScript pass only covers the app route graph, so it misses files like `*.test.ts`). |
 | `npm test` | Run the Vitest unit/component test suite once. |
 | `npm run test:watch` | Run the Vitest suite in watch mode while developing. |
+| `npm run test:coverage` | Run the Vitest suite once with a `text`/`html`/`json-summary` coverage report over `app/**` (HTML report at `coverage/index.html`). |
 | `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship; runs after every build in CI. |
 | `typos` | Spell-check `app/**`, `*.md`, and config files with [`typos`](https://github.com/crate-ci/typos) (config: [`_typos.toml`](./_typos.toml)). Not an npm script — install with `cargo install typos-cli` or `brew install typos-cli`, then run `typos` from the repo root. Gated in CI on every PR and push to `main`. |
 
