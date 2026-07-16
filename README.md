@@ -3,6 +3,7 @@
 [![Live site](https://img.shields.io/website?url=https%3A%2F%2Fmoadim.io&label=moadim.io)](https://moadim.io)
 [![Product version](https://img.shields.io/crates/v/moadim.svg?label=moadim)](https://crates.io/crates/moadim)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/moadim-io/landing/badge)](https://scorecard.dev/viewer/?uri=github.com/moadim-io/landing)
 
 The marketing/landing site for **Moadim**, an open-source loop engine for AI agents.
 Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes
@@ -42,6 +43,7 @@ you edit files under `app/`.
 | `npm run typecheck` | Type-check the whole project with `tsc --noEmit` (`next build`'s own TypeScript pass only covers the app route graph, so it misses files like `*.test.ts`). |
 | `npm test` | Run the Vitest unit/component test suite once. |
 | `npm run test:watch` | Run the Vitest suite in watch mode while developing. |
+| `npm run test:coverage` | Run the Vitest suite once with a `text`/`html`/`json-summary` coverage report over `app/**` (HTML report at `coverage/index.html`). |
 | `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship; runs after every build in CI. |
 | `typos` | Spell-check `app/**`, `*.md`, and config files with [`typos`](https://github.com/crate-ci/typos) (config: [`_typos.toml`](./_typos.toml)). Not an npm script — install with `cargo install typos-cli` or `brew install typos-cli`, then run `typos` from the repo root. Gated in CI on every PR and push to `main`. |
 
@@ -56,6 +58,8 @@ app/
                         children (the "Try again" screen for the rest of the app).
   global-error.tsx      Root-layout error boundary — supplies its own <html>/<body> for the
                         rare case where the root layout itself throws.
+  SkipLink.tsx          Visually-hidden "Skip to content" link, focusable first so
+                        keyboard/screen-reader users can bypass the repeated header (WCAG 2.4.1).
   ExternalLink.tsx      Outbound (new-tab) link wrapper with the safe rel attributes.
   JsonLdScript.tsx      Escapes and inlines JSON-LD structured data as a <script> tag.
   LoopAnimation.tsx     Thin wrapper embedding public/loop-animation.svg on the landing
@@ -66,11 +70,13 @@ app/
   globals.css           Global styles and Tailwind theme tokens.
   brand-colors.ts       Satori-safe brand hex constants for opengraph-image.tsx/apple-icon.tsx,
                         kept in sync with globals.css by hand (a test guards it).
+  icon.svg              Site favicon (SVG, file-based metadata route).
+  apple-icon.tsx        Generated Apple touch icon (file-based metadata route).
   opengraph-image.tsx   Generated Open Graph social card.
   twitter-image.tsx     Generated Twitter/X social card.
+  manifest.ts           Generated /manifest.webmanifest (PWA manifest).
   robots.ts             Generated robots.txt.
   sitemap.ts            Generated sitemap.xml.
-  favicon.ico           Site favicon.
 public/
   _headers              Cloudflare Pages response headers.
   loop-animation.svg    The animated loop diagram — single source of truth, self-contained
