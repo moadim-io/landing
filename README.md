@@ -67,11 +67,13 @@ app/
   globals.css           Global styles and Tailwind theme tokens.
   brand-colors.ts       Satori-safe brand hex constants for opengraph-image.tsx/apple-icon.tsx,
                         kept in sync with globals.css by hand (a test guards it).
+  icon.svg              Site favicon (SVG, file-based metadata route).
+  apple-icon.tsx        Generated Apple touch icon (file-based metadata route).
   opengraph-image.tsx   Generated Open Graph social card.
   twitter-image.tsx     Generated Twitter/X social card.
+  manifest.ts           Generated /manifest.webmanifest (PWA manifest).
   robots.ts             Generated robots.txt.
   sitemap.ts            Generated sitemap.xml.
-  favicon.ico           Site favicon.
 public/
   _headers              Cloudflare Pages response headers.
   loop-animation.svg    The animated loop diagram — single source of truth, self-contained
@@ -83,10 +85,12 @@ test/
 scripts/
   verify-export.mjs     Checks the built out/ directory for required routes/files (see
                          `npm run verify:export`).
-next.config.test.ts     Guards next.config.ts's static-export invariants against drift.
-deploy-config.test.ts   Guards public/_headers and public/_redirects against malformed rules.
-node-version.test.ts    Guards .nvmrc, package.json engines.node, and CONTRIBUTING.md against drift.
-llms-txt.test.ts        Guards public/llms.txt's install command against the hero's.
+next.config.test.ts      Guards next.config.ts's static-export invariants against drift.
+deploy-config.test.ts    Guards public/_headers and public/_redirects against malformed rules.
+node-version.test.ts     Guards .nvmrc, package.json engines.node, and CONTRIBUTING.md against drift.
+llms-txt.test.ts         Guards public/llms.txt's install command against the hero's.
+loop-animation-svg.test.ts  Guards public/loop-animation.svg's hand-synced palette and animation
+                          CSS against drifting from app/globals.css.
 .github/workflows/
   ci.yml                 Lint, test, build, and verify the export on every PR and push to main.
   deploy.yml             Build + deploy to Cloudflare Pages: production on push to main, a preview on pull requests.
