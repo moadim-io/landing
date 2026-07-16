@@ -5,6 +5,7 @@ import "./globals.css";
 import { SITE_URL, REPO_URL, ORG_URL, SITE_TITLE, SITE_DESCRIPTION } from "./site";
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
+import { SkipLink } from "./SkipLink";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -113,9 +114,11 @@ const organization = {
   "@id": organizationId,
   name: "Moadim",
   url: SITE_URL,
-  // No dedicated brand mark yet (app/favicon.ico is still the create-next-app
-  // scaffold icon, see #145) — the generated OG card is the closest stand-in
-  // for a logo until a real mark ships.
+  // app/icon.svg is Moadim's brand mark today (it replaced the
+  // create-next-app scaffold favicon back in #161), but it's an SVG and
+  // Google's structured-data guidelines for the Logo rich result only
+  // support raster formats (JPG/PNG/WebP) — the generated OG card, already
+  // a raster PNG, is used here instead.
   logo: `${SITE_URL}/opengraph-image`,
   // The GitHub org is the authoritative profile for the "Moadim" entity
   // itself (distinct from the SoftwareApplication.sameAs links below, which
@@ -182,6 +185,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <SkipLink />
         <JsonLdScript data={jsonLd} />
         {/* Site banner landmark: gives assistive-tech users a top-level `banner`
             region to land on, plus a persistent Moadim wordmark for brand
