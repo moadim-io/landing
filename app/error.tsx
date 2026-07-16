@@ -9,7 +9,11 @@ import { ctaButton, panel } from "./page";
 // without this file Next.js falls back to its default unstyled "Application
 // error" overlay, breaking the neobrutalist look on the one page state that
 // most needs a calm, branded off-ramp. Mirrors not-found.tsx: reuses
-// `page.tsx`'s `panel`/`ctaButton` tokens so it can't visually drift.
+// `page.tsx`'s `panel`/`ctaButton` tokens so it can't visually drift, and
+// `id="main"` for the same reason — the root layout's `SkipLink` always
+// targets `#main`, and this boundary replaces `page.tsx`'s `<main>` (the
+// only element that previously carried that id), so without it "Skip to
+// content" silently did nothing on this screen.
 export default function Error({
   error,
   reset,
@@ -26,6 +30,7 @@ export default function Error({
   return (
     <div className="flex flex-1 flex-col items-center justify-center px-4 py-10 sm:px-8 sm:py-16">
       <main
+        id="main"
         className={`${panel} flex w-full max-w-2xl flex-col items-center gap-8 p-8 text-center sm:p-12`}
       >
         <p className="inline-block border-2 border-black bg-accent px-3 py-1 text-xs font-bold uppercase tracking-[0.2em]">

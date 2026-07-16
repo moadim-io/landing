@@ -44,4 +44,14 @@ describe("NotFound", () => {
 
     expect(container.querySelector("main")?.className).toContain(panel);
   });
+
+  // The root layout's SkipLink (rendered on every route, including this one)
+  // always links to `#main`. Only page.tsx's <main> carried that id, so a
+  // keyboard/screen-reader user landing on a 404 and activating "Skip to
+  // content" had it silently do nothing. Guard the id so that regresses loudly.
+  it("carries the id the root layout's skip link targets", () => {
+    const { container } = render(<NotFound />);
+
+    expect(container.querySelector("main")).toHaveAttribute("id", "main");
+  });
 });
