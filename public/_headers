@@ -103,3 +103,8 @@
 /llms.txt
   ! Cache-Control
   Cache-Control: public, max-age=86400
+
+# The build-provenance endpoint (#230): a smoke check or a human confirming
+# "did the new commit actually deploy?" needs this to reflect the very latest
+# build, not a cached older one — so it keeps the broad must-revalidate rule
+# above rather than gaining its own longer max-age.

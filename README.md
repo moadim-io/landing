@@ -133,6 +133,13 @@ Because the build is a fully static export, the same `out/` directory can be ser
 static host — running `npm run build` locally and uploading `out/` to Vercel, Netlify, GitHub
 Pages, or an S3 bucket behind a CDN works without any of the Cloudflare-specific tooling.
 
+### Confirming what's live
+
+Every build embeds its provenance at `https://moadim.io/version.json` — `{ "commit", "ref",
+"builtAt" }`. `deploy.yml` populates it from `GITHUB_SHA`/`GITHUB_REF_NAME`/the build
+timestamp; a local `npm run build` falls back to `"dev"` for all three. Use it to confirm a
+push actually shipped instead of guessing from a `wrangler` exit code or a `<head>` diff.
+
 ### Search-engine verification (optional)
 
 To verify the site in **Google Search Console** / **Bing Webmaster Tools**, set the
