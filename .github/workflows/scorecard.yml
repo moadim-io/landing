@@ -1,0 +1,52 @@
+name: Scorecard
+
+# Complements the individual controls this repo already runs (CodeQL, the dependency-review
+# gate, Actions pinned to commit SHAs) with a single continuous grade of the whole security
+# posture — token permissions, branch protection, pinned dependencies, dangerous workflow
+# patterns, presence of a security policy, etc. — and flags regressions none of those
+# individual checks target. See #223.
+on:
+  branch_protection_rule:
+  schedule:
+    # Weekly, mirroring codeql.yml's cadence.
+    - cron: "23 4 * * 1"
+  push:
+    branches: [main]
+
+# Least-privilege default; the job below elevates only what publishing/SARIF upload needs.
+permissions: read-all
+
+jobs:
+  analysis:
+    name: Scorecard analysis
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write # Upload SARIF to the Security tab.
+      id-token: write # Publish results, signed via Sigstore.
+      contents: read
+      actions: read # Required by scorecard's Token-Permissions/Dangerous-Workflow checks.
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Run analysis
+        uses: ossf/scorecard-action@4eaacf0543bb3f2c246792bd56e8cdeffafb205a # v2.4.3
+        with:
+          results_file: results.sarif
+          results_format: sarif
+          publish_results: true
+
+      - name: Upload SARIF artifact
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: SARIF file
+          path: results.sarif
+          retention-days: 5
+
+      - name: Upload to code scanning
+        uses: github/codeql-action/upload-sarif@e12f0178983d466f2f6028f5cc7a6d786fd97f4b # v4.31.4
+        with:
+          sarif_file: results.sarif
