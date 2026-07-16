@@ -41,7 +41,10 @@ describe("manifest", () => {
       throw new Error("manifest() declared no icons");
     }
 
-    expect(icon.src).toBe("/favicon.ico");
-    expect(icon.type).toBe("image/x-icon");
+    // app/favicon.ico was replaced by app/icon.svg (#161); the export never
+    // emits a /favicon.ico file, so a manifest icon pointing there 404s on
+    // any "Add to Home Screen" / PWA install.
+    expect(icon.src).toBe("/icon.svg");
+    expect(icon.type).toBe("image/svg+xml");
   });
 });

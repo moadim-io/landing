@@ -43,6 +43,13 @@ export const SITE_TITLE = "Moadim — Put your agents on a loop";
  * Open Graph/Twitter cards, and the PWA manifest's `description` (see
  * `layout.tsx` and `manifest.ts`). Same single-source rationale as
  * {@link SITE_TITLE}.
+ *
+ * Kept under ~120 characters (see the length guard in `site.test.ts`) so it
+ * survives both display budgets that reuse it verbatim: Google SERP snippets
+ * truncate at ~155-160 characters, and Twitter/X and most link-unfurlers clamp
+ * social-card descriptions at ~120-125 — the tighter of the two. The core
+ * value proposition ("open-source loop engine for AI agents") is front-loaded
+ * so it survives truncation on every surface (#135).
  */
 export const SITE_DESCRIPTION =
-  "Moadim is an open-source loop engine for AI agents. Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes against your repo on every tick, over MCP and REST.";
+  "Moadim is an open-source loop engine for AI agents — runs Claude, Codex, or Hermes on a schedule, over MCP and REST.";

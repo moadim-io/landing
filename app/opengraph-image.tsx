@@ -4,12 +4,16 @@ import {
   SATORI_BACKGROUND as BACKGROUND,
   SATORI_FOREGROUND as FOREGROUND,
 } from "./brand-colors";
+import { SITE_TITLE } from "./site";
 
 // Static social-share card, generated at build time (compatible with `output: export`).
 export const dynamic = "force-static";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "Moadim — Put your agents on a loop";
+// Twitter/X's card (twitter-image.tsx) re-exports this alt as-is, so a rebrand only
+// needs to change SITE_TITLE once. See site.ts's SITE_TITLE doc comment for the same
+// single-source rationale applied to layout.tsx and manifest.ts.
+export const alt = SITE_TITLE;
 
 export default function OpenGraphImage() {
   return new ImageResponse(
