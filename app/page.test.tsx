@@ -98,6 +98,11 @@ describe("Home", () => {
       `https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`,
     );
     expect(badgeImg).toHaveAttribute("alt", "moadim version on crates.io");
+    // Without this, React DOM auto-hoists a `<link rel="preload" as="image">`
+    // for this third-party badge into <head> at "high" priority — spending
+    // the page's earliest network slot on a decorative img.shields.io fetch
+    // instead of the self-hosted fonts/CSS that actually gate first paint.
+    expect(badgeImg).toHaveAttribute("fetchPriority", "low");
   });
 
   it("renders the loop diagram panel between the CTAs and the features", () => {
