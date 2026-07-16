@@ -21,5 +21,21 @@ export default defineConfig({
     setupFiles: ["./vitest.setup.ts"],
     include: ["**/*.test.{ts,tsx}"],
     exclude: ["node_modules", "out", ".next"],
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "lcov"],
+      include: ["app/**/*.{ts,tsx}"],
+      exclude: ["**/*.test.{ts,tsx}", "test/**"],
+      // Set just below the current baseline (~95% statements/lines, 100%
+      // branches, ~86% functions) so a real regression fails CI without the
+      // gate flaking on the last couple of uncovered lines in generated
+      // metadata routes.
+      thresholds: {
+        statements: 90,
+        branches: 90,
+        functions: 80,
+        lines: 90,
+      },
+    },
   },
 });
