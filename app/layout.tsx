@@ -1,21 +1,17 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
-import { Geist, Geist_Mono } from "next/font/google";
+// `next/font/google` fetches the font files from Google's CDN during
+// `next build`, so a build with no network access (or a Google Fonts outage)
+// fails outright. The `geist` package ships the same Geist Sans/Mono font
+// files locally (via `next/font/local` under the hood), so the build never
+// depends on an external network call.
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { SITE_URL, REPO_URL, ORG_URL, SITE_TITLE, SITE_DESCRIPTION } from "./site";
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
 import { SkipLink } from "./SkipLink";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 // Search-engine ownership-verification tokens, read at build time so nothing
 // sensitive lands in the repo and the tags can differ per environment. They are
@@ -182,7 +178,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${GeistSans.variable} ${GeistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <SkipLink />

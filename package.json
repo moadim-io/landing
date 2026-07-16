@@ -30,6 +30,7 @@
     "verify:export": "node scripts/verify-export.mjs"
   },
   "dependencies": {
+    "geist": "^1.7.2",
     "next": "16.2.10",
     "react": "19.2.7",
     "react-dom": "19.2.7"
