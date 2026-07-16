@@ -96,5 +96,7 @@ app/
   twitter-image.tsx     Generated Twitter card.
   sitemap.ts            /sitemap.xml (force-static).
   robots.ts             /robots.txt (force-static).
+  version.json/route.ts /version.json — build provenance (commit/ref/build time), populated by
+                         deploy.yml from GITHUB_SHA/GITHUB_REF_NAME; falls back to "dev" locally.
 public/                 Static assets served at the site root.
 ```

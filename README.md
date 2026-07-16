@@ -79,6 +79,8 @@ app/
   manifest.ts           Generated /manifest.webmanifest (PWA manifest).
   robots.ts             Generated robots.txt.
   sitemap.ts            Generated sitemap.xml.
+  version.json/route.ts Build-provenance API route — emits the commit/ref/build time baked
+                        in at build time (see "Confirming what's live" below).
 public/
   _headers              Cloudflare Pages response headers.
   loop-animation.svg    The animated loop diagram — single source of truth, self-contained
