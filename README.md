@@ -58,6 +58,8 @@ app/
                         children (the "Try again" screen for the rest of the app).
   global-error.tsx      Root-layout error boundary — supplies its own <html>/<body> for the
                         rare case where the root layout itself throws.
+  SkipLink.tsx          Visually-hidden "Skip to content" link, focusable first so
+                        keyboard/screen-reader users can bypass the repeated header (WCAG 2.4.1).
   ExternalLink.tsx      Outbound (new-tab) link wrapper with the safe rel attributes.
   JsonLdScript.tsx      Escapes and inlines JSON-LD structured data as a <script> tag.
   LoopAnimation.tsx     Thin wrapper embedding public/loop-animation.svg on the landing
