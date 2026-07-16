@@ -209,11 +209,17 @@ export default function Home() {
                 keeps it eager (no loading="lazy" layout-shift risk, since it's
                 in the initial viewport) while telling the browser/React it
                 can wait behind what actually matters for first paint. */}
+            {/* No `width` attribute: shields.io badges are variable-width
+                (the rendered width depends on the version string's length,
+                currently 96px for "v1.3.0" but it drifts with every crate
+                release), so a hardcoded pixel width goes stale and distorts
+                the badge's aspect ratio. Only `height` is fixed — the
+                browser derives width from the image's natural aspect ratio,
+                which stays correct regardless of version-string length. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={`https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`}
               alt="moadim version on crates.io"
-              width={104}
               height={20}
               fetchPriority="low"
             />
