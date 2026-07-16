@@ -17,10 +17,17 @@ export const metadata: Metadata = {
 // `page.tsx`'s `panel` surface and `ctaButton` treatment (instead of
 // hand-copying the class strings) so the off-ramp can't visually drift from
 // the rest of the site.
+//
+// `id="main"` matters here specifically: `SkipLink` (rendered once in the
+// root layout, so it's present on every route including this one) always
+// points at `#main`. Only `page.tsx`'s `<main>` carried that id, so a
+// keyboard/screen-reader user who lands on a 404 and activates "Skip to
+// content" had it silently do nothing — the target didn't exist on this page.
 export default function NotFound() {
   return (
     <div className="flex flex-1 flex-col items-center justify-center px-4 py-10 sm:px-8 sm:py-16">
       <main
+        id="main"
         className={`${panel} flex w-full max-w-2xl flex-col items-center gap-8 p-8 text-center sm:p-12`}
       >
         <p className="inline-block border-2 border-black bg-accent px-3 py-1 text-xs font-bold uppercase tracking-[0.2em]">

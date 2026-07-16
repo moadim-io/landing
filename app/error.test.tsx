@@ -42,4 +42,17 @@ describe("ErrorBoundary", () => {
 
     expect(container.querySelector("main")?.className).toContain(panel);
   });
+
+  // The root layout's SkipLink (rendered on every route, including this
+  // boundary) always links to `#main`. Only page.tsx's <main> carried that
+  // id, so a keyboard/screen-reader user who hit a thrown error and
+  // activated "Skip to content" had it silently do nothing.
+  it("carries the id the root layout's skip link targets", () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    const { container } = render(
+      <ErrorBoundary error={new Error("boom")} reset={() => {}} />,
+    );
+
+    expect(container.querySelector("main")).toHaveAttribute("id", "main");
+  });
 });

@@ -99,6 +99,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- The "Skip to content" link (rendered once in the root layout, so it's present on every route) always targets `#main`, but only `page.tsx`'s `<main>` carried that id — the `<main>` in `not-found.tsx` and `error.tsx` didn't. A keyboard or screen-reader user who landed on the 404 page or hit a thrown error and activated the skip link had it silently do nothing instead of jumping past the header.
 - `public/llms.txt` claimed a single install command "registers a launchd/systemd service so they survive logout and reboot" — the same reboot-persistence overclaim already corrected on the page itself (the separate `moadim install` step, #238), never propagated to this file.
 - `README.md`'s "Project structure" listing named nothing for `app/error.tsx` or `app/global-error.tsx` — both error boundaries existed with their own test coverage but no discoverable entry explaining what each one is for.
 - `LoopAnimation.tsx`'s `next/image` usage swapped for a plain `<img>` — `next/image` unconditionally injects a `style="color:transparent"` attribute that tripped `npm run lint:html`'s `no-inline-style` rule against the built static export (#509).
