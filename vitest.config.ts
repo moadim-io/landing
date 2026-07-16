@@ -21,5 +21,16 @@ export default defineConfig({
     setupFiles: ["./vitest.setup.ts"],
     include: ["**/*.test.{ts,tsx}"],
     exclude: ["node_modules", "out", ".next"],
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "html", "json-summary"],
+      // Only measure app/ route & component source — the thing this is meant to
+      // surface is an untested branch/file under app/. scripts/verify-export.mjs
+      // is deliberately excluded: its own test (scripts/verify-export.test.ts)
+      // runs it as a child process, which v8's coverage hook can't see into, so
+      // instrumenting it here would just report a misleading 0%.
+      include: ["app/**"],
+      exclude: ["**/*.test.{ts,tsx}", "test/mocks/**", "**/*.config.{ts,mjs}"],
+    },
   },
 });

@@ -10,7 +10,7 @@ CSS**, shipped as a fully static export (`output: "export"`).
 ## Prerequisites
 
 - **Node.js 22+** (see `.nvmrc` / `package.json` `engines`) and npm (the repo targets
-  `@types/node` v26).
+  `@types/node` v22).
 
 ## Setup
 
@@ -28,6 +28,7 @@ npm install
 | `npm run typecheck` | Type-check the whole project with `tsc --noEmit` (catches errors in files `next build`'s own TypeScript pass skips, e.g. `*.test.ts`). |
 | `npm test` | Run the Vitest unit/component test suite once (tests live next to the code they cover, e.g. `app/page.test.tsx`). |
 | `npm run test:watch` | Run the Vitest suite in watch mode. |
+| `npm run test:coverage` | Run the Vitest suite once with a coverage report over `app/**` (HTML report at `coverage/index.html`). |
 | `npm run build` | Produce the static export in `out/`. |
 | `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship (CI runs this after every build, before deploy). |
 | `npm run start` | Serve the production build locally. |
@@ -48,6 +49,7 @@ landing content, `globals.css` for styles). Static assets go in `public/`.
    npm test
    npm run build
    npm run verify:export
+   npm run lint:html
    ```
 
 3. If your change touches shipped code (`app/`, `scripts/`, config, etc. —

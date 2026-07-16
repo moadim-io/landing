@@ -23,4 +23,14 @@ describe("public/llms.txt", () => {
       expect(match).toBe(lockedCommand);
     }
   });
+
+  it("doesn't claim installing alone registers the launchd/systemd service", () => {
+    // The hero card and feature 02 on the page both make clear that reboot
+    // persistence needs the separate `moadim install` step (#238) — installing
+    // the crate only puts the binary on PATH. llms.txt drifted from that fix
+    // once already (claiming a bare install "registers a launchd/systemd
+    // service"); guard the corrected wording so it can't silently regress.
+    expect(llmsTxt).toContain("moadim install");
+    expect(llmsTxt).not.toMatch(/install command registers/);
+  });
 });
