@@ -33,6 +33,7 @@ npm install
 | `npm run build` | Produce the static export in `out/`. |
 | `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship (CI runs this after every build, before deploy). |
 | `npm run lint:html` | Validate the built `out/**/*.html` with [`html-validate`](https://html-validate.org) (config: [`.htmlvalidate.json`](./.htmlvalidate.json)). Run `npm run build` first. |
+| `npm run test:visual` | Run the Playwright visual-regression suite against the built `out/` export (run `npm run build` first). Compares homepage screenshots at mobile/desktop viewports against the committed baselines in `e2e/visual.spec.ts-snapshots/`. Update baselines after an intentional visual change with `npm run test:visual -- --update-snapshots`. |
 | `npm run start` | Serve the production build locally. |
 | `actionlint` | Lint `.github/workflows/**` YAML (and embedded shell via shellcheck). Install via `brew install actionlint` or see the [actionlint releases](https://github.com/rhysd/actionlint/releases). |
 | `typos` | Spell-check `app/**`, `*.md`, and config files (config: [`_typos.toml`](./_typos.toml)). Install via `cargo install typos-cli` or `brew install typos-cli`, then run `typos` from the repo root. |
@@ -54,6 +55,7 @@ landing content, `globals.css` for styles). Static assets go in `public/`.
    npm run build
    npm run verify:export
    npm run lint:html
+   npm run test:visual
    ```
 
 3. If your change touches shipped code (`app/`, `scripts/`, config, etc. —
