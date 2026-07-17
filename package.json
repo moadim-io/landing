@@ -24,7 +24,6 @@
     "lint:css": "stylelint \"app/**/*.css\"",
     "lint:md": "markdownlint-cli2",
     "lint:html": "html-validate 'out/**/*.html'",
-    "lint:css": "stylelint 'app/**/*.css'",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
