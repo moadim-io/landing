@@ -34,9 +34,9 @@ This version has breaking changes — APIs, conventions, and file structure may 
 | `npm run test:visual` | Playwright visual-regression suite against the built `out/` export: compares mobile/desktop screenshots against the committed baselines in `e2e/visual.spec.ts-snapshots/`. Requires `npm run build` first; update baselines with `npm run test:visual -- --update-snapshots`. |
 
 Before opening a PR, make sure `npm run lint`, `npm run lint:md`, `npm run lint:css`,
-`npm run typecheck`, `npm run test`, `npm run build`, `npm run verify:export`, **and**
-`npm run lint:html` all pass — the build is the real gate, since static export surfaces
-errors `dev` tolerates.
+`npm run typecheck`, `npm run test`, `npm run build`, `npm run verify:export`,
+`npm run lint:html`, **and** `npm run test:visual` all pass — the build is the real gate,
+since static export surfaces errors `dev` tolerates.
 
 ## Static-export constraint (read before adding features)
 
