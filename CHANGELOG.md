@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Unit test rendering `RootLayout` itself (not just its exported `metadata`/`viewport`/`jsonLd`), covering the `<html lang>` shell, the `banner` landmark, the wordmark link, and the Docs/GitHub nav (#557).
+- CI: an `OpenSSF Scorecard` workflow (`ossf/scorecard-action`) that continuously grades the repo's whole security posture and uploads results to the Security tab, complementing CodeQL and the dependency-review gate (#223, #550).
+- CI: wired `npm run lint:html` into `ci.yml`'s `Lint, test & build` job, so a malformed-markup regression in the built export actually fails a PR instead of only being catchable by hand (#549).
+- `SkipLink`, a visually-hidden "Skip to content" link rendered first in `<body>` that becomes visible on keyboard focus and jumps to `<main>` (WCAG 2.4.1 Bypass Blocks) (#71, #547).
+- `test:coverage` script (`@vitest/coverage-v8`, `text`/`html`/`json-summary` reporters) so a PR can no longer silently ship an untested branch or file with zero coverage signal (#539).
+- Unit tests covering `layout.tsx`'s `metadata.alternates.canonical`, `appleWebApp`, and `formatDetection` fields (#536).
+- CI/deploy: Cloudflare Pages preview deploys for pull requests, posted to the job summary and a sticky PR comment, so a reviewer can see a rendered preview before merging (#526).
+- Unit test guarding `app/icon.svg`'s hand-synced brand palette against drift from `app/globals.css`, mirroring the same guard already in place for `brand-colors.ts` and `loop-animation.svg` (#513).
+- `metadata.robots` declared with `max-image-preview: large` so Google Search/Discover can surface the full Open Graph card instead of a small default thumbnail (#143, #490).
+- Unit test covering `ORG_URL`'s derivation from `REPO_SLUG` in `app/site.ts`, filling the one gap the `REPO_URL`/`CRATE_URL` derivation tests didn't reach (#488).
+- Branded App Router error boundaries: `app/error.tsx` (for errors thrown inside the root layout's children) and `app/global-error.tsx` (for errors thrown by the root layout itself), replacing Next.js's default unstyled error overlay (#76, #475).
+- `appleWebApp` and `formatDetection` metadata: chromeless iOS home-screen presentation under the Moadim name, and opting out of Safari's heuristic `tel:` auto-linking of identifier strings (#289).
 - Animated SVG diagram of the Moadim loop ("The loop" panel between the CTA row and the features grid): an agent square rides a circuit between a GOALS repo and a ROUTINES repo, and each routine row in the ROUTINES card is itself a small loop with its own accent runner riding a miniature track at its own pace — the same visual grammar at two scales (#507, #508).
 - `lychee` link-check now globs `public/llms.txt`'s built output (`out/llms.txt`) too, closing a gap where the workflow's own name ("Link check: built export + docs") implied coverage the glob pattern never actually matched (#504).
 - Hero: a `crates.io` version badge next to the install command, so a visitor can see the current published `moadim` version (and that the crate is actively maintained) without leaving the page — a static `shields.io` badge image, so it never needs a build-time network fetch and can't break the static export (#183).
@@ -59,6 +71,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Dropped the dead `changeFrequency`/`priority` fields from `app/sitemap.ts` — Google and Bing both document that neither ever influenced crawl behavior (#535).
+- `global-error.tsx`'s "Try again" button now uses the `shadow-brutal` token instead of a raw `shadow-[6px_6px_0_0_#000]` arbitrary value, the one call site the #213 shadow-token consolidation missed (#528).
+- Hero crates.io version badge now uses the `shadow-brutal` token instead of a raw arbitrary shadow value, for the same reason (#519).
 - Extracted the repeated `border-4`/`shadow-[Npx_Npx_0_0_#000]` recipe used at every panel/CTA call site (header, install card, features grid, reads section, FAQ, `ctaButton`) into `shadow-brutal` / `shadow-brutal-hover` / `shadow-brutal-active` / `shadow-brutal-lg` tokens in `app/globals.css`'s `@theme` block, so "the brutalist card" has one definition instead of drifting per call site (#213, #483).
 - Every `actions/setup-node` step in `ci.yml`, `deploy.yml`, `lighthouse.yml`, and `link-check.yml` now reads the Node version from `.nvmrc` (`node-version-file`) instead of a fifth untested hardcoded `node-version: 22` literal (#477).
 - Enabled `noImplicitReturns` and `exactOptionalPropertyTypes` in `tsconfig.json`, completing the project's strict-mode opt-ins (#467, #463).
@@ -95,10 +110,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Performance
 
+- The crates.io version badge `<img>` now opts out of React DOM's automatic image preloading (`fetchPriority="low"`), so the page's earliest network slot isn't spent on a decorative third-party badge instead of the self-hosted fonts and critical CSS (#544).
 - Paint the background grid pre-dimmed and drop the full-viewport overlay, so the page renders without an extra compositing layer covering the viewport (#205).
 
 ### Fixed
 
+- `README.md`'s "Project structure" `.github/workflows/` listing never named `scorecard.yml` (added in #550) or `visual-regression.yml` (added in #561), despite both being real, currently-running CI workflows (#570).
+- `AGENTS.md` and `README.md`'s file listings never named `app/SkipLink.tsx`, despite it being rendered from `layout.tsx` since #547 (#558).
+- `CODE_OF_CONDUCT.md`'s Attribution links pointed at Contributor Covenant URLs that 301-redirect instead of their canonical destinations (#555).
+- `README.md`'s "Project structure" section still listed the removed `app/favicon.ico` instead of the actual `app/icon.svg` route (#553).
+- The loop diagram's `overflow-x-auto` scroll wrapper had no `tabIndex`, so a keyboard-only visitor could never focus it to scroll and see the ROUTINES/EXTERNAL half of the diagram cropped below the `sm` breakpoint (#546).
+- `public/_headers`' immutable-caching rule still targeted the removed `/favicon.ico` route instead of the actual `/icon.svg` favicon, so `/icon.svg` fell through to the broad `max-age=0` catch-all instead of a year-long immutable cache (#545).
+- `SECURITY.md`'s private-reporting link pointed at a GitHub docs URL that now 301-redirects to the current one (#542).
+- `CONTRIBUTING.md`'s `@types/node` prerequisite still said "v26" after #534 pinned it to `^22` (#541).
+- `README.md`'s root-level guard tests listing never picked up `loop-animation-svg.test.ts` (#540).
+- `@types/node` pinned from `^26` down to `^22`, matching the Node 22 major `.nvmrc`/`engines.node`/CI/deploy actually build and run against (#534).
+- `AGENTS.md`'s command table and pre-PR checklist never listed `npm run lint:md` or `npm run verify:export`, despite both being required checks documented in README.md/CONTRIBUTING.md (#533).
+- `scripts/verify-export.mjs`'s `REQUIRED_FILES` list never included `loop-animation.svg`, the sole visual in the homepage's "The loop" section and a file hotlinked from external READMEs, so its silent disappearance from a build had zero CI signal (#530).
+- `app/layout.tsx`'s comment on `Organization.logo` still said `app/favicon.ico` was the scaffold icon, a premise superseded when `icon.svg` replaced it (#527).
+- `AGENTS.md`'s file listing never named `app/error.tsx` or `app/global-error.tsx`, despite README.md's equivalent list already having been fixed (#524).
+- Removed a byte-for-byte duplicate `:root` palette-alias block in `app/globals.css` (#518).
+- `SITE_DESCRIPTION` shortened so it survives Google SERP (~155-160 char) and Twitter/X social-card (~120-125 char) truncation instead of being cut off mid-sentence (#135, #517).
+- `app/manifest.ts`'s PWA icon pointed at the removed `/favicon.ico` instead of the actual `/icon.svg` route, 404ing on "Add to Home Screen" (#516).
+- The homepage feature grid's three cards sat as unlabeled `<h2>` siblings with no grouping heading in the outline; added a visually-hidden labelled `<h2>` (#214, #515).
+- `opengraph-image.tsx`'s `alt` text was a hardcoded literal instead of importing `site.ts`'s `SITE_TITLE`, exposing it to the same drift the constant exists to prevent (#512).
+- `app/brand-colors.ts`'s docstring still said the Satori hex values must be kept in sync with `globals.css` "by hand," though `brand-colors.test.ts` (#457) now enforces it (#499).
+- `public/_headers` never declared `Content-Type` for the extensionless `/opengraph-image`, `/twitter-image`, and `/apple-icon` routes, so a host that infers MIME type from the file extension served them as `application/octet-stream` (#473).
+- `Strict-Transport-Security` header was missing the `preload` directive required for `hstspreload.org` submission, despite a comment claiming the header already met that bar (#472).
+- `CONTRIBUTING.md`'s checklist and `.github/PULL_REQUEST_TEMPLATE.md` never listed `npm run lint:html`, though `AGENTS.md` already documented it as a required pre-PR gate (#496).
+- `public/llms.txt` claimed a single install command "registers a launchd/systemd service so they survive logout and reboot" — the same reboot-persistence overclaim already corrected on the page itself (the separate `moadim install` step, #238), never propagated to this file.
+- `README.md`'s "Project structure" listing named nothing for `app/error.tsx` or `app/global-error.tsx` — both error boundaries existed with their own test coverage but no discoverable entry explaining what each one is for.
 - `LoopAnimation.tsx`'s `next/image` usage swapped for a plain `<img>` — `next/image` unconditionally injects a `style="color:transparent"` attribute that tripped `npm run lint:html`'s `no-inline-style` rule against the built static export (#509).
 - Both `README.md` and `AGENTS.md`'s "Project structure" / "Where things live" listings named nothing for `app/brand-colors.ts`, despite it single-sourcing the Satori-safe brand hex constants and having its own guard test — a real onboarding gap for anyone skimming that list (#503).
 - Hero install card now surfaces the missing `moadim` run step (`cargo install --locked moadim && moadim`) instead of stopping at `cargo install`, which only compiles and installs the binary — nothing starts the daemon or its web UI until `moadim` is also run (#500).

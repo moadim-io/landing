@@ -107,7 +107,7 @@ export const panel = "border-4 border-black bg-white shadow-brutal-lg";
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col items-center px-4 py-10 sm:px-8 sm:py-16">
-      <main className="flex w-full max-w-4xl flex-1 flex-col gap-10">
+      <main id="main" className="flex w-full max-w-4xl flex-1 flex-col gap-10">
         <header className={`${panel} p-6 sm:p-10`}>
           <p className="mb-6 inline-block border-2 border-black bg-accent px-3 py-1 text-xs font-bold uppercase tracking-[0.2em]">
             Open source · Loop engine
@@ -184,7 +184,7 @@ export default function Home() {
             <span aria-hidden="true">↗</span>
           </ExternalLink>
           <ExternalLink
-            className="flex items-center justify-center border-4 border-black bg-white p-2 shadow-[6px_6px_0_0_#000]"
+            className="flex items-center justify-center border-4 border-black bg-white p-2 shadow-brutal"
             href={CRATE_URL}
             aria-label="Latest published moadim release"
           >
@@ -194,13 +194,28 @@ export default function Home() {
                 build time). next/image needs a configured remote loader for
                 arbitrary external hosts, which isn't worth wiring up for one
                 badge image, so this is a deliberate exception to the
-                next/no-img-element rule. See #183. */}
+                next/no-img-element rule. See #183.
+
+                `fetchPriority="low"` opts this <img> out of React DOM's
+                automatic image preloading (any eager <img> without it gets a
+                `<link rel="preload" as="image" fetchpriority="high">` hoisted
+                into <head> - see react-dom's `pushImg` in
+                react-dom-server.edge.development.js). That auto-preload spends
+                the page's earliest, highest-priority network slot on a
+                decorative third-party (img.shields.io) badge - a fresh
+                DNS+TLS negotiation racing the self-hosted Geist fonts and
+                critical CSS for bandwidth - for an image that isn't the LCP
+                candidate (the hero heading text is). Marking it low-priority
+                keeps it eager (no loading="lazy" layout-shift risk, since it's
+                in the initial viewport) while telling the browser/React it
+                can wait behind what actually matters for first paint. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={`https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`}
               alt="moadim version on crates.io"
               width={104}
               height={20}
+              fetchPriority="low"
             />
           </ExternalLink>
         </div>

@@ -63,6 +63,14 @@ jobs:
         # just at deploy time.
         run: npm run verify:export
 
+      - name: Validate HTML (html-validate)
+        # ESLint covers app/**/*.tsx, markdownlint covers *.md, but the actual HTML this
+        # site ships was never checked — `lint:html` (config: .htmlvalidate.json) has been
+        # documented in AGENTS.md as a pre-PR gate since it was added, but nothing ran it in
+        # CI, so a markup regression (e.g. an unclosed tag or duplicate id introduced by a
+        # generated metadata route) could reach `out/` undetected.
+        run: npm run lint:html
+
   markdown-lint:
     name: Markdown lint
     runs-on: ubuntu-latest

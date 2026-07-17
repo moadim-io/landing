@@ -59,17 +59,21 @@
   Cache-Control: public, max-age=31536000, immutable
 
 # Generated metadata assets whose referencing URL carries a content hash:
-# the OG/Twitter share images (`/opengraph-image?<hash>`, `/twitter-image?<hash>`)
-# and the favicon (`/favicon.ico?<hash>`). Because the URL changes whenever the
-# bytes change, the bytes at any given URL are immutable — so an unfurl bot or
+# the OG/Twitter share images (`/opengraph-image?<hash>`, `/twitter-image?<hash>`),
+# the apple touch icon (`/apple-icon?<hash>`), and the favicon (`/icon.svg?<hash>`,
+# from `app/icon.svg` — the `<link rel="icon">` href Next.js emits always
+# carries a cache-busting query string). Because the URL changes whenever the
+# bytes change, the bytes at any given URL are immutable — so a browser or
 # crawler can cache them forever instead of re-fetching from the origin on every
 # request. Without this they fall under the broad `max-age=0` rule above.
 #
-# These routes also need an explicit Content-Type: the static export writes
-# them as extensionless files (`out/opengraph-image`, not `opengraph-image.png`),
-# so a host that infers MIME type from the file extension serves them as
-# application/octet-stream instead of the image/png each route.tsx declares via
-# `contentType`, breaking OG/Twitter unfurls and the iOS home-screen icon.
+# The OG/Twitter/apple-icon routes also need an explicit Content-Type: the
+# static export writes them as extensionless files (`out/opengraph-image`, not
+# `opengraph-image.png`), so a host that infers MIME type from the file
+# extension serves them as application/octet-stream instead of the image/png
+# each route.tsx declares via `contentType`, breaking OG/Twitter unfurls and
+# the iOS home-screen icon. `/icon.svg` ships as a real `.svg` file, so its
+# type is inferred correctly without an override.
 /opengraph-image
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
@@ -82,7 +86,7 @@
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
   Content-Type: image/png
-/favicon.ico
+/icon.svg
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
@@ -99,3 +103,8 @@
 /llms.txt
   ! Cache-Control
   Cache-Control: public, max-age=86400
+
+# The build-provenance endpoint (#230): a smoke check or a human confirming
+# "did the new commit actually deploy?" needs this to reflect the very latest
+# build, not a cached older one — so it keeps the broad must-revalidate rule
+# above rather than gaining its own longer max-age.
