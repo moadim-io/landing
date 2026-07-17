@@ -13,6 +13,13 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // `npm run test:coverage`'s Istanbul HTML report (gitignored, see
+    // .gitignore's `/coverage`) — ESLint's flat config doesn't read
+    // .gitignore on its own, so without this, running test:coverage before
+    // lint makes `npm run lint` fail on the report's own generated
+    // block-navigation.js/sorter.js/prettify.js ("Unused eslint-disable
+    // directive" etc.) instead of only ever linting this repo's source.
+    "coverage/**",
   ]),
   {
     // Type-aware linting needs the TypeScript program, which only covers
