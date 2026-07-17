@@ -32,6 +32,19 @@ describe("ErrorBoundary", () => {
     expect(reset).toHaveBeenCalledOnce();
   });
 
+  // The body copy tells visitors they can "head back to the homepage" — make
+  // sure that off-ramp actually exists, not just the "Try again" retry.
+  it("renders a link back to the homepage", () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+
+    render(<ErrorBoundary error={new Error("boom")} reset={() => {}} />);
+
+    expect(screen.getByRole("link", { name: /back to home/i })).toHaveAttribute(
+      "href",
+      "/",
+    );
+  });
+
   // Mirrors not-found.test.tsx: assert this reuses the shared panel token
   // instead of a byte-identical copy that could silently drift.
   it("reuses the shared panel surface style instead of a duplicated copy", () => {

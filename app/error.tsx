@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Link from "next/link";
 import { ctaButton, panel } from "./page";
 
 // App Router error boundary for everything rendered inside the root layout
@@ -38,9 +39,15 @@ export default function Error({
           Something went wrong rendering this page. You can try again, or head
           back to the homepage.
         </p>
-        <button type="button" onClick={reset} className={`${ctaButton} bg-accent`}>
-          Try again
-        </button>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <button type="button" onClick={reset} className={`${ctaButton} bg-accent`}>
+            Try again
+          </button>
+          <Link href="/" className={`${ctaButton} gap-2 bg-accent`}>
+            <span aria-hidden="true">←</span>
+            Back to home
+          </Link>
+        </div>
       </main>
     </div>
   );
