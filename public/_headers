@@ -28,6 +28,18 @@
 #   clickjacking-style embedding outright.
 # - Permissions-Policy: the site doesn't use these browser APIs; disabling
 #   them denies a compromised third-party script silent access.
+# - Cross-Origin-Opener-Policy: same-origin — isolates this document's
+#   top-level browsing context from any cross-origin window it opens or is
+#   opened by, so a malicious cross-origin popup can't hold a `window.opener`
+#   reference back into this page and can't share a process/agent-cluster
+#   with it (a baseline Spectre-class side-channel mitigation). Every
+#   outbound link already goes through ExternalLink.tsx's `rel="noopener
+#   noreferrer"`, so this adds no new restriction on this site's own
+#   behavior — it only removes the same access from third parties.
+#   Deliberately not pairing this with Cross-Origin-Resource-Policy: this
+#   site's own SVG (public/loop-animation.svg) is intentionally hotlinked
+#   cross-origin from READMEs (see AGENTS.md), which a site-wide CORP rule
+#   would block.
 # - Strict-Transport-Security: moadim.io is only ever served over HTTPS (see
 #   the www/.pages.dev -> apex redirects in public/_redirects), but without
 #   this header a visitor's first request to a bare `http://` link or typed
@@ -48,6 +60,7 @@
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
   Permissions-Policy: geolocation=(), camera=(), microphone=()
+  Cross-Origin-Opener-Policy: same-origin
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
 
 # Next.js emits content-hashed, immutable assets (JS, CSS, fonts, media) under
