@@ -5,7 +5,7 @@
     "at-rule-no-unknown": [
       true,
       {
-        "ignoreAtRules": ["theme", "plugin", "custom-variant", "apply"]
+        "ignoreAtRules": ["theme", "plugin", "custom-variant", "apply", "tailwind", "layer"]
       }
     ],
     "import-notation": "string",
