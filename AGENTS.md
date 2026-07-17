@@ -31,6 +31,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 | `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship. Requires `npm run build` first. |
 | `npm run lint:html` | Validate `out/**/*.html` with `html-validate` (config: `.htmlvalidate.json`). Requires `npm run build` first. |
 | `npm run lint:css` | Lint `app/**/*.css` with Stylelint (config: `.stylelintrc.json`). |
+| `npm run test:visual` | Playwright visual-regression suite against the built `out/` export: compares mobile/desktop screenshots against the committed baselines in `e2e/visual.spec.ts-snapshots/`. Requires `npm run build` first; update baselines with `npm run test:visual -- --update-snapshots`. |
 
 Before opening a PR, make sure `npm run lint`, `npm run lint:md`, `npm run lint:css`,
 `npm run typecheck`, `npm run test`, `npm run build`, `npm run verify:export`, **and**
