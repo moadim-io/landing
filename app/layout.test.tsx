@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import RootLayout, { jsonLd, metadata, viewport } from "./layout";
 import { ORG_URL, REPO_URL, SITE_URL } from "./site";
 
@@ -73,6 +73,35 @@ describe("root layout metadata", () => {
     // Without this, mobile Safari heuristically turns strings like
     // "moadim-io/daemon" into tap-to-call `tel:` links.
     expect(metadata.formatDetection).toEqual({ telephone: false });
+  });
+
+  it("omits the Bing verification tag when its token is unset", () => {
+    // The default test env has no NEXT_PUBLIC_BING_SITE_VERIFICATION, so
+    // `metadata` (imported once, above) already reflects the unconfigured case.
+    expect(metadata.verification).toEqual({ google: undefined });
+  });
+});
+
+describe("root layout Bing site verification", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.resetModules();
+  });
+
+  it("emits the Bing verification tag when its token is set at build time", async () => {
+    // `googleSiteVerification`/`bingSiteVerification` are read from
+    // `process.env` at module load, so exercising the "token is set" branch
+    // requires stubbing the env and re-importing a fresh module instance —
+    // the `metadata` imported at the top of this file was already evaluated
+    // with the token unset.
+    vi.stubEnv("NEXT_PUBLIC_BING_SITE_VERIFICATION", "bing-token-123");
+    vi.resetModules();
+    const { metadata: metadataWithBingToken } = await import("./layout");
+
+    expect(metadataWithBingToken.verification).toEqual({
+      google: undefined,
+      other: { "msvalidate.01": "bing-token-123" },
+    });
   });
 });
 

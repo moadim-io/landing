@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/stylelintrc.json",
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": ["theme", "plugin", "custom-variant", "apply", "tailwind", "layer"]
+      }
+    ],
+    "import-notation": "string",
+    "declaration-block-no-duplicate-custom-properties": true
+  }
+}
