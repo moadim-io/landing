@@ -23,4 +23,12 @@ describe("GlobalError", () => {
 
     expect(reset).toHaveBeenCalledOnce();
   });
+
+  it("renders a reload link back to the homepage, as the copy promises", () => {
+    render(<GlobalError reset={() => {}} />);
+
+    expect(
+      screen.getByRole("link", { name: /reload site/i }),
+    ).toHaveAttribute("href", "/");
+  });
 });
