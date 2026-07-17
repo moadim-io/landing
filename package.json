@@ -21,6 +21,7 @@
     "build": "next build",
     "start": "npx serve out",
     "lint": "eslint --max-warnings 0",
+    "lint:css": "stylelint \"app/**/*.css\"",
     "lint:md": "markdownlint-cli2",
     "lint:html": "html-validate 'out/**/*.html'",
     "lint:css": "stylelint 'app/**/*.css'",
