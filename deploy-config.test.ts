@@ -50,6 +50,7 @@ describe("public/_headers", () => {
         "Referrer-Policy: strict-origin-when-cross-origin",
         "X-Frame-Options: DENY",
         "Permissions-Policy: geolocation=(), camera=(), microphone=()",
+        "Cross-Origin-Opener-Policy: same-origin",
       ]),
     );
   });

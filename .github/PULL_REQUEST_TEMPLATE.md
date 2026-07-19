@@ -11,6 +11,8 @@
 ## Checklist
 
 - [ ] `npm run lint` passes
+- [ ] `npm run lint:md` passes
+- [ ] `npm run lint:css` passes
 - [ ] `npm run typecheck` passes
 - [ ] `npm test` passes
 - [ ] `npm run build` passes
