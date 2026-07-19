@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `Cross-Origin-Opener-Policy: same-origin` added to `public/_headers`' site-wide baseline, isolating the top-level document from cross-origin windows it opens or is opened by (a Spectre-class side-channel mitigation) without affecting the intentional cross-origin hotlinking of `public/loop-animation.svg` from READMEs (#584).
+- CI: `timeout-minutes` added to `scorecard.yml`'s analysis job — the one job across all workflows that still inherited GitHub Actions' 360-minute default instead of failing a hung run fast and visibly (#587).
+- CI: a `concurrency` group (`cancel-in-progress: true`) added to `actionlint.yml` and `dependency-review.yml`, the two PR-triggered workflows that hadn't yet picked up the cancel-stale-runs pattern already used by `ci.yml`, `codeql.yml`, `lighthouse.yml`, `link-check.yml`, and `visual-regression.yml` (#579).
 - A `stylelint`/`stylelint-config-standard` gate (`npm run lint:css`) over `app/globals.css`, the repo's only hand-written CSS — catches issues like a duplicate custom-property declaration (the #236 class of bug) at lint time instead of only in review (#250, #465, #548).
 - `/version.json` build-provenance route (`app/version.json/route.ts`) exposing the live `{ commit, ref, builtAt }` at `https://moadim.io/version.json`, so a human or an automated smoke check can confirm which commit is actually serving instead of only trusting a `wrangler` upload's exit code (#230, #565).
 - Unit test covering `layout.tsx`'s Bing site-verification `metadata.verification` branch (`NEXT_PUBLIC_BING_SITE_VERIFICATION` set), closing the one branch-coverage gap `npm run test:coverage` still reported for the file (#563).
@@ -74,6 +77,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Bumped `vitest` to `4.1.10`, a patch release within the existing `^4.1.9` range, ahead of Dependabot's weekly grouped run (#437).
+- Bumped `actions/upload-artifact` to `v7.0.1` in `scorecard.yml` (was `v5.0.0`) and `visual-regression.yml` (was `v4.6.2`, over a year stale) — neither pin was covered by an open dependency PR, and the two workflows had drifted onto different major versions of the same action (#578).
+- Bumped the `actions-minor-and-patch` Dependabot group: `lycheeverse/lychee-action` `2.8.0` → `2.9.0` and `github/codeql-action/upload-sarif` `4.31.4` → `4.37.1` (#583).
 - Dropped the dead `changeFrequency`/`priority` fields from `app/sitemap.ts` — Google and Bing both document that neither ever influenced crawl behavior (#535).
 - `global-error.tsx`'s "Try again" button now uses the `shadow-brutal` token instead of a raw `shadow-[6px_6px_0_0_#000]` arbitrary value, the one call site the #213 shadow-token consolidation missed (#528).
 - Hero crates.io version badge now uses the `shadow-brutal` token instead of a raw arbitrary shadow value, for the same reason (#519).
@@ -118,6 +124,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `next@16.2.10` (the latest stable release) bundles a `postcss@8.4.31` vulnerable to a CSS-stringify XSS (GHSA-qx2v-qp2m-jg93); no stable `next` release yet ships a patched `postcss`, so pinned the transitive dependency to `^8.5.10` via a `package.json` `overrides` entry instead of waiting on an unstable `next` bump. `npm audit` now reports 0 vulnerabilities (#591).
+- Bumped `markdownlint-cli2` to `0.23.0` to pull in patched `js-yaml` and `markdown-it` transitive dependencies, fixing two moderate-severity quadratic-complexity ReDoS advisories (GHSA-h67p-54hq-rp68, GHSA-6v5v-wf23-fmfq) flagged by `npm audit` (#433).
+- `AGENTS.md`'s "Before opening a PR" sentence still omitted `npm run test:visual`, even though its own Commands table (#575) and `CONTRIBUTING.md`'s checklist (#577) already required it (#585).
+- `CONTRIBUTING.md`'s Commands table and "Submitting a change" checklist never got `npm run test:visual`, even though README.md and AGENTS.md already documented the Playwright visual-regression suite added in #561 (#577).
+- `AGENTS.md`'s Commands table never listed `npm run test:visual`, even though it's a real `package.json` script gated in CI (`visual-regression.yml`) and already documented in README.md's Scripts table (#575).
 - `stylelint.config.mjs` and `.stylelintrc.json` were two independently-added Stylelint configs for the same file (#465 and #548 each added one without noticing the other) — cosmiconfig only ever loaded `.stylelintrc.json`, so `stylelint.config.mjs` was dead and had silently drifted (missing the `tailwind`/`layer` `ignoreAtRules` entries the active file needed). Folded the missing entries into `.stylelintrc.json` and deleted the dead file (#573).
 - `package.json` had two `"lint:css"` script keys — one from each of #465 and #548 — which JSON silently collapsed to the last one; removed the dead duplicate (#572).
 - `CONTRIBUTING.md`'s "Submitting a change" checklist and `.github/PULL_REQUEST_TEMPLATE.md`'s checklist were missing `npm run lint:md` and `npm run lint:css`, despite `AGENTS.md` already documenting all eight pre-PR gates; `CONTRIBUTING.md`'s command table was also missing `lint:css`/`lint:html` as documented scripts (#571).
