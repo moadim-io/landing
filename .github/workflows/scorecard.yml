@@ -20,6 +20,13 @@ jobs:
   analysis:
     name: Scorecard analysis
     runs-on: ubuntu-latest
+    # Every other job in this repo's workflows sets an explicit timeout instead of
+    # inheriting the 360-minute (6-hour) GitHub Actions default (see deploy.yml's
+    # rationale) — this was the one job across all workflows still missing one, so a
+    # hung scorecard-action run or SARIF upload would otherwise hold a runner for
+    # hours instead of failing fast and visibly. 15 minutes mirrors codeql.yml, the
+    # other SARIF-uploading static-analysis job in this repo.
+    timeout-minutes: 15
     permissions:
       security-events: write # Upload SARIF to the Security tab.
       id-token: write # Publish results, signed via Sigstore.
