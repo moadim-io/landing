@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- An automated `axe-core` accessibility scan of the homepage (`e2e/a11y.spec.ts`, via `@axe-core/playwright`), catching rendered-DOM a11y issues (contrast, landmark structure, ARIA state) that `eslint-plugin-jsx-a11y`'s static check can't see (#589).
 - A `stylelint`/`stylelint-config-standard` gate (`npm run lint:css`) over `app/globals.css`, the repo's only hand-written CSS — catches issues like a duplicate custom-property declaration (the #236 class of bug) at lint time instead of only in review (#250, #465, #548).
 - `/version.json` build-provenance route (`app/version.json/route.ts`) exposing the live `{ commit, ref, builtAt }` at `https://moadim.io/version.json`, so a human or an automated smoke check can confirm which commit is actually serving instead of only trusting a `wrangler` upload's exit code (#230, #565).
 - Unit test covering `layout.tsx`'s Bing site-verification `metadata.verification` branch (`NEXT_PUBLIC_BING_SITE_VERIFICATION` set), closing the one branch-coverage gap `npm run test:coverage` still reported for the file (#563).
