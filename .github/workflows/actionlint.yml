@@ -9,6 +9,12 @@ on:
     paths:
       - ".github/workflows/**"
 
+# Cancel a stale lint run when a PR gets a new push, mirroring ci.yml — a
+# superseded run on an old commit has no reason to keep holding a runner.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   actionlint:
     name: Lint workflow YAML
