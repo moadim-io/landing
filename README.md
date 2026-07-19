@@ -6,7 +6,7 @@
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/moadim-io/landing/badge)](https://scorecard.dev/viewer/?uri=github.com/moadim-io/landing)
 
 The marketing/landing site for **Moadim**, an open-source loop engine for AI agents.
-Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes
+Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, Hermes, or Pi
 against your repo on every tick, over MCP and REST.
 
 ![Animated diagram of the Moadim loop: an agent reads a goals repository and refines the routines in a routines repository — each routine its own small, always-running loop — the routines act on external repositories and tasks, and progress flows back into the goals](./public/loop-animation.svg)
