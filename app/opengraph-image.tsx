@@ -1,15 +1,31 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import {
   SATORI_ACCENT as ACCENT,
   SATORI_BACKGROUND as BACKGROUND,
   SATORI_FOREGROUND as FOREGROUND,
 } from "./brand-colors";
+import { SITE_TITLE } from "./site";
+
+// `next/font` (used by the rest of the site, see layout.tsx) doesn't reach a metadata
+// route's `ImageResponse` — Satori needs raw font bytes handed to it directly, so without
+// this the card rendered in Satori's built-in fallback (Noto Sans), not the site's brand
+// font. Vendored as a static Bold TTF (app/fonts/GEIST-OFL.txt has the SIL Open Font
+// License) rather than fetched from Google Fonts at build time, so this route has no
+// network dependency and works offline. A variable-font instance failed to rasterize here
+// (Satori couldn't parse its glyph tables), so this is the static weight closest to the
+// card's 700/800 text instead.
+const geistBold = readFileSync(join(process.cwd(), "app/fonts/geist-bold.ttf"));
 
 // Static social-share card, generated at build time (compatible with `output: export`).
 export const dynamic = "force-static";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "Moadim — Put your agents on a loop";
+// Twitter/X's card (twitter-image.tsx) re-exports this alt as-is, so a rebrand only
+// needs to change SITE_TITLE once. See site.ts's SITE_TITLE doc comment for the same
+// single-source rationale applied to layout.tsx and manifest.ts.
+export const alt = SITE_TITLE;
 
 export default function OpenGraphImage() {
   return new ImageResponse(
@@ -27,7 +43,7 @@ export default function OpenGraphImage() {
           color: FOREGROUND,
           // Thick black frame — the neobrutalist border applied to the whole card.
           border: `16px solid ${FOREGROUND}`,
-          fontFamily: "sans-serif",
+          fontFamily: "Geist",
         }}
       >
         {/* Eyebrow tag: accent fill, hard offset shadow, uppercase — mirrors the hero pill. */}
@@ -74,6 +90,6 @@ export default function OpenGraphImage() {
         </div>
       </div>
     ),
-    size,
+    { ...size, fonts: [{ name: "Geist", data: geistBold, weight: 700, style: "normal" }] },
   );
 }
