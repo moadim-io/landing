@@ -41,6 +41,9 @@ jobs:
       - name: Lint (ESLint)
         run: npm run lint
 
+      - name: Lint (Stylelint)
+        run: npm run lint:css
+
       - name: Typecheck (tsc)
         # next build's own TypeScript pass only covers the app route graph, so it
         # misses files like *.test.ts (see README.md / AGENTS.md / CONTRIBUTING.md).
@@ -59,6 +62,14 @@ jobs:
         # metadata route, a public/ file that didn't get copied) — catch that on every PR, not
         # just at deploy time.
         run: npm run verify:export
+
+      - name: Validate HTML (html-validate)
+        # ESLint covers app/**/*.tsx, markdownlint covers *.md, but the actual HTML this
+        # site ships was never checked — `lint:html` (config: .htmlvalidate.json) has been
+        # documented in AGENTS.md as a pre-PR gate since it was added, but nothing ran it in
+        # CI, so a markup regression (e.g. an unclosed tag or duplicate id introduced by a
+        # generated metadata route) could reach `out/` undetected.
+        run: npm run lint:html
 
   markdown-lint:
     name: Markdown lint

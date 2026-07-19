@@ -5,8 +5,8 @@
 Moadim turns one-shot prompting into loop engineering. Each loop pairs a prompt,
 a schedule, and an agent; every tick launches that agent in an isolated
 workbench, kills hung runs, and reaps the session when it finishes. Loops fire
-from your own OS crontab — no hidden queue, no cloud — and a single install
-command registers a launchd/systemd service so they survive logout and reboot.
+from your own OS crontab — no hidden queue, no cloud. Run `moadim install` to
+register a launchd/systemd service so the daemon survives logout and reboot.
 
 Every loop is exposed three ways: as an MCP tool, as a documented REST endpoint
 (OpenAPI/Swagger UI), and through a web UI baked into the daemon. An iCal feed

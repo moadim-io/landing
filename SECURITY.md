@@ -27,7 +27,7 @@ against the live site or the latest `main`.
 public issue discloses the problem to everyone before a fix is deployed.
 
 Instead, report privately through GitHub's
-[Private Vulnerability Reporting](https://docs.github.com/en/code-security/security-advisories/guidance-on-reporting-and-writing-information-about-vulnerabilities/privately-reporting-a-security-vulnerability):
+[Private Vulnerability Reporting](https://docs.github.com/en/code-security/how-tos/report-and-fix-vulnerabilities/report-privately):
 open the repository's **Security** tab and choose **Report a vulnerability**.
 This opens a private advisory visible only to the maintainers. If you cannot use
 that channel, email **<ofek.gabay.he@gmail.com>**.
