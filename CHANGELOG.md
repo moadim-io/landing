@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- A `stylelint`/`stylelint-config-standard` gate (`npm run lint:css`) over `app/globals.css`, the repo's only hand-written CSS — catches issues like a duplicate custom-property declaration (the #236 class of bug) at lint time instead of only in review (#250, #465, #548).
+- `/version.json` build-provenance route (`app/version.json/route.ts`) exposing the live `{ commit, ref, builtAt }` at `https://moadim.io/version.json`, so a human or an automated smoke check can confirm which commit is actually serving instead of only trusting a `wrangler` upload's exit code (#230, #565).
+- Unit test covering `layout.tsx`'s Bing site-verification `metadata.verification` branch (`NEXT_PUBLIC_BING_SITE_VERIFICATION` set), closing the one branch-coverage gap `npm run test:coverage` still reported for the file (#563).
 - Unit test rendering `RootLayout` itself (not just its exported `metadata`/`viewport`/`jsonLd`), covering the `<html lang>` shell, the `banner` landmark, the wordmark link, and the Docs/GitHub nav (#557).
 - CI: an `OpenSSF Scorecard` workflow (`ossf/scorecard-action`) that continuously grades the repo's whole security posture and uploads results to the Security tab, complementing CodeQL and the dependency-review gate (#223, #550).
 - CI: wired `npm run lint:html` into `ci.yml`'s `Lint, test & build` job, so a malformed-markup regression in the built export actually fails a PR instead of only being catchable by hand (#549).
@@ -116,6 +119,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `stylelint.config.mjs` and `.stylelintrc.json` were two independently-added Stylelint configs for the same file (#465 and #548 each added one without noticing the other) — cosmiconfig only ever loaded `.stylelintrc.json`, so `stylelint.config.mjs` was dead and had silently drifted (missing the `tailwind`/`layer` `ignoreAtRules` entries the active file needed). Folded the missing entries into `.stylelintrc.json` and deleted the dead file (#573).
+- `package.json` had two `"lint:css"` script keys — one from each of #465 and #548 — which JSON silently collapsed to the last one; removed the dead duplicate (#572).
+- `CONTRIBUTING.md`'s "Submitting a change" checklist and `.github/PULL_REQUEST_TEMPLATE.md`'s checklist were missing `npm run lint:md` and `npm run lint:css`, despite `AGENTS.md` already documenting all eight pre-PR gates; `CONTRIBUTING.md`'s command table was also missing `lint:css`/`lint:html` as documented scripts (#571).
+- `README.md`'s and `AGENTS.md`'s file-by-file project-structure listings never named `app/version.json/route.ts`, unlike every other route under `app/` (#569).
+- `npm run lint` failed after running `npm run test:coverage`, since `eslint.config.mjs`'s ignores never listed the generated `coverage/` report directory (#564).
+- `.github/workflows/actionlint.yml` was the one remaining workflow step still referencing a floating Docker tag (`rhysd/actionlint:1.7.12`) instead of an immutable digest, unlike every other third-party action in the repo (#562).
+- `app/opengraph-image.tsx` (and `twitter-image.tsx`, which re-exports it) rendered in Satori's Noto Sans fallback instead of the site's Geist brand font — `next/font`'s Google Fonts loader isn't reachable from `ImageResponse`, so `fontFamily: "Geist"` had nothing backing it. Vendored a static Geist Bold TTF and passed it to Satori's `fonts` option (#556).
+- `npm ci` failed in CI (`Missing: @emnapi/runtime@1.11.2 from lock file`) after #375/#476 merged a `package-lock.json` regenerated with a newer npm than CI's Node 22 install bundles, resolving a different `wasm32-wasi` optional-dependency tree (#492).
+- `README.md`'s "Project structure" `.github/workflows/` listing never named `scorecard.yml` (added in #550) or `visual-regression.yml` (added in #561), despite both being real, currently-running CI workflows (#570).
 - `AGENTS.md` and `README.md`'s file listings never named `app/SkipLink.tsx`, despite it being rendered from `layout.tsx` since #547 (#558).
 - `CODE_OF_CONDUCT.md`'s Attribution links pointed at Contributor Covenant URLs that 301-redirect instead of their canonical destinations (#555).
 - `README.md`'s "Project structure" section still listed the removed `app/favicon.ico` instead of the actual `app/icon.svg` route (#553).

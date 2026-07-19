@@ -25,12 +25,15 @@ npm install
 | `npm run dev` | Start the local dev server with hot reload at <http://localhost:3000>. |
 | `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript + `jsx-a11y` recommended rules); fails on any warning (`--max-warnings 0`). |
 | `npm run lint:md` | Lint Markdown files with `markdownlint-cli2`. |
+| `npm run lint:css` | Lint `app/**/*.css` with Stylelint (config: [`.stylelintrc.json`](./.stylelintrc.json)); fails on any error. |
 | `npm run typecheck` | Type-check the whole project with `tsc --noEmit` (catches errors in files `next build`'s own TypeScript pass skips, e.g. `*.test.ts`). |
 | `npm test` | Run the Vitest unit/component test suite once (tests live next to the code they cover, e.g. `app/page.test.tsx`). |
 | `npm run test:watch` | Run the Vitest suite in watch mode. |
 | `npm run test:coverage` | Run the Vitest suite once with a coverage report over `app/**` (HTML report at `coverage/index.html`). |
 | `npm run build` | Produce the static export in `out/`. |
 | `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship (CI runs this after every build, before deploy). |
+| `npm run lint:html` | Validate the built `out/**/*.html` with [`html-validate`](https://html-validate.org) (config: [`.htmlvalidate.json`](./.htmlvalidate.json)). Run `npm run build` first. |
+| `npm run test:visual` | Run the Playwright visual-regression suite against the built `out/` export (run `npm run build` first). Compares homepage screenshots at mobile/desktop viewports against the committed baselines in `e2e/visual.spec.ts-snapshots/`. Update baselines after an intentional visual change with `npm run test:visual -- --update-snapshots`. Only the `-linux` baselines are committed (CI runs on `ubuntu-latest`) — on macOS or Windows this fails on the first run with "A snapshot doesn't exist" since no `-darwin`/`-win32` baseline exists yet; that's expected, not a regression. Run the same `--update-snapshots` command once to generate a local baseline (safe to leave uncommitted). |
 | `npm run start` | Serve the production build locally. |
 | `actionlint` | Lint `.github/workflows/**` YAML (and embedded shell via shellcheck). Install via `brew install actionlint` or see the [actionlint releases](https://github.com/rhysd/actionlint/releases). |
 | `typos` | Spell-check `app/**`, `*.md`, and config files (config: [`_typos.toml`](./_typos.toml)). Install via `cargo install typos-cli` or `brew install typos-cli`, then run `typos` from the repo root. |
@@ -45,11 +48,14 @@ landing content, `globals.css` for styles). Static assets go in `public/`.
 
    ```bash
    npm run lint
+   npm run lint:md
+   npm run lint:css
    npm run typecheck
    npm test
    npm run build
    npm run verify:export
    npm run lint:html
+   npm run test:visual
    ```
 
 3. If your change touches shipped code (`app/`, `scripts/`, config, etc. —
