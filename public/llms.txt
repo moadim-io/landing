@@ -1,6 +1,6 @@
 # Moadim
 
-> Open-source loop engine for AI agents. Define a loop — a prompt, a schedule, and an agent (Claude, Codex, or Hermes) — and Moadim runs it against your repo on every tick, in a fresh isolated workbench, with a watchdog on every run.
+> Open-source loop engine for AI agents. Define a loop — a prompt, a schedule, and an agent (Claude, Codex, Hermes, or Pi) — and Moadim runs it against your repo on every tick, in a fresh isolated workbench, with a watchdog on every run.
 
 Moadim turns one-shot prompting into loop engineering. Each loop pairs a prompt,
 a schedule, and an agent; every tick launches that agent in an isolated

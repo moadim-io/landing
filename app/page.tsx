@@ -7,7 +7,7 @@ const features = [
   {
     tag: "01",
     title: "A loop runs an agent",
-    body: "A loop pairs a prompt, a schedule, and an agent — Claude, Codex, or Hermes. Each tick launches it in a fresh, isolated workbench, kills hung runs, and reaps the session when it's done.",
+    body: "A loop pairs a prompt, a schedule, and an agent — Claude, Codex, Hermes, or Pi. Each tick launches it in a fresh, isolated workbench, kills hung runs, and reaps the session when it's done.",
   },
   {
     tag: "02",
@@ -58,7 +58,7 @@ const faqs = [
   },
   {
     q: "Which agents does it support?",
-    a: "Claude, Codex, and Hermes today. Each loop names the agent it runs, and Moadim launches it for you on every tick.",
+    a: "Claude, Codex, Hermes, and Pi today. Each loop names the agent it runs, and Moadim launches it for you on every tick.",
   },
   {
     q: "Which operating systems are supported?",
@@ -120,8 +120,8 @@ export default function Home() {
           </h1>
           <p className="mt-6 max-w-2xl text-lg font-medium leading-7 sm:text-xl">
             Moadim is a loop engine for AI agents. Define a loop — a prompt, a
-            schedule, an agent — and it runs Claude, Codex, or Hermes against
-            your repo on every tick, in an isolated workbench, with a watchdog on
+            schedule, an agent — and it runs Claude, Codex, Hermes, or Pi
+            against your repo on every tick, in an isolated workbench, with a watchdog on
             every run. Loop engineering, not prompting by hand.
           </p>
         </header>

@@ -118,6 +118,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- The "which agents does it support" copy (hero, feature card 01, the FAQ answer, `SITE_DESCRIPTION`, `public/llms.txt`, and `README.md`) listed only Claude, Codex, and Hermes — the daemon has shipped a fourth built-in agent, Pi, for a while, so the landing page undersold what the product actually supports.
 - `stylelint.config.mjs` and `.stylelintrc.json` were two independently-added Stylelint configs for the same file (#465 and #548 each added one without noticing the other) — cosmiconfig only ever loaded `.stylelintrc.json`, so `stylelint.config.mjs` was dead and had silently drifted (missing the `tailwind`/`layer` `ignoreAtRules` entries the active file needed). Folded the missing entries into `.stylelintrc.json` and deleted the dead file (#573).
 - `package.json` had two `"lint:css"` script keys — one from each of #465 and #548 — which JSON silently collapsed to the last one; removed the dead duplicate (#572).
 - `CONTRIBUTING.md`'s "Submitting a change" checklist and `.github/PULL_REQUEST_TEMPLATE.md`'s checklist were missing `npm run lint:md` and `npm run lint:css`, despite `AGENTS.md` already documenting all eight pre-PR gates; `CONTRIBUTING.md`'s command table was also missing `lint:css`/`lint:html` as documented scripts (#571).
