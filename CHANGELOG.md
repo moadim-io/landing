@@ -118,6 +118,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `layout.tsx`'s `SoftwareApplication` JSON-LD (`sameAs`, `codeRepository`, `downloadUrl`) hardcoded the GitHub/crates.io URLs as literal strings instead of importing `REPO_URL`/`CRATE_URL` from `site.ts` — the single source of truth `site.ts` itself documents these constants as being for, so a repo move or crate rename would have silently left stale URLs in the structured data with no test to catch it.
 - The "which agents does it support" copy (hero, feature card 01, the FAQ answer, `SITE_DESCRIPTION`, `public/llms.txt`, and `README.md`) listed only Claude, Codex, and Hermes — the daemon has shipped a fourth built-in agent, Pi, for a while, so the landing page undersold what the product actually supports.
 - `stylelint.config.mjs` and `.stylelintrc.json` were two independently-added Stylelint configs for the same file (#465 and #548 each added one without noticing the other) — cosmiconfig only ever loaded `.stylelintrc.json`, so `stylelint.config.mjs` was dead and had silently drifted (missing the `tailwind`/`layer` `ignoreAtRules` entries the active file needed). Folded the missing entries into `.stylelintrc.json` and deleted the dead file (#573).
 - `package.json` had two `"lint:css"` script keys — one from each of #465 and #548 — which JSON silently collapsed to the last one; removed the dead duplicate (#572).
