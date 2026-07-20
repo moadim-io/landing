@@ -4,6 +4,11 @@ on:
   pull_request:
   push:
     branches: [main]
+  # Lets a maintainer re-run lint/test/build against any branch on demand —
+  # e.g. after a flaky/transient failure, or to sanity-check a branch before
+  # opening a PR — without pushing an empty commit. Mirrors the pattern
+  # already used by deploy.yml and link-check.yml.
+  workflow_dispatch:
 
 # Cancel a stale run when a PR gets a new push, so a superseded npm
 # install/lint/build doesn't keep holding a runner after it's been
