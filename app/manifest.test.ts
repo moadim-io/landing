@@ -61,4 +61,25 @@ describe("manifest", () => {
     expect(icon.src).toBe("/icon.svg");
     expect(icon.type).toBe("image/svg+xml");
   });
+
+  it("declares a maskable icon so Android crops it as an adaptive icon instead of padding it", () => {
+    // Without a `purpose: "maskable"` entry, Android falls back to inset-ing
+    // the `purpose: "any"` icon onto a plain system-color circle instead of
+    // treating it as full-bleed, cropped-safe artwork. Both entries point at
+    // the same /icon.svg on purpose (see manifest.ts's comment): its glyph
+    // already sits inside the maskable safe zone, so no second asset is
+    // needed.
+    const icons = manifest().icons ?? [];
+
+    const anyIcon = icons.find((icon) => icon.purpose === "any");
+    const maskableIcon = icons.find((icon) => icon.purpose === "maskable");
+    if (!anyIcon || !maskableIcon) {
+      throw new Error(
+        `manifest() must declare both an "any" and a "maskable" icon, got: ${JSON.stringify(icons)}`,
+      );
+    }
+
+    expect(anyIcon.src).toBe("/icon.svg");
+    expect(maskableIcon.src).toBe("/icon.svg");
+  });
 });
