@@ -249,4 +249,31 @@ describe("FAQ section", () => {
     expect(faqJsonLd["@context"]).toBe("https://schema.org");
     expect(faqJsonLd.mainEntity.length).toBeGreaterThan(0);
   });
+
+  // #186: the page explained what Moadim is but never why it beats the
+  // scheduling tools a visitor already reaches for. Guards that the
+  // comparison table renders as an actual accessible <table> (row headers,
+  // not just visually-styled <div>s) and covers Moadim's own column.
+  it("positions Moadim against cron/GitHub Actions in an accessible table", () => {
+    render(<Home />);
+
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: /why a loop engine, not a cron line\?/i,
+      }),
+    ).toBeInTheDocument();
+
+    const table = screen.getByRole("table");
+    expect(
+      screen.getByRole("columnheader", { name: /os cron/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("columnheader", { name: /github actions/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("rowheader", { name: /agent-native/i }),
+    ).toBeInTheDocument();
+    expect(table).toHaveTextContent(/runs claude, codex, or hermes natively/i);
+  });
 });

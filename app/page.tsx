@@ -27,6 +27,44 @@ const features = [
   },
 ];
 
+// Positions Moadim against the scheduling tools a visitor already reaches
+// for, reusing only facts stated elsewhere on this page (features grid, hero,
+// FAQ) — no new product claims. See #186: the page explained *what* Moadim is
+// but never *why it beats a cron line*, the first objection a scheduling-savvy
+// visitor has.
+const comparisons = [
+  {
+    axis: "Agent-native",
+    cron: "No — hand-rolled scripts",
+    actions: "No — hand-rolled scripts",
+    moadim: "Runs Claude, Codex, or Hermes natively",
+  },
+  {
+    axis: "Isolated run",
+    cron: "No — shares your shell/env",
+    actions: "Yes, but a fresh runner per workflow, not per tick",
+    moadim: "Fresh workbench every tick",
+  },
+  {
+    axis: "Hung-run watchdog",
+    cron: "No",
+    actions: "Job timeout only",
+    moadim: "Watchdog kills hung runs automatically",
+  },
+  {
+    axis: "Local / offline",
+    cron: "Yes",
+    actions: "No — needs a GitHub-hosted or self-hosted runner",
+    moadim: "Yes — runs entirely on your machine",
+  },
+  {
+    axis: "Interfaces",
+    cron: "None",
+    actions: "GitHub UI/API only",
+    moadim: "UI · REST · MCP, one port",
+  },
+];
+
 const loopEngineeringReads = [
   {
     source: "MindStudio",
@@ -274,6 +312,61 @@ export default function Home() {
               </li>
             ))}
           </ul>
+        </section>
+
+        <section className={panel} aria-labelledby="comparison-heading">
+          <h2
+            id="comparison-heading"
+            className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent"
+          >
+            Why a loop engine, not a cron line?
+          </h2>
+          {/* overflow-x-auto keeps the table itself unscaled (no cramped
+              cells) on narrow viewports — it scrolls inside its own box
+              instead of forcing the page to. */}
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[560px] border-collapse text-left text-sm">
+              <caption className="sr-only">
+                Moadim compared with a plain OS cron job and a GitHub Actions
+                scheduled workflow
+              </caption>
+              <thead>
+                <tr className="border-b-4 border-black">
+                  <th scope="col" className="p-4 font-black uppercase">
+                    &nbsp;
+                  </th>
+                  <th scope="col" className="p-4 font-black uppercase">
+                    OS cron
+                  </th>
+                  <th scope="col" className="p-4 font-black uppercase">
+                    GitHub Actions (cron)
+                  </th>
+                  <th scope="col" className="bg-accent p-4 font-black uppercase">
+                    Moadim
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {comparisons.map((row, i) => (
+                  <tr
+                    key={row.axis}
+                    className={
+                      i < comparisons.length - 1 ? "border-b-2 border-black/15" : ""
+                    }
+                  >
+                    <th scope="row" className="p-4 font-black leading-6">
+                      {row.axis}
+                    </th>
+                    <td className="p-4 leading-6">{row.cron}</td>
+                    <td className="p-4 leading-6">{row.actions}</td>
+                    <td className="bg-accent/10 p-4 font-bold leading-6">
+                      {row.moadim}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </section>
 
         <section className={panel} aria-labelledby="reads-heading">
