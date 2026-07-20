@@ -118,6 +118,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Added an npm `overrides` entry pinning `postcss` to `^8.5.10`, so `next`'s internal build-time copy (previously stuck on the vulnerable `8.4.31`) dedupes to the same patched version already used by `@tailwindcss/postcss` and `vite`, closing the `</style>`-breakout XSS advisory (GHSA-qx2v-qp2m-jg93).
 - `stylelint.config.mjs` and `.stylelintrc.json` were two independently-added Stylelint configs for the same file (#465 and #548 each added one without noticing the other) — cosmiconfig only ever loaded `.stylelintrc.json`, so `stylelint.config.mjs` was dead and had silently drifted (missing the `tailwind`/`layer` `ignoreAtRules` entries the active file needed). Folded the missing entries into `.stylelintrc.json` and deleted the dead file (#573).
 - `package.json` had two `"lint:css"` script keys — one from each of #465 and #548 — which JSON silently collapsed to the last one; removed the dead duplicate (#572).
 - `CONTRIBUTING.md`'s "Submitting a change" checklist and `.github/PULL_REQUEST_TEMPLATE.md`'s checklist were missing `npm run lint:md` and `npm run lint:css`, despite `AGENTS.md` already documenting all eight pre-PR gates; `CONTRIBUTING.md`'s command table was also missing `lint:css`/`lint:html` as documented scripts (#571).
