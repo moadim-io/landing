@@ -32,7 +32,7 @@
     "verify:export": "node scripts/verify-export.mjs"
   },
   "dependencies": {
-    "next": "16.2.10",
+    "next": "16.2.11",
     "react": "19.2.7",
     "react-dom": "19.2.7"
   },
@@ -47,7 +47,7 @@
     "@vitejs/plugin-react": "^6.0.3",
     "@vitest/coverage-v8": "^4.1.9",
     "eslint": "^9",
-    "eslint-config-next": "16.2.10",
+    "eslint-config-next": "16.2.11",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "html-validate": "^11.5.5",
     "jsdom": "^29.1.1",
