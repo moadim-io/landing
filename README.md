@@ -92,6 +92,10 @@ test/
 scripts/
   verify-export.mjs     Checks the built out/ directory for required routes/files (see
                          `npm run verify:export`).
+e2e/
+  visual.spec.ts         Playwright visual-regression suite (see `npm run test:visual` above).
+  visual.spec.ts-snapshots/  Committed `-linux` baseline screenshots the suite diffs against.
+playwright.config.ts     Playwright config for the visual-regression suite (builds against `out/`).
 next.config.test.ts      Guards next.config.ts's static-export invariants against drift.
 deploy-config.test.ts    Guards public/_headers and public/_redirects against malformed rules.
 node-version.test.ts     Guards .nvmrc, package.json engines.node, and CONTRIBUTING.md against drift.
