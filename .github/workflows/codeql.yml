@@ -8,6 +8,10 @@ on:
   schedule:
     # Weekly sweep to catch newly-published query rules against unchanged code.
     - cron: "17 3 * * 1"
+  # Lets a maintainer kick off an ad hoc scan (e.g. right after adding a new
+  # query pack) instead of waiting for the next push or the weekly schedule.
+  # Mirrors the pattern already used by deploy.yml and link-check.yml.
+  workflow_dispatch:
 
 # Cancel a stale analysis when a PR gets a new push, mirroring ci.yml.
 concurrency:
