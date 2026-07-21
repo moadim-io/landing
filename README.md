@@ -167,6 +167,10 @@ When a variable is set, the build renders the matching `<meta>` tag into the sta
 when unset, no tag is emitted. These tokens are public (non-secret) identifiers — set them in
 the deploy build environment rather than committing them.
 
+To try one locally, copy [`.env.example`](./.env.example) to `.env.local`, fill in the token,
+and restart `npm run dev` or `npm run build` — Next.js loads `.env.local` automatically and
+it's git-ignored, so the value never gets committed.
+
 ## Security
 
 Found a vulnerability in the site or its build pipeline? Please report it
