@@ -58,7 +58,13 @@ const faqs = [
   },
   {
     q: "Which agents does it support?",
-    a: "Claude, Codex, Hermes, and Pi today. Each loop names the agent it runs, and Moadim launches it for you on every tick.",
+    // The built-in Claude agent's python3 requirement is easy to miss: the
+    // daemon's own README documents it as a silent-failure trap (setup step
+    // no-ops without an error if python3 isn't on PATH) surfaced only via a
+    // startup log line and GET /api/v1/health's dependencies.python3 flag —
+    // this on-page answer says so up front instead of leaving visitors to
+    // debug a routine that never runs.
+    a: "Claude, Codex, Hermes, and Pi today. Each loop names the agent it runs, and Moadim launches it for you on every tick. The built-in Claude agent additionally needs python3 on your PATH — its unattended setup step uses it to pre-seed trust and MCP-approval state, and without it Claude runs silently no-op.",
   },
   {
     q: "Which operating systems are supported?",
