@@ -7,7 +7,7 @@ const features = [
   {
     tag: "01",
     title: "A loop runs an agent",
-    body: "A loop pairs a prompt, a schedule, and an agent — Claude, Codex, or Hermes. Each tick launches it in a fresh, isolated workbench, kills hung runs, and reaps the session when it's done.",
+    body: "A loop pairs a prompt, a schedule, and an agent — Claude, Codex, Hermes, or Pi. Each tick launches it in a fresh, isolated workbench, kills hung runs, and reaps the session when it's done.",
   },
   {
     tag: "02",
@@ -58,7 +58,7 @@ const faqs = [
   },
   {
     q: "Which agents does it support?",
-    a: "Claude, Codex, and Hermes today. Each loop names the agent it runs, and Moadim launches it for you on every tick.",
+    a: "Claude, Codex, Hermes, and Pi today. Each loop names the agent it runs, and Moadim launches it for you on every tick.",
   },
   {
     q: "Which operating systems are supported?",
@@ -104,12 +104,29 @@ export const ctaButton =
 // for the same export-for-reuse precedent).
 export const panel = "border-4 border-black bg-white shadow-brutal-lg";
 
+// Shared eyebrow-pill tag styling — the small uppercase accent label sitting
+// above a heading (this page's "Open source · Loop engine", and error.tsx/
+// not-found.tsx's "Error"/"Error 404"). Extracted so the three copies can't
+// drift apart; each call site appends only its own margin.
+export const eyebrowPill =
+  "inline-block border-2 border-black bg-accent px-3 py-1 text-xs font-bold uppercase tracking-[0.2em]";
+
+// Shared "centered status off-ramp" chrome worn by error.tsx and
+// not-found.tsx — the outer centering wrapper, the `panel`-based card frame,
+// and the body copy under the heading. Extracted (mirroring `panel`/
+// `ctaButton` above) so the two off-ramps, which are meant to look identical
+// apart from their heading/copy, can't silently drift apart.
+export const statusCardWrapper =
+  "flex flex-1 flex-col items-center justify-center px-4 py-10 sm:px-8 sm:py-16";
+export const statusCard = `${panel} flex w-full max-w-2xl flex-col items-center gap-8 p-8 text-center sm:p-12`;
+export const statusBody = "max-w-md text-lg font-medium leading-7";
+
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col items-center px-4 py-10 sm:px-8 sm:py-16">
-      <main className="flex w-full max-w-4xl flex-1 flex-col gap-10">
+      <main id="main" className="flex w-full max-w-4xl flex-1 flex-col gap-10">
         <header className={`${panel} p-6 sm:p-10`}>
-          <p className="mb-6 inline-block border-2 border-black bg-accent px-3 py-1 text-xs font-bold uppercase tracking-[0.2em]">
+          <p className={`${eyebrowPill} mb-6`}>
             Open source · Loop engine
           </p>
           <h1 className="text-4xl font-black uppercase leading-[0.95] tracking-tight sm:text-6xl">
@@ -120,8 +137,8 @@ export default function Home() {
           </h1>
           <p className="mt-6 max-w-2xl text-lg font-medium leading-7 sm:text-xl">
             Moadim is a loop engine for AI agents. Define a loop — a prompt, a
-            schedule, an agent — and it runs Claude, Codex, or Hermes against
-            your repo on every tick, in an isolated workbench, with a watchdog on
+            schedule, an agent — and it runs Claude, Codex, Hermes, or Pi
+            against your repo on every tick, in an isolated workbench, with a watchdog on
             every run. Loop engineering, not prompting by hand.
           </p>
         </header>
@@ -194,13 +211,28 @@ export default function Home() {
                 build time). next/image needs a configured remote loader for
                 arbitrary external hosts, which isn't worth wiring up for one
                 badge image, so this is a deliberate exception to the
-                next/no-img-element rule. See #183. */}
+                next/no-img-element rule. See #183.
+
+                `fetchPriority="low"` opts this <img> out of React DOM's
+                automatic image preloading (any eager <img> without it gets a
+                `<link rel="preload" as="image" fetchpriority="high">` hoisted
+                into <head> - see react-dom's `pushImg` in
+                react-dom-server.edge.development.js). That auto-preload spends
+                the page's earliest, highest-priority network slot on a
+                decorative third-party (img.shields.io) badge - a fresh
+                DNS+TLS negotiation racing the self-hosted Geist fonts and
+                critical CSS for bandwidth - for an image that isn't the LCP
+                candidate (the hero heading text is). Marking it low-priority
+                keeps it eager (no loading="lazy" layout-shift risk, since it's
+                in the initial viewport) while telling the browser/React it
+                can wait behind what actually matters for first paint. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={`https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`}
               alt="moadim version on crates.io"
               width={104}
               height={20}
+              fetchPriority="low"
             />
           </ExternalLink>
         </div>

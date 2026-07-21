@@ -27,12 +27,16 @@ This version has breaking changes — APIs, conventions, and file structure may 
 | `npm run typecheck` | `tsc --noEmit` over the whole project — catches errors in files `next build`'s own TypeScript pass skips, e.g. `*.test.ts`. |
 | `npm run test` | Vitest unit/component tests (`*.test.ts`/`*.test.tsx` next to the code they cover). |
 | `npm run test:watch` | Vitest in watch mode. |
+| `npm run test:coverage` | Vitest with a `text`/`html`/`json-summary` coverage report over `app/**` (HTML report at `coverage/index.html`). Enforces the coverage thresholds in `vitest.config.ts` — this is what CI runs, not plain `test`. |
 | `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship. Requires `npm run build` first. |
 | `npm run lint:html` | Validate `out/**/*.html` with `html-validate` (config: `.htmlvalidate.json`). Requires `npm run build` first. |
+| `npm run lint:css` | Lint `app/**/*.css` with Stylelint (config: `.stylelintrc.json`). |
+| `npm run test:visual` | Playwright visual-regression suite against the built `out/` export: compares mobile/desktop screenshots against the committed baselines in `e2e/visual.spec.ts-snapshots/`. Requires `npm run build` first; update baselines with `npm run test:visual -- --update-snapshots`. Only the `-linux` baselines are committed (matching CI's `ubuntu-latest` runner) — running this on macOS or Windows fails on the very first run with "A snapshot doesn't exist", not a real regression, since no `-darwin`/`-win32` baseline exists yet; generate one locally with the same `--update-snapshots` flag (safe to leave uncommitted). |
 
-Before opening a PR, make sure `npm run lint`, `npm run lint:md`, `npm run typecheck`,
-`npm run test`, `npm run build`, `npm run verify:export`, **and** `npm run lint:html` all
-pass — the build is the real gate, since static export surfaces errors `dev` tolerates.
+Before opening a PR, make sure `npm run lint`, `npm run lint:md`, `npm run lint:css`,
+`npm run typecheck`, `npm run test:coverage`, `npm run build`, `npm run verify:export`,
+`npm run lint:html`, **and** `npm run test:visual` all pass — the build is the real gate,
+since static export surfaces errors `dev` tolerates.
 
 ## Static-export constraint (read before adding features)
 
@@ -79,6 +83,7 @@ app/
   not-found.tsx         Branded 404 route (statically prerendered).
   error.tsx             Branded error boundary for errors thrown inside the root layout's children (the "Try again" screen for the rest of the app).
   global-error.tsx      Root-layout error boundary — supplies its own <html>/<body> for the rare case where the root layout itself throws.
+  SkipLink.tsx          Visually-hidden "Skip to content" link, focusable first so keyboard/screen-reader users can bypass the repeated header (WCAG 2.4.1).
   ExternalLink.tsx      Outbound (new-tab) link wrapper — use it for any link that leaves the site, not a raw `<a target="_blank">`.
   JsonLdScript.tsx      Escapes and inlines JSON-LD structured data as a `<script>` tag — route any new JSON-LD through this instead of `dangerouslySetInnerHTML` directly.
   LoopAnimation.tsx     Thin wrapper embedding the animated loop diagram. The drawing itself lives in `public/loop-animation.svg` — the single source of truth, also hotlinked from READMEs; edit that file, not this one, to change the diagram (a test guards its palette against globals.css).
@@ -92,5 +97,7 @@ app/
   twitter-image.tsx     Generated Twitter card.
   sitemap.ts            /sitemap.xml (force-static).
   robots.ts             /robots.txt (force-static).
+  version.json/route.ts /version.json — build provenance (commit/ref/build time), populated by
+                         deploy.yml from GITHUB_SHA/GITHUB_REF_NAME; falls back to "dev" locally.
 public/                 Static assets served at the site root.
 ```

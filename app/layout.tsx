@@ -2,9 +2,17 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SITE_URL, REPO_URL, ORG_URL, SITE_TITLE, SITE_DESCRIPTION } from "./site";
+import {
+  SITE_URL,
+  REPO_URL,
+  ORG_URL,
+  CRATE_URL,
+  SITE_TITLE,
+  SITE_DESCRIPTION,
+} from "./site";
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
+import { SkipLink } from "./SkipLink";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -147,16 +155,13 @@ const softwareApplication = {
   // search engines surface the app for an unsupported platform.
   operatingSystem: "macOS, Linux",
   description: SITE_DESCRIPTION,
-  sameAs: [
-    "https://github.com/moadim-io/daemon",
-    "https://crates.io/crates/moadim",
-  ],
+  sameAs: [REPO_URL, CRATE_URL],
   license: "https://opensource.org/licenses/MIT",
   // Static export emits this route as `opengraph-image` with no extension (see
   // `scripts/verify-export.mjs`) — the hardcoded ".png" 404'd in production.
   image: `${SITE_URL}/opengraph-image`,
-  codeRepository: "https://github.com/moadim-io/daemon",
-  downloadUrl: "https://crates.io/crates/moadim",
+  codeRepository: REPO_URL,
+  downloadUrl: CRATE_URL,
   offers: {
     "@type": "Offer",
     price: "0",
@@ -184,6 +189,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <SkipLink />
         <JsonLdScript data={jsonLd} />
         {/* Site banner landmark: gives assistive-tech users a top-level `banner`
             region to land on, plus a persistent Moadim wordmark for brand

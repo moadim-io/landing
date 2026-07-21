@@ -1,6 +1,7 @@
-import { describe, expect, it } from "vitest";
-import { jsonLd, metadata, viewport } from "./layout";
-import { ORG_URL, SITE_URL } from "./site";
+import { render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import RootLayout, { jsonLd, metadata, viewport } from "./layout";
+import { ORG_URL, REPO_URL, CRATE_URL, SITE_URL } from "./site";
 
 describe("root layout metadata", () => {
   it("declares the expected title and description", () => {
@@ -73,6 +74,35 @@ describe("root layout metadata", () => {
     // "moadim-io/daemon" into tap-to-call `tel:` links.
     expect(metadata.formatDetection).toEqual({ telephone: false });
   });
+
+  it("omits the Bing verification tag when its token is unset", () => {
+    // The default test env has no NEXT_PUBLIC_BING_SITE_VERIFICATION, so
+    // `metadata` (imported once, above) already reflects the unconfigured case.
+    expect(metadata.verification).toEqual({ google: undefined });
+  });
+});
+
+describe("root layout Bing site verification", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.resetModules();
+  });
+
+  it("emits the Bing verification tag when its token is set at build time", async () => {
+    // `googleSiteVerification`/`bingSiteVerification` are read from
+    // `process.env` at module load, so exercising the "token is set" branch
+    // requires stubbing the env and re-importing a fresh module instance —
+    // the `metadata` imported at the top of this file was already evaluated
+    // with the token unset.
+    vi.stubEnv("NEXT_PUBLIC_BING_SITE_VERIFICATION", "bing-token-123");
+    vi.resetModules();
+    const { metadata: metadataWithBingToken } = await import("./layout");
+
+    expect(metadataWithBingToken.verification).toEqual({
+      google: undefined,
+      other: { "msvalidate.01": "bing-token-123" },
+    });
+  });
 });
 
 describe("root layout viewport", () => {
@@ -119,9 +149,89 @@ describe("root layout JSON-LD", () => {
     expect(organization.sameAs).toEqual([ORG_URL]);
   });
 
+  it("points the SoftwareApplication node at the product's real distribution channels", () => {
+    // Regression guard: these must come from site.ts's REPO_URL/CRATE_URL, not hardcoded
+    // literals — a repo move or crate rename would otherwise silently leave stale URLs
+    // here with no test failure to catch it.
+    expect(softwareApplication.sameAs).toEqual([REPO_URL, CRATE_URL]);
+    expect(softwareApplication.codeRepository).toBe(REPO_URL);
+    expect(softwareApplication.downloadUrl).toBe(CRATE_URL);
+  });
+
   it("declares a WebSite node with the site name and canonical URL", () => {
     expect(website["@type"]).toBe("WebSite");
     expect(website.name).toBe("Moadim");
     expect(website.url).toBe(SITE_URL);
+  });
+});
+
+// The rest of this file only ever imports RootLayout's exported metadata/
+// jsonLd/viewport objects — the component itself (the <html>/<body> shell,
+// the banner landmark, the wordmark link, and the Docs/GitHub nav) had no
+// render coverage, so a regression there (a dropped landmark, a broken nav
+// href, {children} no longer rendering) could pass CI undetected.
+describe("root layout render", () => {
+  it("renders the html element in English", () => {
+    render(
+      <RootLayout>
+        <p>page content</p>
+      </RootLayout>,
+    );
+
+    expect(document.documentElement.lang).toBe("en");
+  });
+
+  it("gives assistive tech a banner landmark with a link back home", () => {
+    render(
+      <RootLayout>
+        <p>page content</p>
+      </RootLayout>,
+    );
+
+    const homeLink = screen.getByRole("link", { name: "Moadim home" });
+    // <header> only exposes the implicit `banner` landmark role when it
+    // isn't nested inside <main>/<article>/etc. — querying by that role
+    // (not just the <header> tag) guards against that silently changing.
+    expect(screen.getByRole("banner")).toContainElement(homeLink);
+    expect(homeLink).toHaveAttribute("href", "/");
+  });
+
+  it("links Docs and GitHub to the daemon repo as safe outbound links", () => {
+    render(
+      <RootLayout>
+        <p>page content</p>
+      </RootLayout>,
+    );
+
+    const docsLink = screen.getByRole("link", { name: /docs/i });
+    expect(docsLink).toHaveAttribute("href", `${REPO_URL}#readme`);
+    expect(docsLink).toHaveAttribute("target", "_blank");
+    expect(docsLink).toHaveAttribute("rel", "noopener noreferrer");
+
+    const githubLink = screen.getByRole("link", { name: /^github/i });
+    expect(githubLink).toHaveAttribute("href", REPO_URL);
+    expect(githubLink).toHaveAttribute("target", "_blank");
+  });
+
+  it("renders the skip-to-content link", () => {
+    render(
+      <RootLayout>
+        <p>page content</p>
+      </RootLayout>,
+    );
+
+    expect(
+      screen.getByRole("link", { name: /skip to content/i }),
+    ).toHaveAttribute("href", "#main");
+  });
+
+  it("renders its children", () => {
+    render(
+      <RootLayout>
+        <p>page content</p>
+      </RootLayout>,
+    );
+
+    expect(screen.getByText("page content")).toBeInTheDocument();
   });
 });
