@@ -170,7 +170,7 @@ describe("Home", () => {
   it("renders the loop-engineering reading list as safe, nofollow external links", () => {
     render(<Home />);
 
-    const reads: Array<[source: string, href: string]> = [
+    const reads: [source: string, href: string][] = [
       [
         "mindstudio",
         "https://www.mindstudio.ai/blog/what-is-loop-engineering-ai-coding-agents",
@@ -236,10 +236,10 @@ describe("FAQ section", () => {
     jsonLd.mainEntity.forEach(
       (
         entry: { name: string; acceptedAnswer: { text: string } },
-        i: number,
+        index: number,
       ) => {
-        expect(dtElements[i]).toHaveTextContent(entry.name);
-        expect(ddElements[i]).toHaveTextContent(entry.acceptedAnswer.text);
+        expect(dtElements[index]).toHaveTextContent(entry.name);
+        expect(ddElements[index]).toHaveTextContent(entry.acceptedAnswer.text);
       },
     );
   });
