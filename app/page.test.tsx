@@ -198,6 +198,17 @@ describe("Home", () => {
 });
 
 describe("FAQ section", () => {
+  // The built-in Claude agent silently no-ops a run if python3 isn't on
+  // PATH (see the daemon README's "Built-in claude agent prerequisites") —
+  // easy to miss since nothing in the hero/install card mentions it. Assert
+  // the FAQ answer actually says so, so a future copy edit can't silently
+  // drop the one on-page place this trap is documented.
+  it("flags the built-in Claude agent's python3 prerequisite", () => {
+    render(<Home />);
+
+    expect(screen.getByText(/python3/i)).toBeInTheDocument();
+  });
+
   it("renders every FAQ question and answer as a definition-list pair", () => {
     render(<Home />);
 
