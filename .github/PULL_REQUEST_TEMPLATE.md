@@ -14,7 +14,7 @@
 - [ ] `npm run lint:md` passes
 - [ ] `npm run lint:css` passes
 - [ ] `npm run typecheck` passes
-- [ ] `npm test` passes
+- [ ] `npm run test:coverage` passes
 - [ ] `npm run build` passes
 - [ ] `npm run verify:export` passes
 - [ ] `npm run lint:html` passes
