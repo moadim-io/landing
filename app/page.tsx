@@ -269,11 +269,11 @@ export default function Home() {
               so the rule is disabled for this one, deliberate case. */}
           {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
           <ul className={`${panel} grid gap-0 sm:grid-cols-3`} role="list">
-            {features.map((feature, i) => (
+            {features.map((feature, index) => (
               <li
                 key={feature.title}
                 className={`flex flex-col gap-3 p-6 ${
-                  i < features.length - 1
+                  index < features.length - 1
                     ? "border-b-4 border-black sm:border-b-0 sm:border-r-4"
                     : ""
                 }`}
@@ -304,11 +304,11 @@ export default function Home() {
               matching lint disable) is needed. */}
           {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
           <ul className="flex flex-col" role="list">
-            {loopEngineeringReads.map((read, i) => (
+            {loopEngineeringReads.map((read, index) => (
               <li
                 key={read.href}
                 className={
-                  i < loopEngineeringReads.length - 1
+                  index < loopEngineeringReads.length - 1
                     ? "border-b-2 border-black/15"
                     : ""
                 }
@@ -345,11 +345,11 @@ export default function Home() {
             FAQ
           </h2>
           <dl className="flex flex-col">
-            {faqs.map((faq, i) => (
+            {faqs.map((faq, index) => (
               <div
                 key={faq.q}
                 className={`flex flex-col gap-2 px-6 py-5 ${
-                  i < faqs.length - 1 ? "border-b-2 border-black/15" : ""
+                  index < faqs.length - 1 ? "border-b-2 border-black/15" : ""
                 }`}
               >
                 <dt className="text-base font-black uppercase leading-tight">
