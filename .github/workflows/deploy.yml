@@ -83,7 +83,17 @@ jobs:
 
       - name: Build static export
         timeout-minutes: 5
-        run: npm run build
+        # app/version.json/route.ts reads these to answer "what commit is actually
+        # live" (see README's "Confirming what's live"). Without them the build
+        # falls back to its local default ("dev") in production too, silently
+        # defeating the whole point of the route.
+        env:
+          NEXT_PUBLIC_BUILD_COMMIT: ${{ github.sha }}
+          NEXT_PUBLIC_BUILD_REF: ${{ github.ref_name }}
+        run: |
+          NEXT_PUBLIC_BUILD_TIME="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          export NEXT_PUBLIC_BUILD_TIME
+          npm run build
 
       - name: Verify static export
         # A green `next build` can still emit an incomplete out/ (a dropped route, a no-op
@@ -150,7 +160,18 @@ jobs:
 
       - name: Build static export
         timeout-minutes: 5
-        run: npm run build
+        # Same provenance env vars as the production `deploy` job above, so a
+        # preview build's /version.json also reflects the PR it was built from
+        # instead of always reporting "dev". `head.sha`/`head_ref` (not
+        # `github.sha`/`github.ref_name`) because on `pull_request` those refer
+        # to the synthetic merge commit/ref, not the PR's actual branch tip.
+        env:
+          NEXT_PUBLIC_BUILD_COMMIT: ${{ github.event.pull_request.head.sha }}
+          NEXT_PUBLIC_BUILD_REF: ${{ github.head_ref }}
+        run: |
+          NEXT_PUBLIC_BUILD_TIME="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          export NEXT_PUBLIC_BUILD_TIME
+          npm run build
 
       - name: Verify static export
         run: npm run verify:export
