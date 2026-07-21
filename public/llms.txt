@@ -1,0 +1,33 @@
+# Moadim
+
+> Open-source loop engine for AI agents. Define a loop — a prompt, a schedule, and an agent (Claude, Codex, Hermes, or Pi) — and Moadim runs it against your repo on every tick, in a fresh isolated workbench, with a watchdog on every run.
+
+Moadim turns one-shot prompting into loop engineering. Each loop pairs a prompt,
+a schedule, and an agent; every tick launches that agent in an isolated
+workbench, kills hung runs, and reaps the session when it finishes. Loops fire
+from your own OS crontab — no hidden queue, no cloud. Run `moadim install` to
+register a launchd/systemd service so the daemon survives logout and reboot.
+
+Every loop is exposed three ways: as an MCP tool, as a documented REST endpoint
+(OpenAPI/Swagger UI), and through a web UI baked into the daemon. An iCal feed
+publishes upcoming runs.
+
+Install: `cargo install --locked moadim`, then run `moadim` to start the server
+(serves at `http://localhost:5784/`). Run `moadim install` afterward to
+register a launchd/systemd service so it survives logout and reboot.
+
+Platform: Unix-only (macOS and Linux). The daemon depends on `crontab`, `tmux`,
+and a launchd/systemd service; installation bails on unsupported platforms
+(including Windows).
+
+## Docs
+
+- [Daemon README](https://github.com/moadim-io/daemon#readme): install, configuration, and CLI usage.
+- [Architecture](https://github.com/moadim-io/daemon/blob/main/Architecture.md): how loops, the crontab block, and agent sessions fit together.
+- [OpenAPI / Swagger UI](https://github.com/moadim-io/daemon): the REST API is self-documented; the running daemon serves Swagger UI and the OpenAPI spec.
+
+## Links
+
+- [Product source (daemon)](https://github.com/moadim-io/daemon): the Rust MCP/REST server that runs the loops.
+- [crates.io](https://crates.io/crates/moadim): published crate (`cargo install --locked moadim`).
+- [Landing site](https://moadim.io): project home page.

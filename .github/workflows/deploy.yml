@@ -3,14 +3,30 @@ name: Deploy to Cloudflare Pages
 on:
   push:
     branches: [main]
+    # Only run the deploy job for changes that can actually affect the
+    # exported static site. Docs/meta files (README, CHANGELOG, LICENSE,
+    # other workflows, etc.) are intentionally excluded so a docs-only push
+    # doesn't trigger a cold build + a new production Cloudflare deploy.
+    # This file is included so edits to the deploy workflow itself are
+    # always exercised.
+    paths: &deploy-paths
+      - "app/**"
+      - "public/**"
+      - "package.json"
+      - "package-lock.json"
+      - "next.config.ts"
+      - "postcss.config.mjs"
+      - "tsconfig.json"
+      - ".github/workflows/deploy.yml"
+  pull_request:
+    # Same filter as push: a PR preview only needs to rebuild when the
+    # exported site itself could have changed.
+    paths: *deploy-paths
   workflow_dispatch:
-
-concurrency:
-  group: pages-deploy
-  cancel-in-progress: true
 
 jobs:
   deploy:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     # A static Next.js export + Cloudflare Pages deploy normally finishes in a
     # couple of minutes. Without this, the job inherits the 360-minute (6-hour)
@@ -18,33 +34,184 @@ jobs:
     # for hours. 10 minutes leaves comfortable headroom over a cold build+deploy
     # while turning a hang into a fast, visible failure.
     timeout-minutes: 10
+    concurrency:
+      group: pages-deploy
+      # Never cancel an in-flight run: this job deploys to Cloudflare Pages, and
+      # killing it mid-`wrangler pages deploy` can leave a half-uploaded/cancelled
+      # deployment. Queued runs serialize instead, and the last one still ends on
+      # the latest commit.
+      cancel-in-progress: false
+    # Declares a GitHub Environment so every production deploy shows up in the
+    # repo's Deployments tab with a direct link to the live URL, and so
+    # Cloudflare credentials can be scoped to this environment instead of
+    # living only as repo-wide secrets.
+    environment:
+      name: production
+      url: https://moadim.io
     permissions:
       contents: read
       deployments: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
-          node-version: 22
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies
-        # npm install (not npm ci): the committed lockfile omits Linux-only
-        # optional deps (@emnapi/*, nested in wasm32 variants) that macOS dev
-        # machines never resolve, so strict `npm ci` fails on the Linux runner.
-        run: npm install --no-audit --no-fund
+        # npm ci installs the exact, frozen tree from package-lock.json
+        # instead of re-resolving it, so the production build is reproducible.
+        run: npm ci --no-audit --no-fund
+
+      - name: Cache Next.js build cache
+        # Persists .next/cache (compiled modules, minified output, image/font
+        # pipeline artifacts) across runs so `next build` can do an incremental
+        # build instead of a fully cold one. Only the build cache is stored
+        # here, not `out/` or `.next/` wholesale, so the published artifact is
+        # unaffected by cache presence/absence; a stale or missing cache just
+        # falls back to a full build. See:
+        # https://nextjs.org/docs/app/building-your-application/deploying/ci-build-caching
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('app/**', '*.ts', '*.tsx', '*.mjs') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
       - name: Build static export
         timeout-minutes: 5
-        run: npm run build
+        # app/version.json/route.ts reads these to answer "what commit is actually
+        # live" (see README's "Confirming what's live"). Without them the build
+        # falls back to its local default ("dev") in production too, silently
+        # defeating the whole point of the route.
+        env:
+          NEXT_PUBLIC_BUILD_COMMIT: ${{ github.sha }}
+          NEXT_PUBLIC_BUILD_REF: ${{ github.ref_name }}
+        run: |
+          NEXT_PUBLIC_BUILD_TIME="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          export NEXT_PUBLIC_BUILD_TIME
+          npm run build
+
+      - name: Verify static export
+        # A green `next build` can still emit an incomplete out/ (a dropped route, a no-op
+        # metadata route, a public/ file that didn't get copied). Fail here, before wrangler
+        # uploads anything, instead of shipping a silently broken page to prod.
+        run: npm run verify:export
 
       - name: Deploy to Cloudflare Pages
         timeout-minutes: 5
-        uses: cloudflare/wrangler-action@v4
+        uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4.0.0
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy out --project-name=moadim-landing --branch=main --commit-dirty=true
+
+      - name: Smoke test the live site
+        # `wrangler pages deploy` exiting 0 only confirms the upload
+        # succeeded — it doesn't confirm moadim.io actually serves the new
+        # build. Without this, a broken-but-uploaded deploy (edge propagation
+        # failure, DNS/routing misconfiguration, a 5xx from the origin) ships
+        # to production undetected. `--retry` absorbs the few seconds of edge
+        # propagation lag right after a deploy; a real failure still fails
+        # the job loudly instead of shipping silently.
+        timeout-minutes: 2
+        run: |
+          set -euo pipefail
+          body="$(curl --fail --silent --show-error --location \
+            --retry 5 --retry-delay 5 --retry-all-errors \
+            https://moadim.io)"
+          if ! grep -q "Moadim" <<< "$body"; then
+            echo "::error::https://moadim.io responded but the body doesn't mention Moadim — the live site may be serving a broken or unexpected page." >&2
+            exit 1
+          fi
+
+  preview:
+    # PRs from forks don't have access to repo secrets (CLOUDFLARE_API_TOKEN /
+    # CLOUDFLARE_ACCOUNT_ID), so this only runs for same-repo branches. That's
+    # acceptable for an owner-driven repo where external contributions go
+    # through a fork-and-PR-from-a-branch-in-this-repo workflow anyway.
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      # Scoped per PR (not the shared `pages-deploy` group) so preview builds
+      # never queue behind, or block, a production deploy. Superseding pushes
+      # to the same PR cancel the stale preview build instead of serializing.
+      group: pages-preview-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Setup Node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build static export
+        timeout-minutes: 5
+        # Same provenance env vars as the production `deploy` job above, so a
+        # preview build's /version.json also reflects the PR it was built from
+        # instead of always reporting "dev". `head.sha`/`head_ref` (not
+        # `github.sha`/`github.ref_name`) because on `pull_request` those refer
+        # to the synthetic merge commit/ref, not the PR's actual branch tip.
+        env:
+          NEXT_PUBLIC_BUILD_COMMIT: ${{ github.event.pull_request.head.sha }}
+          NEXT_PUBLIC_BUILD_REF: ${{ github.head_ref }}
+        run: |
+          NEXT_PUBLIC_BUILD_TIME="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          export NEXT_PUBLIC_BUILD_TIME
+          npm run build
+
+      - name: Verify static export
+        run: npm run verify:export
+
+      - name: Compute preview branch name
+        # Cloudflare Pages branch aliases must be lowercase alphanumeric +
+        # hyphens, capped at 28 characters. `github.head_ref` (the PR's
+        # source branch) rarely satisfies that as-is, so sanitize it.
+        id: preview-branch
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+          branch=$(echo "$HEAD_REF" \
+            | tr '[:upper:]' '[:lower:]' \
+            | sed -E 's/[^a-z0-9-]+/-/g; s/-+/-/g; s/^-+|-+$//g' \
+            | cut -c1-28 \
+            | sed -E 's/-+$//')
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy preview to Cloudflare Pages
+        id: deploy
+        timeout-minutes: 5
+        uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4.0.0
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy out --project-name=moadim-landing --branch=${{ steps.preview-branch.outputs.branch }} --commit-dirty=true
+
+      - name: Post preview URL to job summary
+        run: |
+          {
+            echo "### Cloudflare Pages preview"
+            echo ""
+            echo "${{ steps.deploy.outputs.pages-deployment-alias-url || steps.deploy.outputs.deployment-url }}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Comment preview URL on PR
+        uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
+        with:
+          header: cloudflare-preview
+          message: |
+            Cloudflare Pages preview: ${{ steps.deploy.outputs.pages-deployment-alias-url || steps.deploy.outputs.deployment-url }}

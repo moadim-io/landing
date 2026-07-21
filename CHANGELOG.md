@@ -9,6 +9,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- CI: `test:coverage`'s coverage thresholds (`vitest.config.ts`) are now actually enforced in `ci.yml` — a PR that drops below them fails the "Test" step instead of the thresholds only being reported (#607).
+- `Cross-Origin-Opener-Policy: same-origin` added to `public/_headers`' baseline security headers, isolating the page's top-level browsing context from any cross-origin window it opens (#584).
+- CI: `workflow_dispatch` added to `ci.yml`, `codeql.yml`, `lighthouse.yml`, `visual-regression.yml`, and `actionlint.yml` so a maintainer can trigger lint/test/build, an ad hoc CodeQL scan, a Lighthouse budget check, a visual-regression diff, or a workflow-YAML lint on demand instead of needing an empty commit or waiting for the next real trigger — `deploy.yml` and `link-check.yml` already supported this (#604).
+- Playwright visual-regression baseline for the 404 page (`not-found-{desktop,mobile}-linux.png` in `e2e/visual.spec.ts-snapshots/`), guarding `app/not-found.tsx`'s rendered look the same way the existing homepage screenshot test already did — previously a Tailwind/token refactor could silently break its layout while lint, unit tests, and the homepage-only visual diff all stayed green (#595).
+- A `stylelint`/`stylelint-config-standard` gate (`npm run lint:css`) over `app/globals.css`, the repo's only hand-written CSS — catches issues like a duplicate custom-property declaration (the #236 class of bug) at lint time instead of only in review (#250, #465, #548).
+- `/version.json` build-provenance route (`app/version.json/route.ts`) exposing the live `{ commit, ref, builtAt }` at `https://moadim.io/version.json`, so a human or an automated smoke check can confirm which commit is actually serving instead of only trusting a `wrangler` upload's exit code (#230, #565).
+- Unit test covering `layout.tsx`'s Bing site-verification `metadata.verification` branch (`NEXT_PUBLIC_BING_SITE_VERIFICATION` set), closing the one branch-coverage gap `npm run test:coverage` still reported for the file (#563).
+- Unit test rendering `RootLayout` itself (not just its exported `metadata`/`viewport`/`jsonLd`), covering the `<html lang>` shell, the `banner` landmark, the wordmark link, and the Docs/GitHub nav (#557).
+- CI: an `OpenSSF Scorecard` workflow (`ossf/scorecard-action`) that continuously grades the repo's whole security posture and uploads results to the Security tab, complementing CodeQL and the dependency-review gate (#223, #550).
+- CI: wired `npm run lint:html` into `ci.yml`'s `Lint, test & build` job, so a malformed-markup regression in the built export actually fails a PR instead of only being catchable by hand (#549).
+- `SkipLink`, a visually-hidden "Skip to content" link rendered first in `<body>` that becomes visible on keyboard focus and jumps to `<main>` (WCAG 2.4.1 Bypass Blocks) (#71, #547).
+- `test:coverage` script (`@vitest/coverage-v8`, `text`/`html`/`json-summary` reporters) so a PR can no longer silently ship an untested branch or file with zero coverage signal (#539).
+- Unit tests covering `layout.tsx`'s `metadata.alternates.canonical`, `appleWebApp`, and `formatDetection` fields (#536).
+- CI/deploy: Cloudflare Pages preview deploys for pull requests, posted to the job summary and a sticky PR comment, so a reviewer can see a rendered preview before merging (#526).
+- Unit test guarding `app/icon.svg`'s hand-synced brand palette against drift from `app/globals.css`, mirroring the same guard already in place for `brand-colors.ts` and `loop-animation.svg` (#513).
+- `metadata.robots` declared with `max-image-preview: large` so Google Search/Discover can surface the full Open Graph card instead of a small default thumbnail (#143, #490).
+- Unit test covering `ORG_URL`'s derivation from `REPO_SLUG` in `app/site.ts`, filling the one gap the `REPO_URL`/`CRATE_URL` derivation tests didn't reach (#488).
+- Branded App Router error boundaries: `app/error.tsx` (for errors thrown inside the root layout's children) and `app/global-error.tsx` (for errors thrown by the root layout itself), replacing Next.js's default unstyled error overlay (#76, #475).
+- `appleWebApp` and `formatDetection` metadata: chromeless iOS home-screen presentation under the Moadim name, and opting out of Safari's heuristic `tel:` auto-linking of identifier strings (#289).
+- Animated SVG diagram of the Moadim loop ("The loop" panel between the CTA row and the features grid): an agent square rides a circuit between a GOALS repo and a ROUTINES repo, and each routine row in the ROUTINES card is itself a small loop with its own accent runner riding a miniature track at its own pace — the same visual grammar at two scales (#507, #508).
+- `lychee` link-check now globs `public/llms.txt`'s built output (`out/llms.txt`) too, closing a gap where the workflow's own name ("Link check: built export + docs") implied coverage the glob pattern never actually matched (#504).
+- Hero: a `crates.io` version badge next to the install command, so a visitor can see the current published `moadim` version (and that the crate is actively maintained) without leaving the page — a static `shields.io` badge image, so it never needs a build-time network fetch and can't break the static export (#183).
+- Unit test rendering `app/apple-icon.tsx`'s `AppleIcon()` component itself, not just asserting its exported route config — mirrors the same coverage `opengraph-image.test.tsx` already had for its identical `next/og`/Satori setup, so a typo in the Satori JSX/inline style tree fails a test instead of only surfacing at `next build` time (#471).
+- `Strict-Transport-Security` header on `public/_headers`, so HTTPS is enforced from a visitor's very first request instead of only after the first redirect (#442).
+- Node.js engine version pinned via `.nvmrc` alongside the existing `package.json` `engines` field, for a reproducible local/CI toolchain (#390).
+- Unit tests guarding `.nvmrc`, `engines.node`, and `CONTRIBUTING.md`'s stated Node version against drifting out of sync with each other (#461).
+- Unit tests guarding the Satori `SATORI_*` brand-color constants (`opengraph-image.tsx`/`apple-icon.tsx`) against drifting from `app/globals.css` (#457).
+- Unit tests covering the `apple-icon` and `manifest.webmanifest` route config (#449).
+- Unit tests covering `public/_headers` and `public/_redirects` deploy config (#448).
+- Unit tests that render the `opengraph-image` card itself, not just assert its route config (#443).
+- Unit tests covering the hero install command's `aria-hidden`/`select-none` shell-prompt decoration (#440).
+- CI: a `Lighthouse` gate (`treosh/lighthouse-ci-action`) that builds the static export and asserts performance ≥0.90, accessibility ≥0.95, best-practices ≥0.95, and SEO ≥0.95 on the landing page — a regression (unoptimized image, dropped alt text, missing meta tag) now fails the PR instead of only surfacing if someone runs Lighthouse by hand (#75).
+- Unit tests for `page.tsx`'s three feature cards and the "On loop engineering" reading list, asserting the reading-list links carry the `nofollow noopener noreferrer` `rel` baseline — previously the only content on the page with no direct test coverage.
+- `verify:export` script (and a matching CI/deploy step) that asserts the static export in `out/` actually contains every file the site depends on — `index.html`, `404.html`, `sitemap.xml`, `robots.txt`, the OG/Twitter images, `favicon.ico`, and `_headers` — so a route or asset that silently drops from a green `next build` fails CI instead of shipping a broken page (#345).
+- `JsonLdScript`, a shared component (plus a `toSafeJsonLd` helper) that `layout.tsx` and `page.tsx` both route through to escape JSON-LD before inlining it, with its own dedicated test coverage for the `</script>`-breakout escaping (#352).
+- CI: a `dependency-review` gate (`actions/dependency-review-action`) that fails a PR on a new high/critical-severity advisory or a disallowed dependency license, catching a vulnerable or incompatibly-licensed package before Dependabot ever sees it (#148, #344).
+- CI: a `lychee` link-check gate over the built static export and the root Markdown docs, plus a weekly scheduled run so external link rot is caught even without a code change (#341).
+- CI: a `typos` spell-check gate over `app/**`, Markdown docs, and config files (#347).
+- CI: an `actionlint` gate for `.github/workflows/**` YAML, including embedded shell via shellcheck (#313).
+- CI: a `markdownlint` gate for the repo's Markdown docs (#314).
+- CI: a `lint-and-build` gate (ESLint + `next build`) on every pull request and push to `main` (#308), later extended to run the Vitest suite too (#321).
+- CI: a CodeQL scanning gate for `javascript-typescript` (#331).
+- CI: cancel a superseded CI run when a PR gets a new push, instead of letting stale runs keep holding a runner (#323).
+- CI/deploy: bound the Cloudflare Pages deploy job with `timeout-minutes`, so a hung build/install/`wrangler` call can't hold a runner for hours (#275).
+- CI/deploy: declare a GitHub `production` Environment on the deploy job, so every deploy shows up in the Deployments tab with a link to the live URL and Cloudflare secrets can be scoped to it (#330).
+- CI/deploy: cache `.next/cache` on the deploy job so `next build` can do an incremental build instead of a fully cold one on every push (#327).
+- Persistent "Docs" and "GitHub" navigation links beside the site wordmark in the header banner (#295, #303).
+- `CODE_OF_CONDUCT.md` (Contributor Covenant) (#309).
+- Unit tests for `not-found.tsx`, the branded 404 page (#325).
+- Unit tests for `app/site.ts`'s constant derivations (`REPO_URL`, `CRATE_URL`, etc.) (#340).
+- `.github/workflows/dependency-review.yml`: a PR-time gate (`actions/dependency-review-action`) that fails on a new high/critical-severity advisory or a disallowed dependency license, so a vulnerable or incompatibly-licensed package can't be introduced before Dependabot ever sees it (#148).
+- Unit tests for the `opengraph-image`/`twitter-image` metadata routes, asserting the `force-static` export (required under `output: "export"`), the declared `1200x630` OG dimensions, the `image/png` content type, and that `twitter-image.tsx` genuinely re-exports (not hand-copies) `opengraph-image`'s config and renderer — previously the only two route files in `app/` with no test coverage.
+- Unit tests for `ExternalLink`, covering `target="_blank"` + `rel="noopener noreferrer"` (reverse-tabnabbing protection), the `relExtra` prepend behavior, and the screen-reader "(opens in a new tab)" suffix — none of which had direct coverage before, so a regression in the component itself could pass CI undetected.
 - A first automated test suite — Vitest + React Testing Library, wired into CI — covering the hero headline/install command/CTA links, the root layout's metadata and `SoftwareApplication` JSON-LD, and the `sitemap.xml`/`robots.txt` output, so regressions in this content now fail CI instead of shipping silently (#40).
 - On-page FAQ section answering the questions visitors weigh before installing (license, self-hosted vs cloud, supported agents/OS, run isolation), with the same five Q&As emitted as schema.org `FAQPage` structured data from a single source so the copy and markup can't drift (#176).
 - Branded `404` not-found page that reuses the site's neobrutalist design language and offers a clear link back home, replacing Next.js's default unstyled error screen (#155).
@@ -25,6 +78,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `.github/PULL_REQUEST_TEMPLATE.md`'s checklist now references `npm run test:coverage` instead of plain `npm test`, matching what `ci.yml` actually runs (#612).
+- `error.tsx`/`not-found.tsx`'s remaining hand-copied status-card class strings deduped into shared `page.tsx` tokens (#610).
+- `README.md`/`CONTRIBUTING.md`'s `npm run test:visual` description now mentions the 404-page baseline alongside the homepage one (#605).
+- Landing copy updated to list `pi` as a fourth built-in agent alongside `claude`/`codex`/`hermes`, matching the daemon's actual agent list (#597).
+- `AGENTS.md`/`CONTRIBUTING.md`/`README.md` clarified that `npm run test:visual` only ships Linux screenshot baselines, so a first run on macOS/Windows failing isn't mistaken for a regression (#594).
+- `.github/PULL_REQUEST_TEMPLATE.md`'s checklist extended with `npm run test:visual`, matching every other pre-PR-gate doc (#593).
+- Added the changeset PR #583's Dependabot bump had been missing, matching the changeset-per-dependency-bump precedent set by #578 (#588).
+- CI: `timeout-minutes` added to the `scorecard.yml` analysis job, the one job across all workflows still relying on the 360-minute default (#587).
+- `AGENTS.md`'s "Before opening a PR" checklist sentence extended with `npm run test:visual`, matching the Commands table entry added in #575 (#585).
+- `lycheeverse/lychee-action` and `github/codeql-action/upload-sarif` bumped via Dependabot's `actions-minor-and-patch` group (#583).
+- CI: `actionlint.yml` and `dependency-review.yml` now cancel a stale run on a new push, matching the `concurrency` pattern already used by `ci.yml`/`codeql.yml`/`lighthouse.yml`/`link-check.yml`/`visual-regression.yml` (#579).
+- `actions/upload-artifact` bumped to `v7.0.1` in `scorecard.yml` and `visual-regression.yml`, resolving a one-major-version drift between the two workflows' pins (#578).
+- `CONTRIBUTING.md`'s Commands table and pre-PR checklist extended with `npm run test:visual` (#577).
+- `AGENTS.md`'s Commands table documents `npm run test:visual` (#575).
+- `vitest` bumped to `4.1.10` (patch) (#437).
+- Dropped the dead `changeFrequency`/`priority` fields from `app/sitemap.ts` — Google and Bing both document that neither ever influenced crawl behavior (#535).
+- `global-error.tsx`'s "Try again" button now uses the `shadow-brutal` token instead of a raw `shadow-[6px_6px_0_0_#000]` arbitrary value, the one call site the #213 shadow-token consolidation missed (#528).
+- Hero crates.io version badge now uses the `shadow-brutal` token instead of a raw arbitrary shadow value, for the same reason (#519).
+- Extracted the repeated `border-4`/`shadow-[Npx_Npx_0_0_#000]` recipe used at every panel/CTA call site (header, install card, features grid, reads section, FAQ, `ctaButton`) into `shadow-brutal` / `shadow-brutal-hover` / `shadow-brutal-active` / `shadow-brutal-lg` tokens in `app/globals.css`'s `@theme` block, so "the brutalist card" has one definition instead of drifting per call site (#213, #483).
+- Every `actions/setup-node` step in `ci.yml`, `deploy.yml`, `lighthouse.yml`, and `link-check.yml` now reads the Node version from `.nvmrc` (`node-version-file`) instead of a fifth untested hardcoded `node-version: 22` literal (#477).
+- Enabled `noImplicitReturns` and `exactOptionalPropertyTypes` in `tsconfig.json`, completing the project's strict-mode opt-ins (#467, #463).
+- Enabled `@typescript-eslint/no-unnecessary-condition` (#460).
+- `not-found.tsx`'s "Back to home" link now reuses the shared `ctaButton` constant instead of hand-copying its class string (#466).
+- Single-sourced `SITE_TITLE`/`SITE_DESCRIPTION` into `app/site.ts`, extending the existing `SITE_URL`/`REPO_URL` single-source pattern (#458).
+- The branded 404 page now reuses `page.tsx`'s shared `panel` constant for its card surface instead of a hand-copied class string, closing the one remaining call site the FAQ-panel single-sourcing (#282) didn't reach.
+- Third-party GitHub Actions across `ci.yml`, `codeql.yml`, `dependency-review.yml`, `link-check.yml`, `actionlint.yml`, and `deploy.yml` pinned to commit SHAs instead of floating version tags, closing a supply-chain tampering vector where a compromised tag could silently change what a workflow runs (#342, #350).
+- `@typescript-eslint/consistent-type-imports` ESLint rule enabled, requiring type-only imports to use `import type` so an erased type doesn't survive into the compiled output as a value import (#16).
+- `eqeqeq` ESLint rule enabled, requiring `===`/`!==` over `==`/`!=` (#335).
+- `@typescript-eslint/no-explicit-any` enabled as an error (#307).
+- `eslint-plugin-jsx-a11y`'s recommended ruleset enabled at error level (#320).
+- Sitemap `lastModified` bumped to 2026-06-25 and `changeFrequency` set to `weekly` (#306).
+- Generated metadata routes (OG/Twitter images, favicon) given a real, long-lived cache window instead of an implicit no-cache default (#228, #278).
+- `cloudflare/wrangler-action` bumped from v3 to v4 (#114).
+- CI and deploy installs switched to `npm ci` against a regenerated, in-sync lockfile, instead of a re-resolving `npm install` (#328).
+- Production deploys now skip for docs-only pushes (README, CHANGELOG, other workflow files) that can't affect the exported static site (#326).
+- README and `CONTRIBUTING.md` now document the test scripts (`npm test`, `npm run test:watch`) (#333).
+- Enabled type-aware ESLint linting (`parserOptions.projectService`, scoped to `**/*.ts`/`**/*.tsx`) and turned on `@typescript-eslint/no-floating-promises` / `@typescript-eslint/no-misused-promises`, so an unawaited promise or an `async` callback passed where a `void`-returning one is expected now fails `npm run lint` instead of silently swallowing the rejection (#288).
 - Marked the three third-party "On loop engineering" reading-list links `rel="nofollow"` so the homepage stops passing ranking signal out to external commentary domains on every crawl (#233).
 - Tightened TypeScript strictness further by enabling `noImplicitOverride`, completing the opt-in strictness set so class members that override a base member must say so explicitly (#160).
 - Centralized the remaining product identifiers (GitHub repo slug, crates.io URL, crate name) in `app/site.ts`, extending the existing `SITE_URL` single-source pattern so a repo move or crate rename no longer means hunting down literals (#173).
@@ -42,10 +132,76 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Performance
 
+- The crates.io version badge `<img>` now opts out of React DOM's automatic image preloading (`fetchPriority="low"`), so the page's earliest network slot isn't spent on a decorative third-party badge instead of the self-hosted fonts and critical CSS (#544).
 - Paint the background grid pre-dimmed and drop the full-viewport overlay, so the page renders without an extra compositing layer covering the viewport (#205).
 
 ### Fixed
 
+- `public/llms.txt`'s `Install:` section never told an agent to actually run `moadim` to start the server after installing it — only to install the binary and, separately, register reboot persistence (#609).
+- `SoftwareApplication` JSON-LD `sameAs`/`codeRepository`/`downloadUrl` now source from `site.ts`'s `REPO_URL`/`CRATE_URL` constants instead of hardcoding the same URLs as separate literals (#602).
+- Pinned `postcss` to `^8.5.10` via `overrides`, resolving a moderate-severity CSS-stringify XSS advisory (GHSA-qx2v-qp2m-jg93) bundled by `next@16.2.10`'s dependency tree (#591).
+- `public/llms.txt`'s reboot-persistence claim corrected: `cargo install --locked moadim` alone does not register a launchd/systemd service — that requires the separate `moadim install` step (#531).
+- `markdownlint-cli2` bumped, resolving two moderate-severity ReDoS advisories (GHSA-h67p-54hq-rp68, GHSA-6v5v-wf23-fmfq) in its `js-yaml`/`markdown-it` transitives (#433).
+- `public/llms.txt` — the file that exists specifically for AI agents to follow — named `cargo install --locked moadim` and the separate `moadim install` persistence step, but never told an agent to actually run `moadim` to start the server in between, the same "one command short of a working daemon" bug already fixed on the hero card (#206).
+- `deploy.yml` never actually set `NEXT_PUBLIC_BUILD_COMMIT`/`NEXT_PUBLIC_BUILD_REF`/`NEXT_PUBLIC_BUILD_TIME` in either its production `deploy` job or its PR `preview` job, so `https://moadim.io/version.json` — the route that exists specifically to confirm which commit is actually live — silently returned `{"commit":"dev","ref":"dev","builtAt":"dev"}` on every production deploy (#601).
+- `app/manifest.ts` set `background_color`/`theme_color` as a third independent `"#f4f1e8"` literal alongside `globals.css`'s `--color-background` and `brand-colors.ts`'s `SATORI_BACKGROUND` (the constant that exists precisely to give Satori-rendered routes one canonical source); now sources both fields from `SATORI_BACKGROUND` so a future palette change can't leave the PWA install/splash background and Android theme color silently stale (#596).
+- `.gitignore` carried a stray `.playwright-mcp` entry accidentally swept in by #561 — the scratch directory of an unrelated local dev-tool integration, not anything this repo's own `playwright.config.ts` or `npm run test:visual` produces (the real Playwright artifacts were already correctly ignored under `# testing`) (#599).
+- `layout.tsx`'s `SoftwareApplication` JSON-LD (`sameAs`, `codeRepository`, `downloadUrl`) hardcoded the GitHub/crates.io URLs as literal strings instead of importing `REPO_URL`/`CRATE_URL` from `site.ts` — the single source of truth `site.ts` itself documents these constants as being for, so a repo move or crate rename would have silently left stale URLs in the structured data with no test to catch it.
+- The "which agents does it support" copy (hero, feature card 01, the FAQ answer, `SITE_DESCRIPTION`, `public/llms.txt`, and `README.md`) listed only Claude, Codex, and Hermes — the daemon has shipped a fourth built-in agent, Pi, for a while, so the landing page undersold what the product actually supports.
+- `stylelint.config.mjs` and `.stylelintrc.json` were two independently-added Stylelint configs for the same file (#465 and #548 each added one without noticing the other) — cosmiconfig only ever loaded `.stylelintrc.json`, so `stylelint.config.mjs` was dead and had silently drifted (missing the `tailwind`/`layer` `ignoreAtRules` entries the active file needed). Folded the missing entries into `.stylelintrc.json` and deleted the dead file (#573).
+- `package.json` had two `"lint:css"` script keys — one from each of #465 and #548 — which JSON silently collapsed to the last one; removed the dead duplicate (#572).
+- `CONTRIBUTING.md`'s "Submitting a change" checklist and `.github/PULL_REQUEST_TEMPLATE.md`'s checklist were missing `npm run lint:md` and `npm run lint:css`, despite `AGENTS.md` already documenting all eight pre-PR gates; `CONTRIBUTING.md`'s command table was also missing `lint:css`/`lint:html` as documented scripts (#571).
+- `README.md`'s and `AGENTS.md`'s file-by-file project-structure listings never named `app/version.json/route.ts`, unlike every other route under `app/` (#569).
+- `npm run lint` failed after running `npm run test:coverage`, since `eslint.config.mjs`'s ignores never listed the generated `coverage/` report directory (#564).
+- `.github/workflows/actionlint.yml` was the one remaining workflow step still referencing a floating Docker tag (`rhysd/actionlint:1.7.12`) instead of an immutable digest, unlike every other third-party action in the repo (#562).
+- `app/opengraph-image.tsx` (and `twitter-image.tsx`, which re-exports it) rendered in Satori's Noto Sans fallback instead of the site's Geist brand font — `next/font`'s Google Fonts loader isn't reachable from `ImageResponse`, so `fontFamily: "Geist"` had nothing backing it. Vendored a static Geist Bold TTF and passed it to Satori's `fonts` option (#556).
+- `npm ci` failed in CI (`Missing: @emnapi/runtime@1.11.2 from lock file`) after #375/#476 merged a `package-lock.json` regenerated with a newer npm than CI's Node 22 install bundles, resolving a different `wasm32-wasi` optional-dependency tree (#492).
+- `README.md`'s "Project structure" `.github/workflows/` listing never named `scorecard.yml` (added in #550) or `visual-regression.yml` (added in #561), despite both being real, currently-running CI workflows (#570).
+- `AGENTS.md` and `README.md`'s file listings never named `app/SkipLink.tsx`, despite it being rendered from `layout.tsx` since #547 (#558).
+- `CODE_OF_CONDUCT.md`'s Attribution links pointed at Contributor Covenant URLs that 301-redirect instead of their canonical destinations (#555).
+- `README.md`'s "Project structure" section still listed the removed `app/favicon.ico` instead of the actual `app/icon.svg` route (#553).
+- The loop diagram's `overflow-x-auto` scroll wrapper had no `tabIndex`, so a keyboard-only visitor could never focus it to scroll and see the ROUTINES/EXTERNAL half of the diagram cropped below the `sm` breakpoint (#546).
+- `public/_headers`' immutable-caching rule still targeted the removed `/favicon.ico` route instead of the actual `/icon.svg` favicon, so `/icon.svg` fell through to the broad `max-age=0` catch-all instead of a year-long immutable cache (#545).
+- `SECURITY.md`'s private-reporting link pointed at a GitHub docs URL that now 301-redirects to the current one (#542).
+- `CONTRIBUTING.md`'s `@types/node` prerequisite still said "v26" after #534 pinned it to `^22` (#541).
+- `README.md`'s root-level guard tests listing never picked up `loop-animation-svg.test.ts` (#540).
+- `@types/node` pinned from `^26` down to `^22`, matching the Node 22 major `.nvmrc`/`engines.node`/CI/deploy actually build and run against (#534).
+- `AGENTS.md`'s command table and pre-PR checklist never listed `npm run lint:md` or `npm run verify:export`, despite both being required checks documented in README.md/CONTRIBUTING.md (#533).
+- `scripts/verify-export.mjs`'s `REQUIRED_FILES` list never included `loop-animation.svg`, the sole visual in the homepage's "The loop" section and a file hotlinked from external READMEs, so its silent disappearance from a build had zero CI signal (#530).
+- `app/layout.tsx`'s comment on `Organization.logo` still said `app/favicon.ico` was the scaffold icon, a premise superseded when `icon.svg` replaced it (#527).
+- `AGENTS.md`'s file listing never named `app/error.tsx` or `app/global-error.tsx`, despite README.md's equivalent list already having been fixed (#524).
+- Removed a byte-for-byte duplicate `:root` palette-alias block in `app/globals.css` (#518).
+- `SITE_DESCRIPTION` shortened so it survives Google SERP (~155-160 char) and Twitter/X social-card (~120-125 char) truncation instead of being cut off mid-sentence (#135, #517).
+- `app/manifest.ts`'s PWA icon pointed at the removed `/favicon.ico` instead of the actual `/icon.svg` route, 404ing on "Add to Home Screen" (#516).
+- The homepage feature grid's three cards sat as unlabeled `<h2>` siblings with no grouping heading in the outline; added a visually-hidden labelled `<h2>` (#214, #515).
+- `opengraph-image.tsx`'s `alt` text was a hardcoded literal instead of importing `site.ts`'s `SITE_TITLE`, exposing it to the same drift the constant exists to prevent (#512).
+- `app/brand-colors.ts`'s docstring still said the Satori hex values must be kept in sync with `globals.css` "by hand," though `brand-colors.test.ts` (#457) now enforces it (#499).
+- `public/_headers` never declared `Content-Type` for the extensionless `/opengraph-image`, `/twitter-image`, and `/apple-icon` routes, so a host that infers MIME type from the file extension served them as `application/octet-stream` (#473).
+- `Strict-Transport-Security` header was missing the `preload` directive required for `hstspreload.org` submission, despite a comment claiming the header already met that bar (#472).
+- `CONTRIBUTING.md`'s checklist and `.github/PULL_REQUEST_TEMPLATE.md` never listed `npm run lint:html`, though `AGENTS.md` already documented it as a required pre-PR gate (#496).
+- `public/llms.txt` claimed a single install command "registers a launchd/systemd service so they survive logout and reboot" — the same reboot-persistence overclaim already corrected on the page itself (the separate `moadim install` step, #238), never propagated to this file.
+- `README.md`'s "Project structure" listing named nothing for `app/error.tsx` or `app/global-error.tsx` — both error boundaries existed with their own test coverage but no discoverable entry explaining what each one is for.
+- `LoopAnimation.tsx`'s `next/image` usage swapped for a plain `<img>` — `next/image` unconditionally injects a `style="color:transparent"` attribute that tripped `npm run lint:html`'s `no-inline-style` rule against the built static export (#509).
+- Both `README.md` and `AGENTS.md`'s "Project structure" / "Where things live" listings named nothing for `app/brand-colors.ts`, despite it single-sourcing the Satori-safe brand hex constants and having its own guard test — a real onboarding gap for anyone skimming that list (#503).
+- Hero install card now surfaces the missing `moadim` run step (`cargo install --locked moadim && moadim`) instead of stopping at `cargo install`, which only compiles and installs the binary — nothing starts the daemon or its web UI until `moadim` is also run (#500).
+- Organization JSON-LD `sameAs` now derived from `app/site.ts`'s `ORG_URL` instead of a hardcoded `"https://github.com/moadim-io"` literal, closing the last stray copy of the GitHub org URL that the earlier `REPO_URL`/`CRATE_URL` single-sourcing (#173) had missed (#484).
+- `README.md`'s Project structure listing named nothing between `app/` and `public/` — the root-level guard tests (`next.config.test.ts`, `deploy-config.test.ts`, `node-version.test.ts`, `llms-txt.test.ts`) and the `test/mocks/` Vitest stub existed with no discoverable entry explaining what each one protects against drifting (#486).
+- `public/llms.txt` — the machine-readable doc AI agents are meant to follow — now uses `cargo install --locked moadim`, matching the hero card's install command instead of the stale unlocked form (#480).
+- Restored the accessible `list` role on the nav, feature-grid, and reading-list `<ul>` elements. Tailwind's Preflight resets `list-style: none` on every `<ul>`, which in Safari/VoiceOver also strips the implicit `list`/`listitem` role, so screen-reader users on Safari weren't hearing these regions announced as lists (#470).
+- `README.md`'s Node.js prerequisite corrected from the stale "20+" to the actual "22+" (#459); its Project structure listing now also names the `lighthouse.yml` CI workflow (#468).
+- Web app manifest branding synced with the loop-engine rebrand (#451).
+- `verify-export` now catches a required route emitted as a directory instead of a flat file, a class of export breakage the size/existence checks alone missed (#446).
+- `SoftwareApplication` JSON-LD `image` now points at the real `opengraph-image` route (#410).
+- The homepage feature grid gained a named landmark region so assistive-tech users navigating by region can find it (#418).
+- `ExternalLink` now appends its own new-tab suffix to a caller-supplied `aria-label` instead of the suffix being silently dropped when a caller also sets one (#416).
+- The Cloudflare `wrangler-action` commit SHA pin, left truncated by an earlier fix, corrected in a follow-up (#445, #452).
+- `AGENTS.md`'s "Where things live" listing: replaced the stale `app/favicon.ico` entry (that file was replaced by `app/icon.svg` a while ago) with the actual `icon.svg`, `apple-icon.tsx`, and `manifest.ts` routes, and added the previously-undocumented `JsonLdScript.tsx` — the file agents are told to route new JSON-LD through, but that wasn't listed here.
+- `sitemap.xml`'s `lastModified` no longer freezes on a hand-maintained hardcoded date — it now stamps the actual build time, so the sitemap stops claiming every page was last modified on a fixed day forever (#57).
+- Escaped `<` in the FAQ `JSON-LD` before inlining, closing the same `</script>`-breakout sink already fixed for the `SoftwareApplication` JSON-LD (#301).
+- Cloudflare Pages deploys are no longer cancelled mid-flight by a newer push to `main`; queued runs now serialize instead, so a killed `wrangler pages deploy` can't leave a half-uploaded deployment (#310).
+- Removed dead `focus-visible` Tailwind utility classes on the header nav links — an unlayered global CSS rule in `globals.css` already always wins the cascade over them, so the per-link classes compiled but never actually rendered (#338).
+- Removed `public/_headers` `Cache-Control` rules that were dead, shadowed by a later, more specific override rule (#334).
+- Removed a byte-for-byte duplicate `@media (prefers-reduced-motion: reduce)` rule in `app/globals.css`, left behind after two separate commits independently fixed the same reduced-motion issue (#89) without either noticing the other's rule was already shipped.
 - Escaped `<` to `<` in the `SoftwareApplication` JSON-LD injected via `dangerouslySetInnerHTML`, closing the `</script>` breakout sink that `JSON.stringify` alone does not guard against (#198).
 - Declared a light `color-scheme` so visitors in OS/browser dark mode no longer get dark-rendered native controls, scrollbars, and a pre-paint flash against the single-theme light design (#293).
 - Corrected the `SoftwareApplication` JSON-LD `operatingSystem` to macOS + Linux, matching the platforms the product actually supports instead of advertising Windows (#267).
@@ -58,3 +214,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a visible keyboard focus indicator on interactive elements so keyboard users can see where they are (WCAG 2.4.7) (#84).
 - Raised the source-label text contrast to meet the WCAG 1.4.3 minimum (#103).
 - Applied the loaded Geist Sans font to body text so typography renders as intended (#7).
+- Enabled `trailingSlash` so the static export emits directory-style routes
+  (`out/<route>/index.html`), giving consistent clean URLs on static hosts and
+  removing the need for `/route` → `/route.html` rewrite rules as pages are added.

@@ -4,38 +4,81 @@ on:
   pull_request:
   push:
     branches: [main]
+  # Lets a maintainer re-run lint/test/build against any branch on demand —
+  # e.g. after a flaky/transient failure, or to sanity-check a branch before
+  # opening a PR — without pushing an empty commit. Mirrors the pattern
+  # already used by deploy.yml and link-check.yml.
+  workflow_dispatch:
+
+# Cancel a stale run when a PR gets a new push, so a superseded npm
+# install/lint/build doesn't keep holding a runner after it's been
+# overtaken by a newer commit. Scoped per-workflow-per-ref so unrelated
+# PRs (and the push-to-main trigger) never cancel each other.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   lint-and-build:
-    name: Lint & build
+    name: Lint, test & build
     runs-on: ubuntu-latest
-    # A static Next.js lint + export normally finishes well under 5 minutes.
-    # Without this the job inherits the 360-minute default, turning a hung npm
-    # install or build into a 6-hour runner hold.
-    timeout-minutes: 10
+    # A static Next.js lint + Vitest run + export normally finishes well under
+    # 10 minutes. Without this the job inherits the 360-minute default,
+    # turning a hung npm install, test, or build into a 6-hour runner hold.
+    timeout-minutes: 15
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
-          node-version: 22
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies
-        # npm install (not npm ci): the committed lockfile omits Linux-only
-        # optional deps (@emnapi/*, nested in wasm32 variants) that macOS dev
-        # machines never resolve, so strict `npm ci` fails on the Linux runner.
-        run: npm install --no-audit --no-fund
+        # npm ci installs the exact, frozen tree from package-lock.json and
+        # also acts as a guard: a future lockfile that's missing platform
+        # entries fails this PR check instead of silently degrading deploy.
+        run: npm ci --no-audit --no-fund
 
       - name: Lint (ESLint)
         run: npm run lint
 
+      - name: Lint (Stylelint)
+        run: npm run lint:css
+
+      - name: Typecheck (tsc)
+        # next build's own TypeScript pass only covers the app route graph, so it
+        # misses files like *.test.ts (see README.md / AGENTS.md / CONTRIBUTING.md).
+        run: npm run typecheck
+
+      - name: Test (Vitest, with coverage thresholds)
+        # `test:coverage` runs the same suite as `test` plus the coverage
+        # thresholds in vitest.config.ts — a PR that drops coverage below the
+        # floor now fails this step instead of the gap only showing up if
+        # someone happens to open coverage/index.html by hand.
+        timeout-minutes: 5
+        run: npm run test:coverage
+
       - name: Build static export
         timeout-minutes: 5
         run: npm run build
+
+      - name: Verify static export
+        # A green `next build` can still emit an incomplete out/ (a dropped route, a no-op
+        # metadata route, a public/ file that didn't get copied) — catch that on every PR, not
+        # just at deploy time.
+        run: npm run verify:export
+
+      - name: Validate HTML (html-validate)
+        # ESLint covers app/**/*.tsx, markdownlint covers *.md, but the actual HTML this
+        # site ships was never checked — `lint:html` (config: .htmlvalidate.json) has been
+        # documented in AGENTS.md as a pre-PR gate since it was added, but nothing ran it in
+        # CI, so a markup regression (e.g. an unclosed tag or duplicate id introduced by a
+        # generated metadata route) could reach `out/` undetected.
+        run: npm run lint:html
 
   markdown-lint:
     name: Markdown lint
@@ -46,16 +89,59 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
-          node-version: 22
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Lint (markdownlint)
         run: npm run lint:md
+
+  commit-lint:
+    name: Commit lint
+    # Only meaningful on a PR: it lints the commit range being merged, which a
+    # push to main (already-merged history) or workflow_dispatch has no range
+    # for. See #181 — this is the CI half of Conventional Commits enforcement;
+    # the local commit-msg hook lands separately once husky is in the repo (#159).
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Lint commits (commitlint)
+        uses: wagoid/commitlint-github-action@b948419dd99f3fd78a6548d48f94e3df7f6bf3ed # v6.2.1
+
+  spell-check:
+    name: Spell check
+    runs-on: ubuntu-latest
+    # A `typos` pass over app/**, *.md, and config files is a few seconds of
+    # work; an isolated job gives docs-only PRs a fast, independent verdict
+    # instead of waiting on the full lint-and-build job.
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Run typos
+        # Config lives in _typos.toml (project-specific identifier allow-list,
+        # e.g. Moadim, cargo, launchd, systemd, crontab, Codex, Hermes,
+        # neobrutalist). Scans app/**, *.md, and config files from the repo
+        # root; fails the build on a real misspelling in source/content.
+        #
+        # Pinned to a commit SHA, not the floating `v1.48.0` tag — every other
+        # third-party action in these workflows already is (see CHANGELOG
+        # #342/#350); a mutable tag lets a compromised upstream release
+        # silently change what this step runs with repo write access.
+        uses: crate-ci/typos@bee27e3a4fd1ea2111cf90ab89cd076c870fce14 # v1.48.0

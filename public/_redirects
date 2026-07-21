@@ -1,0 +1,22 @@
+# Cloudflare Pages redirect rules — force the canonical apex host.
+# https://developers.cloudflare.com/pages/configuration/redirects/
+#
+# Cloudflare serves this same static export from extra hostnames besides the
+# canonical https://moadim.io:
+#   - the production alias  moadim-landing.pages.dev
+#   - per-deploy / branch previews  <hash>.moadim-landing.pages.dev
+# All return HTTP 200 with identical content, so search engines can index the
+# .pages.dev copies as duplicates and split ranking signals away from the brand
+# host. A rel=canonical tag is only a hint; a host-level 301 is the
+# authoritative fix. This is host-native and free — Pages reads _redirects from
+# the static export with no runtime cost. It complements (does not overlap) the
+# header rules in public/_headers.
+#
+# Format: <source> <destination> <status>. Sources are matched per host, so the
+# canonical apex (moadim.io) has no rule and is never redirected — no loop.
+# :splat captures the wildcard path; :preview captures the preview subdomain
+# label (a placeholder in the hostname), covering arbitrary <hash>/branch hosts.
+
+https://moadim-landing.pages.dev/*            https://moadim.io/:splat   301
+https://:preview.moadim-landing.pages.dev/*   https://moadim.io/:splat   301
+https://www.moadim.io/*                       https://moadim.io/:splat   301

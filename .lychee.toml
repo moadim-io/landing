@@ -1,0 +1,24 @@
+# Config for the link-check workflow (.github/workflows/link-check.yml).
+# https://lychee.cli.rs/usage/config/
+
+# Send a real UA so hosts that block anonymous/bot traffic (LinkedIn, some
+# blog platforms) don't return a false-positive failure.
+user_agent = "Mozilla/5.0 (compatible; moadim-landing-link-check/1.0; +https://moadim.io)"
+
+# Retry flaky/rate-limited hosts before failing the job.
+max_retries = 3
+retry_wait_time = 5
+
+# GitHub API rate-limits unauthenticated requests aggressively; the workflow
+# passes GITHUB_TOKEN so github.com links get authenticated requests instead.
+
+exclude = [
+  # JSON-LD `@context` namespace identifier, not a fetchable page — schema.org
+  # returns non-HTML content that isn't meaningful to link-check.
+  "^https://schema\\.org",
+  # Placeholder domain used in unit test fixtures, never meant to resolve.
+  "^https://example\\.com",
+  # Local dev server address quoted in docs (README/AGENTS/CONTRIBUTING), not
+  # a real endpoint to check.
+  "^https?://localhost",
+]
