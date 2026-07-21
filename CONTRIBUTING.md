@@ -29,7 +29,7 @@ npm install
 | `npm run typecheck` | Type-check the whole project with `tsc --noEmit` (catches errors in files `next build`'s own TypeScript pass skips, e.g. `*.test.ts`). |
 | `npm test` | Run the Vitest unit/component test suite once (tests live next to the code they cover, e.g. `app/page.test.tsx`). |
 | `npm run test:watch` | Run the Vitest suite in watch mode. |
-| `npm run test:coverage` | Run the Vitest suite once with a coverage report over `app/**` (HTML report at `coverage/index.html`). |
+| `npm run test:coverage` | Run the Vitest suite once with a coverage report over `app/**` (HTML report at `coverage/index.html`). Enforces the coverage thresholds in `vitest.config.ts` — this is what CI runs, not plain `npm test`. |
 | `npm run build` | Produce the static export in `out/`. |
 | `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship (CI runs this after every build, before deploy). |
 | `npm run lint:html` | Validate the built `out/**/*.html` with [`html-validate`](https://html-validate.org) (config: [`.htmlvalidate.json`](./.htmlvalidate.json)). Run `npm run build` first. |
@@ -51,7 +51,7 @@ landing content, `globals.css` for styles). Static assets go in `public/`.
    npm run lint:md
    npm run lint:css
    npm run typecheck
-   npm test
+   npm run test:coverage
    npm run build
    npm run verify:export
    npm run lint:html

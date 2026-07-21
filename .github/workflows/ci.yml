@@ -54,9 +54,13 @@ jobs:
         # misses files like *.test.ts (see README.md / AGENTS.md / CONTRIBUTING.md).
         run: npm run typecheck
 
-      - name: Test (Vitest)
+      - name: Test (Vitest, with coverage thresholds)
+        # `test:coverage` runs the same suite as `test` plus the coverage
+        # thresholds in vitest.config.ts — a PR that drops coverage below the
+        # floor now fails this step instead of the gap only showing up if
+        # someone happens to open coverage/index.html by hand.
         timeout-minutes: 5
-        run: npm run test
+        run: npm run test:coverage
 
       - name: Build static export
         timeout-minutes: 5
