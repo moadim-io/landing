@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- CI: `test:coverage`'s coverage thresholds (`vitest.config.ts`) are now actually enforced in `ci.yml` — a PR that drops below them fails the "Test" step instead of the thresholds only being reported (#607).
+- `Cross-Origin-Opener-Policy: same-origin` added to `public/_headers`' baseline security headers, isolating the page's top-level browsing context from any cross-origin window it opens (#584).
 - CI: `workflow_dispatch` added to `ci.yml`, `codeql.yml`, `lighthouse.yml`, `visual-regression.yml`, and `actionlint.yml` so a maintainer can trigger lint/test/build, an ad hoc CodeQL scan, a Lighthouse budget check, a visual-regression diff, or a workflow-YAML lint on demand instead of needing an empty commit or waiting for the next real trigger — `deploy.yml` and `link-check.yml` already supported this (#604).
 - Playwright visual-regression baseline for the 404 page (`not-found-{desktop,mobile}-linux.png` in `e2e/visual.spec.ts-snapshots/`), guarding `app/not-found.tsx`'s rendered look the same way the existing homepage screenshot test already did — previously a Tailwind/token refactor could silently break its layout while lint, unit tests, and the homepage-only visual diff all stayed green (#595).
 - A `stylelint`/`stylelint-config-standard` gate (`npm run lint:css`) over `app/globals.css`, the repo's only hand-written CSS — catches issues like a duplicate custom-property declaration (the #236 class of bug) at lint time instead of only in review (#250, #465, #548).
@@ -76,6 +78,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `.github/PULL_REQUEST_TEMPLATE.md`'s checklist now references `npm run test:coverage` instead of plain `npm test`, matching what `ci.yml` actually runs (#612).
+- `error.tsx`/`not-found.tsx`'s remaining hand-copied status-card class strings deduped into shared `page.tsx` tokens (#610).
+- `README.md`/`CONTRIBUTING.md`'s `npm run test:visual` description now mentions the 404-page baseline alongside the homepage one (#605).
+- Landing copy updated to list `pi` as a fourth built-in agent alongside `claude`/`codex`/`hermes`, matching the daemon's actual agent list (#597).
+- `AGENTS.md`/`CONTRIBUTING.md`/`README.md` clarified that `npm run test:visual` only ships Linux screenshot baselines, so a first run on macOS/Windows failing isn't mistaken for a regression (#594).
+- `.github/PULL_REQUEST_TEMPLATE.md`'s checklist extended with `npm run test:visual`, matching every other pre-PR-gate doc (#593).
+- Added the changeset PR #583's Dependabot bump had been missing, matching the changeset-per-dependency-bump precedent set by #578 (#588).
+- CI: `timeout-minutes` added to the `scorecard.yml` analysis job, the one job across all workflows still relying on the 360-minute default (#587).
+- `AGENTS.md`'s "Before opening a PR" checklist sentence extended with `npm run test:visual`, matching the Commands table entry added in #575 (#585).
+- `lycheeverse/lychee-action` and `github/codeql-action/upload-sarif` bumped via Dependabot's `actions-minor-and-patch` group (#583).
+- CI: `actionlint.yml` and `dependency-review.yml` now cancel a stale run on a new push, matching the `concurrency` pattern already used by `ci.yml`/`codeql.yml`/`lighthouse.yml`/`link-check.yml`/`visual-regression.yml` (#579).
+- `actions/upload-artifact` bumped to `v7.0.1` in `scorecard.yml` and `visual-regression.yml`, resolving a one-major-version drift between the two workflows' pins (#578).
+- `CONTRIBUTING.md`'s Commands table and pre-PR checklist extended with `npm run test:visual` (#577).
+- `AGENTS.md`'s Commands table documents `npm run test:visual` (#575).
+- `vitest` bumped to `4.1.10` (patch) (#437).
 - Dropped the dead `changeFrequency`/`priority` fields from `app/sitemap.ts` — Google and Bing both document that neither ever influenced crawl behavior (#535).
 - `global-error.tsx`'s "Try again" button now uses the `shadow-brutal` token instead of a raw `shadow-[6px_6px_0_0_#000]` arbitrary value, the one call site the #213 shadow-token consolidation missed (#528).
 - Hero crates.io version badge now uses the `shadow-brutal` token instead of a raw arbitrary shadow value, for the same reason (#519).
@@ -120,6 +137,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `public/llms.txt`'s `Install:` section never told an agent to actually run `moadim` to start the server after installing it — only to install the binary and, separately, register reboot persistence (#609).
+- `SoftwareApplication` JSON-LD `sameAs`/`codeRepository`/`downloadUrl` now source from `site.ts`'s `REPO_URL`/`CRATE_URL` constants instead of hardcoding the same URLs as separate literals (#602).
+- Pinned `postcss` to `^8.5.10` via `overrides`, resolving a moderate-severity CSS-stringify XSS advisory (GHSA-qx2v-qp2m-jg93) bundled by `next@16.2.10`'s dependency tree (#591).
+- `public/llms.txt`'s reboot-persistence claim corrected: `cargo install --locked moadim` alone does not register a launchd/systemd service — that requires the separate `moadim install` step (#531).
+- `markdownlint-cli2` bumped, resolving two moderate-severity ReDoS advisories (GHSA-h67p-54hq-rp68, GHSA-6v5v-wf23-fmfq) in its `js-yaml`/`markdown-it` transitives (#433).
 - `public/llms.txt` — the file that exists specifically for AI agents to follow — named `cargo install --locked moadim` and the separate `moadim install` persistence step, but never told an agent to actually run `moadim` to start the server in between, the same "one command short of a working daemon" bug already fixed on the hero card (#206).
 - `deploy.yml` never actually set `NEXT_PUBLIC_BUILD_COMMIT`/`NEXT_PUBLIC_BUILD_REF`/`NEXT_PUBLIC_BUILD_TIME` in either its production `deploy` job or its PR `preview` job, so `https://moadim.io/version.json` — the route that exists specifically to confirm which commit is actually live — silently returned `{"commit":"dev","ref":"dev","builtAt":"dev"}` on every production deploy (#601).
 - `app/manifest.ts` set `background_color`/`theme_color` as a third independent `"#f4f1e8"` literal alongside `globals.css`'s `--color-background` and `brand-colors.ts`'s `SATORI_BACKGROUND` (the constant that exists precisely to give Satori-rendered routes one canonical source); now sources both fields from `SATORI_BACKGROUND` so a future palette change can't leave the PWA install/splash background and Android theme color silently stale (#596).

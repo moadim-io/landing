@@ -92,6 +92,10 @@ test/
 scripts/
   verify-export.mjs     Checks the built out/ directory for required routes/files (see
                          `npm run verify:export`).
+e2e/
+  visual.spec.ts         Playwright visual-regression suite (see `npm run test:visual` above).
+  visual.spec.ts-snapshots/  Committed `-linux` baseline screenshots the suite diffs against.
+playwright.config.ts     Playwright config for the visual-regression suite (builds against `out/`).
 next.config.test.ts      Guards next.config.ts's static-export invariants against drift.
 deploy-config.test.ts    Guards public/_headers and public/_redirects against malformed rules.
 node-version.test.ts     Guards .nvmrc, package.json engines.node, and CONTRIBUTING.md against drift.
@@ -162,6 +166,10 @@ ownership tokens as build-time environment variables:
 When a variable is set, the build renders the matching `<meta>` tag into the static export;
 when unset, no tag is emitted. These tokens are public (non-secret) identifiers — set them in
 the deploy build environment rather than committing them.
+
+To try one locally, copy [`.env.example`](./.env.example) to `.env.local`, fill in the token,
+and restart `npm run dev` or `npm run build` — Next.js loads `.env.local` automatically and
+it's git-ignored, so the value never gets committed.
 
 ## Security
 
