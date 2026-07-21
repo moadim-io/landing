@@ -8,6 +8,12 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/**"
+  # Lets a maintainer re-lint every workflow file on demand (e.g. after
+  # bumping the pinned actionlint image, or to confirm a flaky run was a
+  # fluke) without touching a workflow file just to retrigger the path
+  # filter. Mirrors the pattern already used by deploy.yml and
+  # link-check.yml.
+  workflow_dispatch:
 
 # Cancel a stale lint run when a PR gets a new push, mirroring ci.yml — a
 # superseded run on an old commit has no reason to keep holding a runner.
