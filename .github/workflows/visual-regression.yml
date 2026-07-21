@@ -4,6 +4,11 @@ on:
   pull_request:
   push:
     branches: [main]
+  # Lets a maintainer re-run the screenshot diff against main on demand (e.g.
+  # to confirm a flaky run was a fluke, or after touching a baseline PNG)
+  # without pushing an empty commit. Mirrors the pattern already used by
+  # deploy.yml and link-check.yml.
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
