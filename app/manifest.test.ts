@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import manifest, { dynamic } from "./manifest";
 import { SITE_TITLE, SITE_DESCRIPTION } from "./site";
+import { SATORI_BACKGROUND } from "./brand-colors";
 
 describe("manifest", () => {
   it("shares its name/description with layout.tsx's metadata via site.ts", () => {
@@ -21,6 +22,19 @@ describe("manifest", () => {
     // export (see AGENTS.md). If this regresses to the Next.js default,
     // `next build` fails — this test catches that without a full build.
     expect(dynamic).toBe("force-static");
+  });
+
+  it("sources its background/theme color from brand-colors.ts, not a re-typed literal", () => {
+    // Before this, background_color/theme_color were a third independent
+    // copy of the brand background hex (alongside globals.css and
+    // brand-colors.ts). A rebrand could update those two and silently miss
+    // this one, leaving the PWA install/splash screen stale. Asserting
+    // against the shared constant fails the moment manifest.ts stops
+    // importing it.
+    const result = manifest();
+
+    expect(result.background_color).toBe(SATORI_BACKGROUND);
+    expect(result.theme_color).toBe(SATORI_BACKGROUND);
   });
 
   it("declares a standalone PWA manifest rooted at the site", () => {

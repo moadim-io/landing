@@ -52,4 +52,4 @@ export const SITE_TITLE = "Moadim — Put your agents on a loop";
  * so it survives truncation on every surface (#135).
  */
 export const SITE_DESCRIPTION =
-  "Moadim is an open-source loop engine for AI agents — runs Claude, Codex, or Hermes on a schedule, over MCP and REST.";
+  "Moadim is an open-source loop engine for AI agents — runs Claude, Codex, Hermes, or Pi on a schedule, over MCP and REST.";

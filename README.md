@@ -6,7 +6,7 @@
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/moadim-io/landing/badge)](https://scorecard.dev/viewer/?uri=github.com/moadim-io/landing)
 
 The marketing/landing site for **Moadim**, an open-source loop engine for AI agents.
-Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, or Hermes
+Define a loop — a prompt, a schedule, an agent — and it runs Claude, Codex, Hermes, or Pi
 against your repo on every tick, over MCP and REST.
 
 ![Animated diagram of the Moadim loop: an agent reads a goals repository and refines the routines in a routines repository — each routine its own small, always-running loop — the routines act on external repositories and tasks, and progress flows back into the goals](./public/loop-animation.svg)
@@ -44,9 +44,9 @@ you edit files under `app/`.
 | `npm run typecheck` | Type-check the whole project with `tsc --noEmit` (`next build`'s own TypeScript pass only covers the app route graph, so it misses files like `*.test.ts`). |
 | `npm test` | Run the Vitest unit/component test suite once. |
 | `npm run test:watch` | Run the Vitest suite in watch mode while developing. |
-| `npm run test:coverage` | Run the Vitest suite once with a `text`/`html`/`json-summary` coverage report over `app/**` (HTML report at `coverage/index.html`). |
+| `npm run test:coverage` | Run the Vitest suite once with a `text`/`html`/`json-summary` coverage report over `app/**` (HTML report at `coverage/index.html`). Enforces the coverage thresholds in `vitest.config.ts` and is what CI runs on every PR — not plain `npm test`. |
 | `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship; runs after every build in CI. |
-| `npm run test:visual` | Run the Playwright visual-regression suite against the built `out/` export (run `npm run build` first). Compares homepage screenshots at mobile/desktop viewports against the committed baselines in `e2e/visual.spec.ts-snapshots/`. Update baselines after an intentional visual change with `npm run test:visual -- --update-snapshots`. Only the `-linux` baselines are committed (CI runs on `ubuntu-latest`) — on macOS or Windows this fails on the first run with "A snapshot doesn't exist" since no `-darwin`/`-win32` baseline exists yet; that's expected, not a regression. Run the same `--update-snapshots` command once to generate a local baseline (safe to leave uncommitted). |
+| `npm run test:visual` | Run the Playwright visual-regression suite against the built `out/` export (run `npm run build` first). Compares homepage and 404-page screenshots at mobile/desktop viewports against the committed baselines in `e2e/visual.spec.ts-snapshots/`. Update baselines after an intentional visual change with `npm run test:visual -- --update-snapshots`. Only the `-linux` baselines are committed (CI runs on `ubuntu-latest`) — on macOS or Windows this fails on the first run with "A snapshot doesn't exist" since no `-darwin`/`-win32` baseline exists yet; that's expected, not a regression. Run the same `--update-snapshots` command once to generate a local baseline (safe to leave uncommitted). |
 | `typos` | Spell-check `app/**`, `*.md`, and config files with [`typos`](https://github.com/crate-ci/typos) (config: [`_typos.toml`](./_typos.toml)). Not an npm script — install with `cargo install typos-cli` or `brew install typos-cli`, then run `typos` from the repo root. Gated in CI on every PR and push to `main`. |
 
 ## Project structure
@@ -92,6 +92,10 @@ test/
 scripts/
   verify-export.mjs     Checks the built out/ directory for required routes/files (see
                          `npm run verify:export`).
+e2e/
+  visual.spec.ts         Playwright visual-regression suite (see `npm run test:visual` above).
+  visual.spec.ts-snapshots/  Committed `-linux` baseline screenshots the suite diffs against.
+playwright.config.ts     Playwright config for the visual-regression suite (builds against `out/`).
 next.config.test.ts      Guards next.config.ts's static-export invariants against drift.
 deploy-config.test.ts    Guards public/_headers and public/_redirects against malformed rules.
 node-version.test.ts     Guards .nvmrc, package.json engines.node, and CONTRIBUTING.md against drift.
@@ -162,6 +166,10 @@ ownership tokens as build-time environment variables:
 When a variable is set, the build renders the matching `<meta>` tag into the static export;
 when unset, no tag is emitted. These tokens are public (non-secret) identifiers — set them in
 the deploy build environment rather than committing them.
+
+To try one locally, copy [`.env.example`](./.env.example) to `.env.local`, fill in the token,
+and restart `npm run dev` or `npm run build` — Next.js loads `.env.local` automatically and
+it's git-ignored, so the value never gets committed.
 
 ## Security
 
