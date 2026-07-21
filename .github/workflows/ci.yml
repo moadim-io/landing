@@ -103,6 +103,25 @@ jobs:
       - name: Lint (markdownlint)
         run: npm run lint:md
 
+  commit-lint:
+    name: Commit lint
+    # Only meaningful on a PR: it lints the commit range being merged, which a
+    # push to main (already-merged history) or workflow_dispatch has no range
+    # for. See #181 — this is the CI half of Conventional Commits enforcement;
+    # the local commit-msg hook lands separately once husky is in the repo (#159).
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Lint commits (commitlint)
+        uses: wagoid/commitlint-github-action@b948419dd99f3fd78a6548d48f94e3df7f6bf3ed # v6.2.1
+
   spell-check:
     name: Spell check
     runs-on: ubuntu-latest
