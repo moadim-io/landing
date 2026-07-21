@@ -20,6 +20,34 @@ describe("Home", () => {
     ).toBeInTheDocument();
   });
 
+  it("surfaces the moadim run step after the install command (#206)", () => {
+    // `cargo install` only compiles and installs the binary — nothing runs
+    // until `moadim` itself is invoked. Without this line the hero's primary
+    // CTA leaves visitors installed but with no daemon running.
+    render(<Home />);
+
+    expect(screen.getByText("moadim", { selector: "code" })).toBeInTheDocument();
+    expect(screen.getByText(/localhost:5784/i)).toBeInTheDocument();
+  });
+
+  it("hides the decorative shell prompt from assistive tech and text selection", () => {
+    // page.tsx's own comment spells out why this matters: the leading `$` is
+    // pure decoration, so it must stay `aria-hidden` (a screen reader
+    // shouldn't announce "dollar sign") and `select-none` (so copying the
+    // install line yields a runnable `cargo install --locked moadim`, not a
+    // `$`-prefixed one a shell would reject). Nothing asserted either
+    // attribute before, so a future edit to the install card could drop
+    // either silently.
+    const { container } = render(<Home />);
+
+    const prompt = container.querySelector(
+      'code span[aria-hidden="true"].select-none',
+    );
+
+    expect(prompt).not.toBeNull();
+    expect(prompt?.textContent.trim()).toBe("$");
+  });
+
   it("surfaces the Unix/tmux/cron-daemon runtime prerequisite next to the install command", () => {
     render(<Home />);
 
@@ -53,21 +81,90 @@ describe("Home", () => {
     );
   });
 
+  it("links the crates.io version badge at the published crate and uses the shared shadow token", () => {
+    render(<Home />);
+
+    const badgeLink = screen.getByRole("link", {
+      name: /latest published moadim release/i,
+    });
+
+    expect(badgeLink).toHaveAttribute("href", CRATE_URL);
+    expect(badgeLink.className).toContain("shadow-brutal");
+    expect(badgeLink.className).not.toMatch(/shadow-\[/);
+
+    const badgeImg = badgeLink.querySelector("img");
+    expect(badgeImg).toHaveAttribute(
+      "src",
+      `https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`,
+    );
+    expect(badgeImg).toHaveAttribute("alt", "moadim version on crates.io");
+    // Without this, React DOM auto-hoists a `<link rel="preload" as="image">`
+    // for this third-party badge into <head> at "high" priority — spending
+    // the page's earliest network slot on a decorative img.shields.io fetch
+    // instead of the self-hosted fonts/CSS that actually gate first paint.
+    expect(badgeImg).toHaveAttribute("fetchPriority", "low");
+  });
+
+  it("renders the loop diagram panel between the CTAs and the features", () => {
+    render(<Home />);
+
+    // The diagram itself is covered by LoopAnimation.test.tsx; here we only
+    // assert the page actually mounts it inside a named landmark section.
+    const section = screen.getByRole("region", { name: /the loop/i });
+
+    expect(
+      section.querySelector('img[src="/loop-animation.svg"]'),
+    ).not.toBeNull();
+  });
+
+  it("exposes the feature cards as a named landmark region", () => {
+    render(<Home />);
+
+    // Unlike the "On loop engineering" and FAQ sections, this grid has no
+    // visible heading — without an accessible name it'd be an anonymous
+    // <ul> that screen-reader landmark navigation skips right over.
+    expect(
+      screen.getByRole("region", { name: /features/i }),
+    ).toBeInTheDocument();
+  });
+
   it("renders all three feature cards", () => {
     render(<Home />);
 
     expect(
-      screen.getByRole("heading", { level: 2, name: /a loop runs an agent/i }),
+      screen.getByRole("heading", { level: 3, name: /a loop runs an agent/i }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("heading", {
-        level: 2,
+        level: 3,
         name: /runs locally, survives reboot/i,
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { level: 2, name: /mcp · rest · openapi/i }),
+      screen.getByRole("heading", { level: 3, name: /ui · rest · mcp/i }),
     ).toBeInTheDocument();
+  });
+
+  it("groups the feature cards under a labelled, level-2 section heading", () => {
+    // The three card titles are demoted to <h3> precisely so a <h2> can sit
+    // above them in the outline (hero <h1> -> section <h2> -> card <h3>)
+    // instead of leaving them as unlabeled peers of "The loop" / "On loop
+    // engineering". See #214.
+    render(<Home />);
+
+    expect(
+      screen.getByRole("heading", { level: 2, name: /^features$/i }),
+    ).toBeInTheDocument();
+  });
+
+  it("keeps the feature grid and reading list in the accessibility tree's list semantics", () => {
+    // Tailwind's Preflight resets `list-style: none` on every <ul>, which in
+    // Safari/VoiceOver also strips the implicit `list`/`listitem` role (a
+    // long-documented WebKit quirk) unless `role="list"` restores it — see
+    // the matching comment on each <ul> in page.tsx.
+    render(<Home />);
+
+    expect(screen.getAllByRole("list")).toHaveLength(2);
   });
 
   it("renders the loop-engineering reading list as safe, nofollow external links", () => {

@@ -26,6 +26,8 @@ const REQUIRED_FILES = [
   "_headers",
   "_redirects",
   "llms.txt",
+  "loop-animation.svg",
+  "version.json",
 ];
 
 let workDir: string | undefined;
@@ -33,12 +35,17 @@ let workDir: string | undefined;
 function makeOutDir({
   missing = [],
   empty = [],
-}: { missing?: string[]; empty?: string[] } = {}) {
+  asDir = [],
+}: { missing?: string[]; empty?: string[]; asDir?: string[] } = {}) {
   workDir = mkdtempSync(join(tmpdir(), "verify-export-test-"));
   const outDir = join(workDir, "out");
   mkdirSync(outDir, { recursive: true });
   for (const file of REQUIRED_FILES) {
     if (missing.includes(file)) continue;
+    if (asDir.includes(file)) {
+      mkdirSync(join(outDir, file), { recursive: true });
+      continue;
+    }
     writeFileSync(join(outDir, file), empty.includes(file) ? "" : "content");
   }
   return workDir;
@@ -75,6 +82,20 @@ describe("verify-export", () => {
 
     expect(() => execFileSync("node", [SCRIPT_PATH], { cwd, encoding: "utf8" })).toThrow(
       /icon\.svg \(empty\)/,
+    );
+  });
+
+  it("exits non-zero when a required path is a directory instead of a file", () => {
+    // A directory's `size` is a small, non-zero number of its own (filesystem
+    // metadata, not content) — a naive `size === 0` check alone would treat a
+    // required route that's been silently replaced by a directory (e.g. a
+    // future Next.js version emitting `<name>/index.html` instead of a flat
+    // `<name>` file) as present and non-empty, when the site would actually
+    // 404 for that URL.
+    const cwd = makeOutDir({ asDir: ["opengraph-image"] });
+
+    expect(() => execFileSync("node", [SCRIPT_PATH], { cwd, encoding: "utf8" })).toThrow(
+      /opengraph-image \(not a file\)/,
     );
   });
 });

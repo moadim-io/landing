@@ -13,6 +13,13 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // `npm run test:coverage`'s Istanbul HTML report (gitignored, see
+    // .gitignore's `/coverage`) — ESLint's flat config doesn't read
+    // .gitignore on its own, so without this, running test:coverage before
+    // lint makes `npm run lint` fail on the report's own generated
+    // block-navigation.js/sorter.js/prettify.js ("Unused eslint-disable
+    // directive" etc.) instead of only ever linting this repo's source.
+    "coverage/**",
   ]),
   {
     // Type-aware linting needs the TypeScript program, which only covers
@@ -38,6 +45,13 @@ const eslintConfig = defineConfig([
       // same way. Force the call site to use a non-async callback or
       // handle the promise explicitly.
       "@typescript-eslint/no-misused-promises": "error",
+      // Flag a `?.`/non-null-guard branch whose condition the type checker
+      // already proves can't be nullish (or is always nullish). Such a
+      // check reads as defensive code the type system disagrees with,
+      // masking either a stale guard left over from a type change or a
+      // wrong assumption about what can flow through. Only checkable with
+      // type information, so it lives in this typed-linting block.
+      "@typescript-eslint/no-unnecessary-condition": "error",
     },
   },
   {

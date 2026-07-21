@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { SATORI_ACCENT as ACCENT, SATORI_FOREGROUND as FOREGROUND } from "./brand-colors";
 
 // Apple touch icon for iOS "Add to Home Screen", Safari bookmarks, and the
 // link-preview tools that request `apple-touch-icon`. Generated at build time
@@ -21,8 +22,8 @@ export default function AppleIcon() {
           justifyContent: "center",
           // Site palette: black field, accent-yellow mark — matches the
           // neobrutalist favicon (app/icon.svg) and the OG card.
-          background: "#0a0a0a",
-          border: "12px solid #ffd400",
+          background: FOREGROUND,
+          border: `12px solid ${ACCENT}`,
         }}
       >
         <div
@@ -30,7 +31,7 @@ export default function AppleIcon() {
             fontSize: 120,
             fontWeight: 800,
             lineHeight: 1,
-            color: "#ffd400",
+            color: ACCENT,
           }}
         >
           M

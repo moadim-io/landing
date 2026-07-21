@@ -6,6 +6,17 @@
   --color-accent: #ffd400;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /*
+   * Neobrutalist hard drop shadows, keyed off --color-foreground instead of
+   * a re-typed #000 literal per call site (#213). `-lg` is the panel-level
+   * shadow (header/features/reads/FAQ); the unsuffixed pair plus its
+   * hover/active steps are the CTA-button choreography.
+   */
+  --shadow-brutal: 6px 6px 0 0 var(--color-foreground);
+  --shadow-brutal-hover: 8px 8px 0 0 var(--color-foreground);
+  --shadow-brutal-active: 2px 2px 0 0 var(--color-foreground);
+  --shadow-brutal-lg: 10px 10px 0 0 var(--color-foreground);
 }
 
 /*
@@ -31,6 +42,7 @@
  */
 body {
   --grid-line: color-mix(in srgb, var(--foreground) 6%, var(--background));
+
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;

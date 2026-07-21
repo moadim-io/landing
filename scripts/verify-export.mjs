@@ -35,19 +35,39 @@ const REQUIRED_FILES = [
   // canonical host and let search engines index duplicate-content mirrors.
   "_redirects",
   "llms.txt",
+  // app/LoopAnimation.tsx embeds this as the homepage's sole "The loop" visual and
+  // README.md hotlinks it from moadim.io directly — it was never added here, so it
+  // silently dropping from a build (e.g. a public/ copy failure `next build` doesn't
+  // notice) would break both the hero content and every external README hotlink with
+  // zero CI signal.
+  "loop-animation.svg",
+  // /version.json (#230) exposes the commit that produced this build so a human
+  // or the deploy smoke check can confirm what's actually live — silently
+  // dropping it would remove that signal with zero build-time warning.
+  "version.json",
 ];
 
 const missing = [];
 for (const file of REQUIRED_FILES) {
   const path = join(OUT_DIR, file);
-  let size = 0;
+  let stats;
   try {
-    size = statSync(path).size;
+    stats = statSync(path);
   } catch {
     missing.push(`${path} (not found)`);
     continue;
   }
-  if (size === 0) {
+  // A directory's `size` is a small, non-zero number of its own (filesystem
+  // metadata, not content), so the `size === 0` check below would silently
+  // pass a required "file" that's actually a directory — e.g. a future
+  // Next.js version emitting a route as `<name>/index.html` instead of a
+  // flat `<name>` file. Checking `isFile()` catches that class of export
+  // breakage too, not just a missing or zero-byte file.
+  if (!stats.isFile()) {
+    missing.push(`${path} (not a file)`);
+    continue;
+  }
+  if (stats.size === 0) {
     missing.push(`${path} (empty)`);
   }
 }
