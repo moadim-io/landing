@@ -71,7 +71,12 @@ landing content, `globals.css` for styles). Static assets go in `public/`.
    `CHANGELOG.md` and bump `package.json` on release. Pure docs/Markdown
    changes don't need one.
 
-4. Open a pull request using the PR template. Link the related issue
+4. Write commit messages as [Conventional Commits](https://www.conventionalcommits.org)
+   (`feat: add hero CTA`, `fix(a11y): correct skip-link target`, `docs: …`, `chore: …`).
+   CI's "Commit lint" job (config: [`commitlint.config.mjs`](./commitlint.config.mjs))
+   rejects a PR whose commits don't follow this format.
+
+5. Open a pull request using the PR template. Link the related issue
    (e.g. `Closes #123`) and attach screenshots for any visual change.
 
 ## Reporting issues
