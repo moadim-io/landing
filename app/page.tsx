@@ -253,6 +253,52 @@ export default function Home() {
           <LoopAnimation />
         </section>
 
+        {/* The page sold "MCP-native" / "REST + OpenAPI" as feature bullets with no
+            code to back them up — a visitor couldn't see what scheduling or listing
+            a loop over either interface actually looks like without leaving for the
+            daemon's own README (#67). Both snippets are verified against the
+            daemon's real surface: `GET /api/v1/routines` (src/commands.rs) and the
+            `list_routines` MCP tool (src/routes/mcp.rs). */}
+        <section className={panel} aria-labelledby="quickstart-heading">
+          <h2
+            id="quickstart-heading"
+            className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent"
+          >
+            Quickstart
+          </h2>
+          <div className="grid gap-0 sm:grid-cols-2">
+            <div className="flex flex-col gap-2 border-b-4 border-black p-6 sm:border-b-0 sm:border-r-4">
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-black/70">
+                REST — list loops
+              </span>
+              <pre className="overflow-x-auto rounded border-2 border-black bg-black p-3 font-mono text-sm text-white">
+                <code>
+                  <span aria-hidden="true" className="select-none text-accent">
+                    ${" "}
+                  </span>
+                  curl http://localhost:5784/api/v1/routines
+                </code>
+              </pre>
+              <p className="text-sm font-medium leading-6">
+                Every loop is also a documented HTTP endpoint, with an OpenAPI
+                schema and Swagger UI baked into the daemon.
+              </p>
+            </div>
+            <div className="flex flex-col gap-2 p-6">
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-black/70">
+                MCP — list loops
+              </span>
+              <pre className="overflow-x-auto rounded border-2 border-black bg-black p-3 font-mono text-sm text-white">
+                <code>{`{ "name": "list_routines", "arguments": {} }`}</code>
+              </pre>
+              <p className="text-sm font-medium leading-6">
+                The same call as an MCP tool, for any MCP-compatible agent
+                connected to <code className="font-mono">/mcp</code>.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Unlike the reading-list and FAQ sections below, this grid has no
             visible heading of its own — the CTA row above flows straight
             into it. A visually-hidden <h2> + `aria-labelledby` gives the
