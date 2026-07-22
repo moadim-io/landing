@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import Home, { faqJsonLd } from "./page";
-import { CRATE_NAME, CRATE_URL, REPO_URL } from "./site";
+import { CRATE_NAME, CRATE_URL, REPO_SLUG, REPO_URL } from "./site";
 
 describe("Home", () => {
   it("renders the hero headline", () => {
@@ -27,7 +27,13 @@ describe("Home", () => {
     render(<Home />);
 
     expect(screen.getByText("moadim", { selector: "code" })).toBeInTheDocument();
-    expect(screen.getByText(/localhost:5784/i)).toBeInTheDocument();
+
+    // Scoped to the install card: the quickstart section below also mentions
+    // `localhost:5784` (in its REST example), so an unscoped query is ambiguous.
+    const installCard = screen
+      .getByText("moadim", { selector: "code" })
+      .closest("div");
+    expect(installCard?.textContent).toMatch(/localhost:5784/i);
   });
 
   it("hides the decorative shell prompt from assistive tech and text selection", () => {
@@ -105,6 +111,24 @@ describe("Home", () => {
     expect(badgeImg).toHaveAttribute("fetchPriority", "low");
   });
 
+  it("shows a live GitHub star count badge next to the Star on GitHub CTA (#162)", () => {
+    render(<Home />);
+
+    const badgeLink = screen.getByRole("link", {
+      name: /moadim github star count/i,
+    });
+
+    expect(badgeLink).toHaveAttribute("href", REPO_URL);
+    expect(badgeLink.className).toContain("shadow-brutal");
+
+    const badgeImg = badgeLink.querySelector("img");
+    expect(badgeImg).toHaveAttribute(
+      "src",
+      `https://img.shields.io/github/stars/${REPO_SLUG}?style=flat&label=stars`,
+    );
+    expect(badgeImg).toHaveAttribute("alt", "moadim GitHub star count");
+  });
+
   it("renders the loop diagram panel between the CTAs and the features", () => {
     render(<Home />);
 
@@ -115,6 +139,24 @@ describe("Home", () => {
     expect(
       section.querySelector('img[src="/loop-animation.svg"]'),
     ).not.toBeNull();
+  });
+
+  it("shows a REST and an MCP quickstart example, each accurate against the daemon's real surface", () => {
+    // The install card only gets the daemon running — nothing on the page
+    // previously showed what calling it over REST or MCP actually looks
+    // like (#67). Both snippets are verified against the daemon repo:
+    // `GET /api/v1/routines` (src/commands.rs) and the `list_routines` MCP
+    // tool (src/routes/mcp.rs).
+    render(<Home />);
+
+    const section = screen.getByRole("region", { name: /quickstart/i });
+
+    expect(section.textContent).toContain(
+      "curl http://localhost:5784/api/v1/routines",
+    );
+    expect(section.textContent).toMatch(
+      /"name":\s*"list_routines",\s*"arguments":\s*{}/,
+    );
   });
 
   it("exposes the feature cards as a named landmark region", () => {
@@ -170,7 +212,7 @@ describe("Home", () => {
   it("renders the loop-engineering reading list as safe, nofollow external links", () => {
     render(<Home />);
 
-    const reads: Array<[source: string, href: string]> = [
+    const reads: [source: string, href: string][] = [
       [
         "mindstudio",
         "https://www.mindstudio.ai/blog/what-is-loop-engineering-ai-coding-agents",
@@ -198,6 +240,17 @@ describe("Home", () => {
 });
 
 describe("FAQ section", () => {
+  // The built-in Claude agent silently no-ops a run if python3 isn't on
+  // PATH (see the daemon README's "Built-in claude agent prerequisites") —
+  // easy to miss since nothing in the hero/install card mentions it. Assert
+  // the FAQ answer actually says so, so a future copy edit can't silently
+  // drop the one on-page place this trap is documented.
+  it("flags the built-in Claude agent's python3 prerequisite", () => {
+    render(<Home />);
+
+    expect(screen.getByText(/python3/i)).toBeInTheDocument();
+  });
+
   it("renders every FAQ question and answer as a definition-list pair", () => {
     render(<Home />);
 
@@ -236,10 +289,10 @@ describe("FAQ section", () => {
     jsonLd.mainEntity.forEach(
       (
         entry: { name: string; acceptedAnswer: { text: string } },
-        i: number,
+        index: number,
       ) => {
-        expect(dtElements[i]).toHaveTextContent(entry.name);
-        expect(ddElements[i]).toHaveTextContent(entry.acceptedAnswer.text);
+        expect(dtElements[index]).toHaveTextContent(entry.name);
+        expect(ddElements[index]).toHaveTextContent(entry.acceptedAnswer.text);
       },
     );
   });
