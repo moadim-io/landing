@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import RootLayout, { jsonLd, metadata, viewport } from "./layout";
 import { ORG_URL, REPO_URL, CRATE_URL, SITE_URL } from "./site";
@@ -208,7 +208,13 @@ describe("root layout render", () => {
     expect(docsLink).toHaveAttribute("target", "_blank");
     expect(docsLink).toHaveAttribute("rel", "noopener noreferrer");
 
-    const githubLink = screen.getByRole("link", { name: /^github/i });
+    // Scoped to the header `banner` landmark (mirroring the homeLink
+    // assertion above): the footer added its own outbound GitHub link
+    // (see app/layout.tsx), which also matches /^github/i and would
+    // otherwise make this query ambiguous.
+    const githubLink = within(screen.getByRole("banner")).getByRole("link", {
+      name: /^github/i,
+    });
     expect(githubLink).toHaveAttribute("href", REPO_URL);
     expect(githubLink).toHaveAttribute("target", "_blank");
   });
