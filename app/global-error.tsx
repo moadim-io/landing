@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import "./globals.css";
 
 // Root-layout error boundary: only fires when the root layout itself (fonts,
@@ -21,13 +22,25 @@ export default function GlobalError({ reset }: { reset: () => void }) {
         <p className="max-w-md text-lg font-medium leading-7">
           The page failed to load. Try again, or reload the site.
         </p>
-        <button
-          type="button"
-          onClick={reset}
-          className="border-4 border-black bg-accent px-8 py-4 text-base font-black uppercase tracking-wide shadow-brutal"
-        >
-          Try again
-        </button>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <button
+            type="button"
+            onClick={reset}
+            className="border-4 border-black bg-accent px-8 py-4 text-base font-black uppercase tracking-wide shadow-brutal"
+          >
+            Try again
+          </button>
+          {/* The copy above promises a "reload the site" escape hatch distinct
+              from `reset()` (which just re-renders the same broken tree — a
+              no-op if the error is persistent rather than transient). Linking
+              home gives the visitor an actual way out of the errored state. */}
+          <Link
+            href="/"
+            className="border-4 border-black bg-white px-8 py-4 text-base font-black uppercase tracking-wide shadow-brutal"
+          >
+            Reload site
+          </Link>
+        </div>
       </body>
     </html>
   );
