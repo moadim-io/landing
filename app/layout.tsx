@@ -14,6 +14,12 @@ import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
 import { SkipLink } from "./SkipLink";
 
+// Stamped at build time (mirrors sitemap.ts's `lastModified`) so the footer
+// copyright year advances on its own with each redeploy instead of needing a
+// yearly hand-edit — a static "© 2026" would otherwise start under-stating
+// the site's freshness the moment the calendar turns over.
+const copyrightYear = new Date().getFullYear();
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -260,7 +266,7 @@ export default function RootLayout({
             inside `app/page.tsx`. */}
         <footer className="border-t-4 border-black bg-background">
           <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-3 px-4 py-6 sm:flex-row sm:justify-between sm:px-8">
-            <p className="text-sm font-medium">© 2026 Moadim</p>
+            <p className="text-sm font-medium">© {copyrightYear} Moadim</p>
             {/* Same Safari/VoiceOver `role="list"` restoration as the nav
                 `<ul>` above — see the comment there for why. */}
             {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
