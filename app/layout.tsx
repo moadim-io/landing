@@ -251,6 +251,41 @@ export default function RootLayout({
           </div>
         </header>
         {children}
+        {/* Site footer landmark: gives assistive-tech users a `contentinfo`
+            region to land on (a semantic <footer> exposes it implicitly, so
+            no redundant `role="contentinfo"` is added), plus a persistent
+            home for copyright and outbound links. Sits below `main`, mirroring
+            the top-level `banner` <header> above — `body` is already `flex
+            flex-col`, so this is a second flex child rather than living
+            inside `app/page.tsx`. */}
+        <footer className="border-t-4 border-black bg-background">
+          <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-3 px-4 py-6 sm:flex-row sm:justify-between sm:px-8">
+            <p className="text-sm font-medium">© 2026 Moadim</p>
+            {/* Same Safari/VoiceOver `role="list"` restoration as the nav
+                `<ul>` above — see the comment there for why. */}
+            {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+            <ul className="flex items-center gap-6" role="list">
+              <li>
+                <ExternalLink
+                  href={REPO_URL}
+                  className="text-sm font-bold uppercase tracking-wide hover:text-accent"
+                  aria-label="GitHub"
+                >
+                  GitHub
+                </ExternalLink>
+              </li>
+              <li>
+                <ExternalLink
+                  href={CRATE_URL}
+                  className="text-sm font-bold uppercase tracking-wide hover:text-accent"
+                  aria-label="crates.io"
+                >
+                  crates.io
+                </ExternalLink>
+              </li>
+            </ul>
+          </div>
+        </footer>
       </body>
     </html>
   );

@@ -23,12 +23,12 @@ describe("Node version pinning", () => {
   });
 
   it("pins @types/node to the same major as .nvmrc", () => {
-    const major = packageJson.devDependencies["@types/node"].match(/\d+/)?.[0];
+    const major = (/\d+/.exec(packageJson.devDependencies["@types/node"]))?.[0];
     expect(major).toBe(nvmrc);
   });
 
   it("documents the same @types/node major in CONTRIBUTING.md's prerequisites", () => {
-    const major = packageJson.devDependencies["@types/node"].match(/\d+/)?.[0];
+    const major = (/\d+/.exec(packageJson.devDependencies["@types/node"]))?.[0];
     expect(contributing).toContain(`@types/node\` v${major}`);
   });
 });
