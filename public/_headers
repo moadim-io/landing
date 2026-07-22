@@ -15,10 +15,18 @@
 # Baseline security headers, applied site-wide. More specific rules below only
 # detach/reset Cache-Control (`! Cache-Control`), so these keep applying to
 # every path — including hashed assets and metadata routes — without repeating
-# them per rule. No CSP here: the JSON-LD <script> (JsonLdScript.tsx) is inline
-# and static-exported with no per-request nonce, so a strict CSP would need
-# 'unsafe-inline' anyway; adding one is a separate, larger effort left for later.
+# them per rule.
 #
+# - Content-Security-Policy: no 'unsafe-inline' needed for script-src. The
+#   JSON-LD <script> (JsonLdScript.tsx) is inline, but it's typed
+#   `application/ld+json` — per the HTML spec, a <script> element only executes
+#   (and only counts as a "script" for CSP's script-src) when its type is empty,
+#   a JavaScript MIME type, or "module"; a non-JS type like this is just an inert
+#   data block the parser never runs, CSP or not. Every actual script/style/font
+#   is self-hosted under content-hashed /_next/static/* URLs (next/font resolves
+#   Geist at build time, no runtime Google Fonts request), there are no <form>s,
+#   and nothing on the page issues fetch/XHR calls — so every fetch directive
+#   below can stay locked to 'self' or 'none' with no allowance carved out.
 # - X-Content-Type-Options: stops a browser from MIME-sniffing a response into
 #   an executable type against the served Content-Type.
 # - Referrer-Policy: sends the full referrer to same-origin requests but only
@@ -56,6 +64,7 @@
 # picked up immediately instead of serving a stale page.
 /*
   Cache-Control: public, max-age=0, must-revalidate
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY

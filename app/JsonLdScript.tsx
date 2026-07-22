@@ -17,9 +17,10 @@
  * behavior gets one test instead of zero — mirroring the `ExternalLink` /
  * `ctaButton` / `SITE_URL` single-source-of-truth pattern used elsewhere in
  * this codebase.
+ * @param data
  */
 export function toSafeJsonLd(data: unknown): string {
-  return JSON.stringify(data).replace(/</g, "\\u003c");
+  return JSON.stringify(data).replaceAll('<', String.raw`\u003c`);
 }
 
 export function JsonLdScript({ data }: { data: unknown }) {
