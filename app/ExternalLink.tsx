@@ -27,7 +27,7 @@ import type { AnchorHTMLAttributes, ReactNode } from "react";
  * warning. Appending it here instead means a caller's `aria-label` only ever
  * needs to describe the link's destination.
  */
-type ExternalLinkProps = Omit<
+type ExternalLinkProperties = Omit<
   AnchorHTMLAttributes<HTMLAnchorElement>,
   "target" | "href" | "rel"
 > & {
@@ -43,7 +43,7 @@ export function ExternalLink({
   children,
   "aria-label": ariaLabel,
   ...rest
-}: ExternalLinkProps) {
+}: ExternalLinkProperties) {
   const rel = relExtra
     ? `${relExtra} noopener noreferrer`
     : "noopener noreferrer";

@@ -12,7 +12,9 @@ Every loop is exposed three ways: as an MCP tool, as a documented REST endpoint
 (OpenAPI/Swagger UI), and through a web UI baked into the daemon. An iCal feed
 publishes upcoming runs.
 
-Install: `cargo install --locked moadim`
+Install: `cargo install --locked moadim`, then run `moadim` to start the server
+(serves at `http://localhost:5784/`). Run `moadim install` afterward to
+register a launchd/systemd service so it survives logout and reboot.
 
 Platform: Unix-only (macOS and Linux). The daemon depends on `crontab`, `tmux`,
 and a launchd/systemd service; installation bails on unsupported platforms
