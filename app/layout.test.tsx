@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import RootLayout, { jsonLd, metadata, viewport } from "./layout";
 import { ORG_URL, REPO_URL, CRATE_URL, SITE_URL } from "./site";
@@ -203,12 +203,18 @@ describe("root layout render", () => {
       </RootLayout>,
     );
 
-    const docsLink = screen.getByRole("link", { name: /docs/i });
+    // Scoped to the header nav: the footer also links to GitHub (see
+    // layout.tsx's footer), so an unscoped getByRole("link", { name:
+    // /^github/i }) matches both and throws. This test only cares about
+    // the header nav's Docs/GitHub links.
+    const nav = within(screen.getByRole("navigation", { name: "Site navigation" }));
+
+    const docsLink = nav.getByRole("link", { name: /docs/i });
     expect(docsLink).toHaveAttribute("href", `${REPO_URL}#readme`);
     expect(docsLink).toHaveAttribute("target", "_blank");
     expect(docsLink).toHaveAttribute("rel", "noopener noreferrer");
 
-    const githubLink = screen.getByRole("link", { name: /^github/i });
+    const githubLink = nav.getByRole("link", { name: /^github/i });
     expect(githubLink).toHaveAttribute("href", REPO_URL);
     expect(githubLink).toHaveAttribute("target", "_blank");
   });
