@@ -26,7 +26,7 @@ describe("site", () => {
     // `sameAs` matches whatever ORG_URL happens to be, so it stays green even
     // if this slicing logic regressed to point at the wrong segment or a
     // full repo URL instead of the org profile.
-    expect(ORG_URL).toBe(`https://github.com/${REPO_SLUG.split("/")[0]}`);
+    expect(ORG_URL).toBe(`https://github.com/${REPO_SLUG.split("/", 1)[0]}`);
     expect(ORG_URL).toBe("https://github.com/moadim-io");
   });
 
