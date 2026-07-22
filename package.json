@@ -29,7 +29,12 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:visual": "playwright test",
-    "verify:export": "node scripts/verify-export.mjs"
+    "verify:export": "node scripts/verify-export.mjs",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,mjs}": "eslint --fix --max-warnings 0",
+    "*.md": "markdownlint-cli2 --fix"
   },
   "dependencies": {
     "next": "16.2.10",
@@ -54,7 +59,9 @@
     "eslint-import-resolver-typescript": "^4.4.5",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "html-validate": "^11.5.5",
+    "husky": "^9.1.7",
     "jsdom": "^29.1.1",
+    "lint-staged": "^17.0.8",
     "markdownlint-cli2": "^0.23.0",
     "stylelint": "^17.14.0",
     "stylelint-config-standard": "^40.0.0",

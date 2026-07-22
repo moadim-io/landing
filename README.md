@@ -30,6 +30,11 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) in your browser. The page hot-reloads as
 you edit files under `app/`.
 
+`npm install` also registers a `pre-commit` hook (via `husky` + `lint-staged`) that runs
+`eslint --fix` on staged `*.{ts,tsx,mjs}` files and `markdownlint-cli2 --fix` on staged `*.md`
+files, so lint/format issues are caught before a commit instead of after a push. Bypass it for
+an intentional exception with `git commit --no-verify`.
+
 ## Scripts
 
 | Command | Description |
