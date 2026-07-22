@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import RootLayout, { jsonLd, metadata, viewport } from "./layout";
-import { ORG_URL, REPO_URL, SITE_URL } from "./site";
+import { ORG_URL, REPO_URL, CRATE_URL, SITE_URL } from "./site";
 
 describe("root layout metadata", () => {
   it("declares the expected title and description", () => {
@@ -147,6 +147,15 @@ describe("root layout JSON-LD", () => {
     // channels): this is what lets search engines resolve the "Moadim"
     // Organization entity to a verifiable external profile.
     expect(organization.sameAs).toEqual([ORG_URL]);
+  });
+
+  it("points the SoftwareApplication node at the product's real distribution channels", () => {
+    // Regression guard: these must come from site.ts's REPO_URL/CRATE_URL, not hardcoded
+    // literals — a repo move or crate rename would otherwise silently leave stale URLs
+    // here with no test failure to catch it.
+    expect(softwareApplication.sameAs).toEqual([REPO_URL, CRATE_URL]);
+    expect(softwareApplication.codeRepository).toBe(REPO_URL);
+    expect(softwareApplication.downloadUrl).toBe(CRATE_URL);
   });
 
   it("declares a WebSite node with the site name and canonical URL", () => {
