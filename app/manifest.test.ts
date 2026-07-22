@@ -46,6 +46,15 @@ describe("manifest", () => {
     expect(result.short_name?.length).toBeGreaterThan(0);
   });
 
+  it("pins a stable app id independent of start_url", () => {
+    // Without `id`, a future start_url change (e.g. adding a query param
+    // or locale prefix) would register as a *new* installed app instead of
+    // updating the existing one for users who already installed it.
+    const result = manifest();
+
+    expect(result.id).toBe("/");
+  });
+
   it("points its icon at a file the export actually ships", () => {
     const [icon] = manifest().icons ?? [];
     // Throw (not a non-null assertion, which lint forbids) so a missing
