@@ -30,6 +30,10 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) in your browser. The page hot-reloads as
 you edit files under `app/`.
 
+`npm install` also installs a pre-commit hook (via husky + lint-staged) that runs ESLint on
+staged `*.{ts,tsx,mjs}` files and markdownlint on staged `*.md` files. Use `git commit
+--no-verify` to bypass it intentionally.
+
 ## Scripts
 
 | Command | Description |
