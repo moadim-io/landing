@@ -9,6 +9,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: SITE_TITLE,
     short_name: "Moadim",
     description: SITE_DESCRIPTION,
+    id: "/",
     start_url: "/",
     display: "standalone",
     background_color: SATORI_BACKGROUND,

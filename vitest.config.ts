@@ -12,7 +12,7 @@ export default defineConfig({
       // `app/layout.tsx`) can be imported in tests. See the mock file for
       // details.
       "next/font/google": fileURLToPath(
-        new URL("./test/mocks/next-font-google.ts", import.meta.url),
+        new URL("test/mocks/next-font-google.ts", import.meta.url),
       ),
     },
   },

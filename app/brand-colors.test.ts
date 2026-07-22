@@ -13,7 +13,7 @@ import { SATORI_ACCENT, SATORI_BACKGROUND, SATORI_FOREGROUND } from "./brand-col
 const theme = readFileSync("app/globals.css", "utf8");
 
 function themeColor(token: string): string {
-  const match = theme.match(new RegExp(`--color-${token}:\\s*(#[0-9a-fA-F]+);`));
+  const match = new RegExp(String.raw`--color-${token}:\s*(#[0-9a-fA-F]+);`).exec(theme);
   const hex = match?.[1];
   if (!hex) throw new Error(`--color-${token} not found in app/globals.css`);
   return hex;
