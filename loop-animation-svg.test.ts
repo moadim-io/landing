@@ -14,9 +14,7 @@ const svg = readFileSync("public/loop-animation.svg", "utf8");
 const css = readFileSync("app/globals.css", "utf8");
 
 function themeColor(token: string): string {
-  const value = css.match(
-    new RegExp(`--color-${token}:\\s*(#[0-9a-f]{3,8})`),
-  )?.[1];
+  const value = (new RegExp(String.raw`--color-${token}:\s*(#[0-9a-f]{3,8})`).exec(css))?.[1];
   if (!value) {
     throw new Error(`--color-${token} not found in globals.css`);
   }
