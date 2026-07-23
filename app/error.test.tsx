@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 // Named `ErrorBoundary` (not `Error`) so it can't shadow the global `Error`
 // constructor this file also needs, below.
 import ErrorBoundary from "./error";
-import { panel } from "./page";
+import { eyebrowPill, statusBody, statusCard, statusCardWrapper } from "./page";
 
 describe("ErrorBoundary", () => {
   afterEach(() => {
@@ -40,6 +40,21 @@ describe("ErrorBoundary", () => {
       <ErrorBoundary error={new Error("boom")} reset={() => {}} />,
     );
 
-    expect(container.querySelector("main")?.className).toContain(panel);
+    expect(container.querySelector("main")?.className).toBe(statusCard);
+  });
+
+  // Same drift risk as the `panel` guard above, for the rest of the "status
+  // off-ramp" chrome this page shares with not-found.tsx.
+  it("reuses the shared status-card wrapper, eyebrow, and body tokens", () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    const { container } = render(
+      <ErrorBoundary error={new Error("boom")} reset={() => {}} />,
+    );
+
+    expect(container.firstElementChild?.className).toBe(statusCardWrapper);
+    expect(screen.getByText("Error").className).toBe(eyebrowPill);
+    expect(
+      screen.getByText(/you can try again/i).className,
+    ).toBe(statusBody);
   });
 });

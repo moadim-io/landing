@@ -50,6 +50,7 @@ describe("public/_headers", () => {
         "Referrer-Policy: strict-origin-when-cross-origin",
         "X-Frame-Options: DENY",
         "Permissions-Policy: geolocation=(), camera=(), microphone=()",
+        "Cross-Origin-Opener-Policy: same-origin",
       ]),
     );
   });
@@ -65,6 +66,17 @@ describe("public/_headers", () => {
         "Strict-Transport-Security: max-age=63072000; includeSubDomains; preload",
       ]),
     );
+  });
+
+  it("locks the Content-Security-Policy to same-origin, with no unsafe-inline/eval allowance", () => {
+    const csp = headerRules["/*"]?.find((line) =>
+      line.startsWith("Content-Security-Policy:"),
+    );
+    expect(csp).toBeDefined();
+    expect(csp).toContain("default-src 'self'");
+    expect(csp).toContain("object-src 'none'");
+    expect(csp).toContain("frame-ancestors 'none'");
+    expect(csp).not.toMatch(/unsafe-inline|unsafe-eval/);
   });
 
   it("caches content-hashed assets and metadata images forever", () => {
