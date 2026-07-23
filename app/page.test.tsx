@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import Home, { faqJsonLd } from "./page";
-import { CRATE_NAME, CRATE_URL, REPO_URL } from "./site";
+import { CRATE_NAME, CRATE_URL, REPO_SLUG, REPO_URL } from "./site";
 
 describe("Home", () => {
   it("renders the hero headline", () => {
@@ -18,6 +18,22 @@ describe("Home", () => {
     expect(
       screen.getByText(`cargo install --locked ${CRATE_NAME}`),
     ).toBeInTheDocument();
+  });
+
+  it("surfaces the moadim run step after the install command (#206)", () => {
+    // `cargo install` only compiles and installs the binary — nothing runs
+    // until `moadim` itself is invoked. Without this line the hero's primary
+    // CTA leaves visitors installed but with no daemon running.
+    render(<Home />);
+
+    expect(screen.getByText("moadim", { selector: "code" })).toBeInTheDocument();
+
+    // Scoped to the install card: the quickstart section below also mentions
+    // `localhost:5784` (in its REST example), so an unscoped query is ambiguous.
+    const installCard = screen
+      .getByText("moadim", { selector: "code" })
+      .closest("div");
+    expect(installCard?.textContent).toMatch(/localhost:5784/i);
   });
 
   it("hides the decorative shell prompt from assistive tech and text selection", () => {
@@ -71,6 +87,78 @@ describe("Home", () => {
     );
   });
 
+  it("links the crates.io version badge at the published crate and uses the shared shadow token", () => {
+    render(<Home />);
+
+    const badgeLink = screen.getByRole("link", {
+      name: /latest published moadim release/i,
+    });
+
+    expect(badgeLink).toHaveAttribute("href", CRATE_URL);
+    expect(badgeLink.className).toContain("shadow-brutal");
+    expect(badgeLink.className).not.toMatch(/shadow-\[/);
+
+    const badgeImg = badgeLink.querySelector("img");
+    expect(badgeImg).toHaveAttribute(
+      "src",
+      `https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`,
+    );
+    expect(badgeImg).toHaveAttribute("alt", "moadim version on crates.io");
+    // Without this, React DOM auto-hoists a `<link rel="preload" as="image">`
+    // for this third-party badge into <head> at "high" priority — spending
+    // the page's earliest network slot on a decorative img.shields.io fetch
+    // instead of the self-hosted fonts/CSS that actually gate first paint.
+    expect(badgeImg).toHaveAttribute("fetchPriority", "low");
+  });
+
+  it("shows a live GitHub star count badge next to the Star on GitHub CTA (#162)", () => {
+    render(<Home />);
+
+    const badgeLink = screen.getByRole("link", {
+      name: /moadim github star count/i,
+    });
+
+    expect(badgeLink).toHaveAttribute("href", REPO_URL);
+    expect(badgeLink.className).toContain("shadow-brutal");
+
+    const badgeImg = badgeLink.querySelector("img");
+    expect(badgeImg).toHaveAttribute(
+      "src",
+      `https://img.shields.io/github/stars/${REPO_SLUG}?style=flat&label=stars`,
+    );
+    expect(badgeImg).toHaveAttribute("alt", "moadim GitHub star count");
+  });
+
+  it("renders the loop diagram panel between the CTAs and the features", () => {
+    render(<Home />);
+
+    // The diagram itself is covered by LoopAnimation.test.tsx; here we only
+    // assert the page actually mounts it inside a named landmark section.
+    const section = screen.getByRole("region", { name: /the loop/i });
+
+    expect(
+      section.querySelector('img[src="/loop-animation.svg"]'),
+    ).not.toBeNull();
+  });
+
+  it("shows a REST and an MCP quickstart example, each accurate against the daemon's real surface", () => {
+    // The install card only gets the daemon running — nothing on the page
+    // previously showed what calling it over REST or MCP actually looks
+    // like (#67). Both snippets are verified against the daemon repo:
+    // `GET /api/v1/routines` (src/commands.rs) and the `list_routines` MCP
+    // tool (src/routes/mcp.rs).
+    render(<Home />);
+
+    const section = screen.getByRole("region", { name: /quickstart/i });
+
+    expect(section.textContent).toContain(
+      "curl http://localhost:5784/api/v1/routines",
+    );
+    expect(section.textContent).toMatch(
+      /"name":\s*"list_routines",\s*"arguments":\s*{}/,
+    );
+  });
+
   it("exposes the feature cards as a named landmark region", () => {
     render(<Home />);
 
@@ -86,16 +174,28 @@ describe("Home", () => {
     render(<Home />);
 
     expect(
-      screen.getByRole("heading", { level: 2, name: /a loop runs an agent/i }),
+      screen.getByRole("heading", { level: 3, name: /a loop runs an agent/i }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("heading", {
-        level: 2,
+        level: 3,
         name: /runs locally, survives reboot/i,
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { level: 2, name: /ui · rest · mcp/i }),
+      screen.getByRole("heading", { level: 3, name: /ui · rest · mcp/i }),
+    ).toBeInTheDocument();
+  });
+
+  it("groups the feature cards under a labelled, level-2 section heading", () => {
+    // The three card titles are demoted to <h3> precisely so a <h2> can sit
+    // above them in the outline (hero <h1> -> section <h2> -> card <h3>)
+    // instead of leaving them as unlabeled peers of "The loop" / "On loop
+    // engineering". See #214.
+    render(<Home />);
+
+    expect(
+      screen.getByRole("heading", { level: 2, name: /^features$/i }),
     ).toBeInTheDocument();
   });
 
@@ -112,7 +212,7 @@ describe("Home", () => {
   it("renders the loop-engineering reading list as safe, nofollow external links", () => {
     render(<Home />);
 
-    const reads: Array<[source: string, href: string]> = [
+    const reads: [source: string, href: string][] = [
       [
         "mindstudio",
         "https://www.mindstudio.ai/blog/what-is-loop-engineering-ai-coding-agents",
@@ -140,6 +240,17 @@ describe("Home", () => {
 });
 
 describe("FAQ section", () => {
+  // The built-in Claude agent silently no-ops a run if python3 isn't on
+  // PATH (see the daemon README's "Built-in claude agent prerequisites") —
+  // easy to miss since nothing in the hero/install card mentions it. Assert
+  // the FAQ answer actually says so, so a future copy edit can't silently
+  // drop the one on-page place this trap is documented.
+  it("flags the built-in Claude agent's python3 prerequisite", () => {
+    render(<Home />);
+
+    expect(screen.getByText(/python3/i)).toBeInTheDocument();
+  });
+
   it("renders every FAQ question and answer as a definition-list pair", () => {
     render(<Home />);
 
@@ -178,10 +289,10 @@ describe("FAQ section", () => {
     jsonLd.mainEntity.forEach(
       (
         entry: { name: string; acceptedAnswer: { text: string } },
-        i: number,
+        index: number,
       ) => {
-        expect(dtElements[i]).toHaveTextContent(entry.name);
-        expect(ddElements[i]).toHaveTextContent(entry.acceptedAnswer.text);
+        expect(dtElements[index]).toHaveTextContent(entry.name);
+        expect(ddElements[index]).toHaveTextContent(entry.acceptedAnswer.text);
       },
     );
   });

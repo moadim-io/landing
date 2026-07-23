@@ -2,9 +2,17 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SITE_URL, REPO_URL, ORG_URL, SITE_TITLE, SITE_DESCRIPTION } from "./site";
+import {
+  SITE_URL,
+  REPO_URL,
+  ORG_URL,
+  CRATE_URL,
+  SITE_TITLE,
+  SITE_DESCRIPTION,
+} from "./site";
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
+import { SkipLink } from "./SkipLink";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,6 +55,23 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  // Explicit indexability + large-image-preview opt-in. With nothing set,
+  // Google's default (`max-image-preview:standard`) only ever shows a small
+  // thumbnail of the Open Graph card in Search/Discover, regardless of how
+  // much the card itself is invested in. This is a per-document <meta
+  // name="robots"> directive — distinct from `app/robots.ts`, which emits
+  // the site-wide robots.txt crawl directive. See #143.
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
@@ -69,6 +94,21 @@ export const metadata: Metadata = {
       ? { other: { "msvalidate.01": bingSiteVerification } }
       : {}),
   },
+  // iOS home-screen / standalone presentation. When the site is added to the
+  // home screen, launch it chromeless under the Moadim name with a status bar
+  // that matches the neobrutalist light palette (emits
+  // `apple-mobile-web-app-*` meta tags) instead of Safari's defaults.
+  appleWebApp: {
+    capable: true,
+    title: "Moadim",
+    statusBarStyle: "default",
+  },
+  // The copy carries no phone numbers, yet mobile Safari heuristically turns
+  // version-like and identifier strings (e.g. `moadim-io/daemon`) into tap-to-
+  // call links. Opt out so no body text is silently rewritten into a `tel:`.
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 // @id anchors so the Organization, WebSite, and SoftwareApplication nodes
@@ -81,9 +121,11 @@ const organization = {
   "@id": organizationId,
   name: "Moadim",
   url: SITE_URL,
-  // No dedicated brand mark yet (app/favicon.ico is still the create-next-app
-  // scaffold icon, see #145) — the generated OG card is the closest stand-in
-  // for a logo until a real mark ships.
+  // app/icon.svg is Moadim's brand mark today (it replaced the
+  // create-next-app scaffold favicon back in #161), but it's an SVG and
+  // Google's structured-data guidelines for the Logo rich result only
+  // support raster formats (JPG/PNG/WebP) — the generated OG card, already
+  // a raster PNG, is used here instead.
   logo: `${SITE_URL}/opengraph-image`,
   // The GitHub org is the authoritative profile for the "Moadim" entity
   // itself (distinct from the SoftwareApplication.sameAs links below, which
@@ -113,16 +155,13 @@ const softwareApplication = {
   // search engines surface the app for an unsupported platform.
   operatingSystem: "macOS, Linux",
   description: SITE_DESCRIPTION,
-  sameAs: [
-    "https://github.com/moadim-io/daemon",
-    "https://crates.io/crates/moadim",
-  ],
+  sameAs: [REPO_URL, CRATE_URL],
   license: "https://opensource.org/licenses/MIT",
   // Static export emits this route as `opengraph-image` with no extension (see
   // `scripts/verify-export.mjs`) — the hardcoded ".png" 404'd in production.
   image: `${SITE_URL}/opengraph-image`,
-  codeRepository: "https://github.com/moadim-io/daemon",
-  downloadUrl: "https://crates.io/crates/moadim",
+  codeRepository: REPO_URL,
+  downloadUrl: CRATE_URL,
   offers: {
     "@type": "Offer",
     price: "0",
@@ -150,6 +189,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <SkipLink />
         <JsonLdScript data={jsonLd} />
         {/* Site banner landmark: gives assistive-tech users a top-level `banner`
             region to land on, plus a persistent Moadim wordmark for brand
@@ -211,6 +251,41 @@ export default function RootLayout({
           </div>
         </header>
         {children}
+        {/* Site footer landmark: gives assistive-tech users a `contentinfo`
+            region to land on (a semantic <footer> exposes it implicitly, so
+            no redundant `role="contentinfo"` is added), plus a persistent
+            home for copyright and outbound links. Sits below `main`, mirroring
+            the top-level `banner` <header> above — `body` is already `flex
+            flex-col`, so this is a second flex child rather than living
+            inside `app/page.tsx`. */}
+        <footer className="border-t-4 border-black bg-background">
+          <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-3 px-4 py-6 sm:flex-row sm:justify-between sm:px-8">
+            <p className="text-sm font-medium">© 2026 Moadim</p>
+            {/* Same Safari/VoiceOver `role="list"` restoration as the nav
+                `<ul>` above — see the comment there for why. */}
+            {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+            <ul className="flex items-center gap-6" role="list">
+              <li>
+                <ExternalLink
+                  href={REPO_URL}
+                  className="text-sm font-bold uppercase tracking-wide hover:text-accent"
+                  aria-label="GitHub"
+                >
+                  GitHub
+                </ExternalLink>
+              </li>
+              <li>
+                <ExternalLink
+                  href={CRATE_URL}
+                  className="text-sm font-bold uppercase tracking-wide hover:text-accent"
+                  aria-label="crates.io"
+                >
+                  crates.io
+                </ExternalLink>
+              </li>
+            </ul>
+          </div>
+        </footer>
       </body>
     </html>
   );

@@ -26,6 +26,8 @@ const REQUIRED_FILES = [
   "_headers",
   "_redirects",
   "llms.txt",
+  "loop-animation.svg",
+  "version.json",
 ];
 
 let workDir: string | undefined;

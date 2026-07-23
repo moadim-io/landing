@@ -15,10 +15,18 @@
 # Baseline security headers, applied site-wide. More specific rules below only
 # detach/reset Cache-Control (`! Cache-Control`), so these keep applying to
 # every path — including hashed assets and metadata routes — without repeating
-# them per rule. No CSP here: the JSON-LD <script> (JsonLdScript.tsx) is inline
-# and static-exported with no per-request nonce, so a strict CSP would need
-# 'unsafe-inline' anyway; adding one is a separate, larger effort left for later.
+# them per rule.
 #
+# - Content-Security-Policy: no 'unsafe-inline' needed for script-src. The
+#   JSON-LD <script> (JsonLdScript.tsx) is inline, but it's typed
+#   `application/ld+json` — per the HTML spec, a <script> element only executes
+#   (and only counts as a "script" for CSP's script-src) when its type is empty,
+#   a JavaScript MIME type, or "module"; a non-JS type like this is just an inert
+#   data block the parser never runs, CSP or not. Every actual script/style/font
+#   is self-hosted under content-hashed /_next/static/* URLs (next/font resolves
+#   Geist at build time, no runtime Google Fonts request), there are no <form>s,
+#   and nothing on the page issues fetch/XHR calls — so every fetch directive
+#   below can stay locked to 'self' or 'none' with no allowance carved out.
 # - X-Content-Type-Options: stops a browser from MIME-sniffing a response into
 #   an executable type against the served Content-Type.
 # - Referrer-Policy: sends the full referrer to same-origin requests but only
@@ -28,24 +36,41 @@
 #   clickjacking-style embedding outright.
 # - Permissions-Policy: the site doesn't use these browser APIs; disabling
 #   them denies a compromised third-party script silent access.
+# - Cross-Origin-Opener-Policy: same-origin — isolates this document's
+#   top-level browsing context from any cross-origin window it opens or is
+#   opened by, so a malicious cross-origin popup can't hold a `window.opener`
+#   reference back into this page and can't share a process/agent-cluster
+#   with it (a baseline Spectre-class side-channel mitigation). Every
+#   outbound link already goes through ExternalLink.tsx's `rel="noopener
+#   noreferrer"`, so this adds no new restriction on this site's own
+#   behavior — it only removes the same access from third parties.
+#   Deliberately not pairing this with Cross-Origin-Resource-Policy: this
+#   site's own SVG (public/loop-animation.svg) is intentionally hotlinked
+#   cross-origin from READMEs (see AGENTS.md), which a site-wide CORP rule
+#   would block.
 # - Strict-Transport-Security: moadim.io is only ever served over HTTPS (see
 #   the www/.pages.dev -> apex redirects in public/_redirects), but without
 #   this header a visitor's first request to a bare `http://` link or typed
 #   URL still round-trips in plaintext before Cloudflare's edge can apply
 #   that redirect, leaving a window for a network attacker to intercept or
-#   downgrade it. `max-age=63072000` (2 years) + `includeSubDomains` is the
-#   standard baseline (https://hstspreload.org); submitting to the preload
-#   list itself is a separate opt-in step, left for later.
+#   downgrade it. `max-age=63072000` (2 years) + `includeSubDomains` +
+#   `preload` meets the https://hstspreload.org submission requirements —
+#   the browser only honors `preload` for domains actually baked into its
+#   shipped list, so carrying the directive ahead of submission is inert,
+#   not premature. Submitting the domain to the list is a separate, manual
+#   opt-in step outside this repo.
 
 # HTML and everything else: cache but always revalidate, so a redeploy is
 # picked up immediately instead of serving a stale page.
 /*
   Cache-Control: public, max-age=0, must-revalidate
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
   Permissions-Policy: geolocation=(), camera=(), microphone=()
-  Strict-Transport-Security: max-age=63072000; includeSubDomains
+  Cross-Origin-Opener-Policy: same-origin
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
 
 # Next.js emits content-hashed, immutable assets (JS, CSS, fonts, media) under
 # /_next/static/*. A new build changes the hash (and the URL), so these can be
@@ -56,18 +81,34 @@
   Cache-Control: public, max-age=31536000, immutable
 
 # Generated metadata assets whose referencing URL carries a content hash:
-# the OG/Twitter share images (`/opengraph-image?<hash>`, `/twitter-image?<hash>`)
-# and the favicon (`/favicon.ico?<hash>`). Because the URL changes whenever the
-# bytes change, the bytes at any given URL are immutable — so an unfurl bot or
+# the OG/Twitter share images (`/opengraph-image?<hash>`, `/twitter-image?<hash>`),
+# the apple touch icon (`/apple-icon?<hash>`), and the favicon (`/icon.svg?<hash>`,
+# from `app/icon.svg` — the `<link rel="icon">` href Next.js emits always
+# carries a cache-busting query string). Because the URL changes whenever the
+# bytes change, the bytes at any given URL are immutable — so a browser or
 # crawler can cache them forever instead of re-fetching from the origin on every
 # request. Without this they fall under the broad `max-age=0` rule above.
+#
+# The OG/Twitter/apple-icon routes also need an explicit Content-Type: the
+# static export writes them as extensionless files (`out/opengraph-image`, not
+# `opengraph-image.png`), so a host that infers MIME type from the file
+# extension serves them as application/octet-stream instead of the image/png
+# each route.tsx declares via `contentType`, breaking OG/Twitter unfurls and
+# the iOS home-screen icon. `/icon.svg` ships as a real `.svg` file, so its
+# type is inferred correctly without an override.
 /opengraph-image
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
+  Content-Type: image/png
 /twitter-image
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
-/favicon.ico
+  Content-Type: image/png
+/apple-icon
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
+  Content-Type: image/png
+/icon.svg
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
@@ -84,3 +125,8 @@
 /llms.txt
   ! Cache-Control
   Cache-Control: public, max-age=86400
+
+# The build-provenance endpoint (#230): a smoke check or a human confirming
+# "did the new commit actually deploy?" needs this to reflect the very latest
+# build, not a cached older one — so it keeps the broad must-revalidate rule
+# above rather than gaining its own longer max-age.

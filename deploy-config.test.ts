@@ -50,20 +50,53 @@ describe("public/_headers", () => {
         "Referrer-Policy: strict-origin-when-cross-origin",
         "X-Frame-Options: DENY",
         "Permissions-Policy: geolocation=(), camera=(), microphone=()",
+        "Cross-Origin-Opener-Policy: same-origin",
       ]),
     );
   });
 
+  it("meets the hstspreload.org submission baseline (2yr max-age, includeSubDomains, preload)", () => {
+    // Nothing asserted the actual Strict-Transport-Security value before —
+    // the baseline-headers test above only checks the *other* four headers
+    // via arrayContaining, so a future edit could drop `preload` (or the
+    // whole header) from `/*` silently, quietly opting the site back out of
+    // preload-list eligibility with no red CI run to catch it.
+    expect(headerRules["/*"]).toEqual(
+      expect.arrayContaining([
+        "Strict-Transport-Security: max-age=63072000; includeSubDomains; preload",
+      ]),
+    );
+  });
+
+  it("locks the Content-Security-Policy to same-origin, with no unsafe-inline/eval allowance", () => {
+    const csp = headerRules["/*"]?.find((line) =>
+      line.startsWith("Content-Security-Policy:"),
+    );
+    expect(csp).toBeDefined();
+    expect(csp).toContain("default-src 'self'");
+    expect(csp).toContain("object-src 'none'");
+    expect(csp).toContain("frame-ancestors 'none'");
+    expect(csp).not.toMatch(/unsafe-inline|unsafe-eval/);
+  });
+
   it("caches content-hashed assets and metadata images forever", () => {
-    for (const path of [
-      "/_next/static/*",
-      "/opengraph-image",
-      "/twitter-image",
-      "/favicon.ico",
-    ]) {
+    for (const path of ["/_next/static/*", "/icon.svg"]) {
       expect(headerRules[path]).toEqual([
         "! Cache-Control",
         "Cache-Control: public, max-age=31536000, immutable",
+      ]);
+    }
+  });
+
+  it("caches and declares the image/png type for generated metadata images", () => {
+    // Unlike /_next/static/* and /icon.svg above, these ship as extensionless
+    // files from the static export, so a host can't infer their MIME type from
+    // the file extension — Content-Type must be set explicitly here.
+    for (const path of ["/opengraph-image", "/twitter-image", "/apple-icon"]) {
+      expect(headerRules[path]).toEqual([
+        "! Cache-Control",
+        "Cache-Control: public, max-age=31536000, immutable",
+        "Content-Type: image/png",
       ]);
     }
   });

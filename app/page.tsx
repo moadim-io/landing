@@ -1,12 +1,13 @@
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
-import { CRATE_NAME, CRATE_URL, REPO_URL } from "./site";
+import { LoopAnimation } from "./LoopAnimation";
+import { CRATE_NAME, CRATE_URL, REPO_SLUG, REPO_URL } from "./site";
 
 const features = [
   {
     tag: "01",
     title: "A loop runs an agent",
-    body: "A loop pairs a prompt, a schedule, and an agent — Claude, Codex, or Hermes. Each tick launches it in a fresh, isolated workbench, kills hung runs, and reaps the session when it's done.",
+    body: "A loop pairs a prompt, a schedule, and an agent — Claude, Codex, Hermes, or Pi. Each tick launches it in a fresh, isolated workbench, kills hung runs, and reaps the session when it's done.",
   },
   {
     tag: "02",
@@ -57,7 +58,13 @@ const faqs = [
   },
   {
     q: "Which agents does it support?",
-    a: "Claude, Codex, and Hermes today. Each loop names the agent it runs, and Moadim launches it for you on every tick.",
+    // The built-in Claude agent's python3 requirement is easy to miss: the
+    // daemon's own README documents it as a silent-failure trap (setup step
+    // no-ops without an error if python3 isn't on PATH) surfaced only via a
+    // startup log line and GET /api/v1/health's dependencies.python3 flag —
+    // this on-page answer says so up front instead of leaving visitors to
+    // debug a routine that never runs.
+    a: "Claude, Codex, Hermes, and Pi today. Each loop names the agent it runs, and Moadim launches it for you on every tick. The built-in Claude agent additionally needs python3 on your PATH — its unattended setup step uses it to pre-seed trust and MCP-approval state, and without it Claude runs silently no-op.",
   },
   {
     q: "Which operating systems are supported?",
@@ -92,7 +99,7 @@ export const faqJsonLd = {
 // home" link — which wears the exact same treatment — reuses it instead of
 // hand-copying the class string (mirroring the `panel` export below).
 export const ctaButton =
-  "flex items-center justify-center border-4 border-black px-8 py-4 text-base font-black uppercase tracking-wide shadow-[6px_6px_0_0_#000] transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#000]";
+  "flex items-center justify-center border-4 border-black px-8 py-4 text-base font-black uppercase tracking-wide shadow-brutal transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-brutal-hover active:translate-x-[2px] active:translate-y-[2px] active:shadow-brutal-active";
 
 // Shared neobrutalist panel surface — the 4px black frame, white fill, and
 // 10px hard drop shadow worn by the hero header, the feature grid, the
@@ -101,14 +108,31 @@ export const ctaButton =
 // Exported so `not-found.tsx`'s 404 card — which wears the exact same surface —
 // reuses it instead of hand-copying the class string (see `faqJsonLd` above
 // for the same export-for-reuse precedent).
-export const panel = "border-4 border-black bg-white shadow-[10px_10px_0_0_#000]";
+export const panel = "border-4 border-black bg-white shadow-brutal-lg";
+
+// Shared eyebrow-pill tag styling — the small uppercase accent label sitting
+// above a heading (this page's "Open source · Loop engine", and error.tsx/
+// not-found.tsx's "Error"/"Error 404"). Extracted so the three copies can't
+// drift apart; each call site appends only its own margin.
+export const eyebrowPill =
+  "inline-block border-2 border-black bg-accent px-3 py-1 text-xs font-bold uppercase tracking-[0.2em]";
+
+// Shared "centered status off-ramp" chrome worn by error.tsx and
+// not-found.tsx — the outer centering wrapper, the `panel`-based card frame,
+// and the body copy under the heading. Extracted (mirroring `panel`/
+// `ctaButton` above) so the two off-ramps, which are meant to look identical
+// apart from their heading/copy, can't silently drift apart.
+export const statusCardWrapper =
+  "flex flex-1 flex-col items-center justify-center px-4 py-10 sm:px-8 sm:py-16";
+export const statusCard = `${panel} flex w-full max-w-2xl flex-col items-center gap-8 p-8 text-center sm:p-12`;
+export const statusBody = "max-w-md text-lg font-medium leading-7";
 
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col items-center px-4 py-10 sm:px-8 sm:py-16">
-      <main className="flex w-full max-w-4xl flex-1 flex-col gap-10">
+      <main id="main" className="flex w-full max-w-4xl flex-1 flex-col gap-10">
         <header className={`${panel} p-6 sm:p-10`}>
-          <p className="mb-6 inline-block border-2 border-black bg-accent px-3 py-1 text-xs font-bold uppercase tracking-[0.2em]">
+          <p className={`${eyebrowPill} mb-6`}>
             Open source · Loop engine
           </p>
           <h1 className="text-4xl font-black uppercase leading-[0.95] tracking-tight sm:text-6xl">
@@ -119,18 +143,18 @@ export default function Home() {
           </h1>
           <p className="mt-6 max-w-2xl text-lg font-medium leading-7 sm:text-xl">
             Moadim is a loop engine for AI agents. Define a loop — a prompt, a
-            schedule, an agent — and it runs Claude, Codex, or Hermes against
-            your repo on every tick, in an isolated workbench, with a watchdog on
+            schedule, an agent — and it runs Claude, Codex, Hermes, or Pi
+            against your repo on every tick, in an isolated workbench, with a watchdog on
             every run. Loop engineering, not prompting by hand.
           </p>
         </header>
 
         <div className="flex flex-col gap-4 sm:flex-row sm:items-stretch">
-          <div className="flex flex-1 flex-col gap-2 border-4 border-black bg-black p-5 shadow-[6px_6px_0_0_#000]">
+          <div className="flex flex-1 flex-col gap-2 border-4 border-black bg-black p-5 shadow-brutal">
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
               Install
             </span>
-            <code className="font-mono text-base text-white sm:text-lg">
+            <code className="block font-mono text-base text-white sm:text-lg">
               {/* The shell prompt is decoration: hide it from screen readers and
                   exclude it from text selection so copying the line yields a
                   runnable `cargo install --locked moadim`, not
@@ -142,8 +166,22 @@ export default function Home() {
               </span>
               {`cargo install --locked ${CRATE_NAME}`}
             </code>
+            <code className="block font-mono text-base text-white sm:text-lg">
+              {/* `cargo install` only compiles and installs the binary — nothing
+                  runs until `moadim` itself is invoked, so the snippet stopped
+                  one command short of a working daemon (#206). Same
+                  aria-hidden/select-none prompt trick as the install line above. */}
+              <span aria-hidden="true" className="select-none text-accent">
+                ${" "}
+              </span>
+              moadim
+            </code>
             <p className="mt-1 text-xs font-medium leading-snug text-white">
-              Requires a Unix-like OS with{" "}
+              Starts the server in the background at{" "}
+              <code className="font-mono text-accent">
+                http://localhost:5784/
+              </code>
+              . Requires a Unix-like OS with{" "}
               <code className="font-mono text-accent">tmux</code> and a cron
               daemon (cron / launchd / systemd) — loops fire from your OS crontab
               inside a tmux session, so without them the install succeeds but
@@ -161,6 +199,27 @@ export default function Home() {
             Star on GitHub
           </ExternalLink>
           <ExternalLink
+            className="flex items-center justify-center border-4 border-black bg-white p-2 shadow-brutal"
+            href={REPO_URL}
+            aria-label="moadim GitHub star count"
+          >
+            {/* Live star count as social proof next to the "Star on GitHub" CTA
+                (#162) — a shields.io badge, same deliberate exception as the
+                crates.io version badge below: it renders the current count at
+                request time (no build-time fetch, no token, no client JS, and
+                it can't go stale between deploys the way a build-time-baked
+                count would), and next/image needs a configured remote loader
+                for arbitrary external hosts, which isn't worth wiring up for
+                one badge image. See #183 for the identical precedent. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`https://img.shields.io/github/stars/${REPO_SLUG}?style=flat&label=stars`}
+              alt="moadim GitHub star count"
+              width={104}
+              height={20}
+            />
+          </ExternalLink>
+          <ExternalLink
             className={`${ctaButton} gap-2 bg-white`}
             href={CRATE_URL}
             aria-label="crates.io"
@@ -168,18 +227,110 @@ export default function Home() {
             crates.io
             <span aria-hidden="true">↗</span>
           </ExternalLink>
+          <ExternalLink
+            className="flex items-center justify-center border-4 border-black bg-white p-2 shadow-brutal"
+            href={CRATE_URL}
+            aria-label="Latest published moadim release"
+          >
+            {/* A static shields.io badge — it renders the current crates.io
+                version at request time, so it never needs a build-time fetch
+                (and never breaks the build if crates.io is unreachable at
+                build time). next/image needs a configured remote loader for
+                arbitrary external hosts, which isn't worth wiring up for one
+                badge image, so this is a deliberate exception to the
+                next/no-img-element rule. See #183.
+
+                `fetchPriority="low"` opts this <img> out of React DOM's
+                automatic image preloading (any eager <img> without it gets a
+                `<link rel="preload" as="image" fetchpriority="high">` hoisted
+                into <head> - see react-dom's `pushImg` in
+                react-dom-server.edge.development.js). That auto-preload spends
+                the page's earliest, highest-priority network slot on a
+                decorative third-party (img.shields.io) badge - a fresh
+                DNS+TLS negotiation racing the self-hosted Geist fonts and
+                critical CSS for bandwidth - for an image that isn't the LCP
+                candidate (the hero heading text is). Marking it low-priority
+                keeps it eager (no loading="lazy" layout-shift risk, since it's
+                in the initial viewport) while telling the browser/React it
+                can wait behind what actually matters for first paint. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`}
+              alt="moadim version on crates.io"
+              width={104}
+              height={20}
+              fetchPriority="low"
+            />
+          </ExternalLink>
         </div>
+
+        <section className={panel} aria-labelledby="loop-heading">
+          <h2
+            id="loop-heading"
+            className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent"
+          >
+            The loop
+          </h2>
+          <LoopAnimation />
+        </section>
+
+        {/* The page sold "MCP-native" / "REST + OpenAPI" as feature bullets with no
+            code to back them up — a visitor couldn't see what scheduling or listing
+            a loop over either interface actually looks like without leaving for the
+            daemon's own README (#67). Both snippets are verified against the
+            daemon's real surface: `GET /api/v1/routines` (src/commands.rs) and the
+            `list_routines` MCP tool (src/routes/mcp.rs). */}
+        <section className={panel} aria-labelledby="quickstart-heading">
+          <h2
+            id="quickstart-heading"
+            className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent"
+          >
+            Quickstart
+          </h2>
+          <div className="grid gap-0 sm:grid-cols-2">
+            <div className="flex flex-col gap-2 border-b-4 border-black p-6 sm:border-b-0 sm:border-r-4">
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-black/70">
+                REST — list loops
+              </span>
+              <pre className="overflow-x-auto rounded border-2 border-black bg-black p-3 font-mono text-sm text-white">
+                <code>
+                  <span aria-hidden="true" className="select-none text-accent">
+                    ${" "}
+                  </span>
+                  curl http://localhost:5784/api/v1/routines
+                </code>
+              </pre>
+              <p className="text-sm font-medium leading-6">
+                Every loop is also a documented HTTP endpoint, with an OpenAPI
+                schema and Swagger UI baked into the daemon.
+              </p>
+            </div>
+            <div className="flex flex-col gap-2 p-6">
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-black/70">
+                MCP — list loops
+              </span>
+              <pre className="overflow-x-auto rounded border-2 border-black bg-black p-3 font-mono text-sm text-white">
+                <code>{`{ "name": "list_routines", "arguments": {} }`}</code>
+              </pre>
+              <p className="text-sm font-medium leading-6">
+                The same call as an MCP tool, for any MCP-compatible agent
+                connected to <code className="font-mono">/mcp</code>.
+              </p>
+            </div>
+          </div>
+        </section>
 
         {/* Unlike the reading-list and FAQ sections below, this grid has no
             visible heading of its own — the CTA row above flows straight
-            into it. Without an accessible name it's an anonymous <ul>, so
-            screen-reader users navigating by landmark region jump from the
-            hero straight to "On loop engineering" and never learn a
-            "features" region exists. `aria-label` (rather than
-            `aria-labelledby` + a visible/sr-only <h2>) fixes that without
-            introducing a heading above the per-card <h2> titles, which
-            would otherwise sit at the wrong hierarchy level. */}
-        <section aria-label="Features">
+            into it. A visually-hidden <h2> + `aria-labelledby` gives the
+            section both an accessible name and a real place in the heading
+            outline (hero <h1> -> section <h2> -> per-card <h3>), instead of
+            leaving the three card titles as unlabeled <h2> siblings of "The
+            loop" / "On loop engineering". See #214. */}
+        <section aria-labelledby="features-heading">
+          <h2 id="features-heading" className="sr-only">
+            Features
+          </h2>
           {/* Tailwind's Preflight resets `list-style: none` on every <ul>,
               which in Safari/VoiceOver also strips the implicit
               `list`/`listitem` role — a long-documented WebKit quirk
@@ -191,11 +342,11 @@ export default function Home() {
               so the rule is disabled for this one, deliberate case. */}
           {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
           <ul className={`${panel} grid gap-0 sm:grid-cols-3`} role="list">
-            {features.map((feature, i) => (
+            {features.map((feature, index) => (
               <li
                 key={feature.title}
                 className={`flex flex-col gap-3 p-6 ${
-                  i < features.length - 1
+                  index < features.length - 1
                     ? "border-b-4 border-black sm:border-b-0 sm:border-r-4"
                     : ""
                 }`}
@@ -206,9 +357,9 @@ export default function Home() {
                 >
                   {feature.tag}
                 </span>
-                <h2 className="text-lg font-black uppercase leading-tight">
+                <h3 className="text-lg font-black uppercase leading-tight">
                   {feature.title}
-                </h2>
+                </h3>
                 <p className="text-sm font-medium leading-6">{feature.body}</p>
               </li>
             ))}
@@ -226,11 +377,11 @@ export default function Home() {
               matching lint disable) is needed. */}
           {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
           <ul className="flex flex-col" role="list">
-            {loopEngineeringReads.map((read, i) => (
+            {loopEngineeringReads.map((read, index) => (
               <li
                 key={read.href}
                 className={
-                  i < loopEngineeringReads.length - 1
+                  index < loopEngineeringReads.length - 1
                     ? "border-b-2 border-black/15"
                     : ""
                 }
@@ -267,11 +418,11 @@ export default function Home() {
             FAQ
           </h2>
           <dl className="flex flex-col">
-            {faqs.map((faq, i) => (
+            {faqs.map((faq, index) => (
               <div
                 key={faq.q}
                 className={`flex flex-col gap-2 px-6 py-5 ${
-                  i < faqs.length - 1 ? "border-b-2 border-black/15" : ""
+                  index < faqs.length - 1 ? "border-b-2 border-black/15" : ""
                 }`}
               >
                 <dt className="text-base font-black uppercase leading-tight">

@@ -8,6 +8,18 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/**"
+  # Lets a maintainer re-lint every workflow file on demand (e.g. after
+  # bumping the pinned actionlint image, or to confirm a flaky run was a
+  # fluke) without touching a workflow file just to retrigger the path
+  # filter. Mirrors the pattern already used by deploy.yml and
+  # link-check.yml.
+  workflow_dispatch:
+
+# Cancel a stale lint run when a PR gets a new push, mirroring ci.yml — a
+# superseded run on an old commit has no reason to keep holding a runner.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   actionlint:
@@ -17,10 +29,15 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Run actionlint
         # shellcheck is enabled by default and lints embedded `run:` steps.
-        uses: docker://rhysd/actionlint:1.7.12
+        # Pinned to the image digest, not the floating `1.7.12` tag — every
+        # other third-party action across these workflows is already pinned
+        # this way (SHA for actions/*, digest for this Docker action) to
+        # close the same supply-chain tampering vector a mutable tag leaves
+        # open; this one was missed when the gate was added in #313.
+        uses: docker://rhysd/actionlint@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667 # 1.7.12
         with:
           args: -color

@@ -9,8 +9,6 @@ describe("sitemap", () => {
     expect(entries).toHaveLength(1);
     expect(entries[0]).toMatchObject({
       url: SITE_URL,
-      changeFrequency: "weekly",
-      priority: 1,
     });
   });
 

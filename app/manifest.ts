@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { SITE_TITLE, SITE_DESCRIPTION } from "./site";
+import { SATORI_BACKGROUND } from "./brand-colors";
 
 export const dynamic = "force-static";
 
@@ -8,15 +9,16 @@ export default function manifest(): MetadataRoute.Manifest {
     name: SITE_TITLE,
     short_name: "Moadim",
     description: SITE_DESCRIPTION,
+    id: "/",
     start_url: "/",
     display: "standalone",
-    background_color: "#f4f1e8",
-    theme_color: "#f4f1e8",
+    background_color: SATORI_BACKGROUND,
+    theme_color: SATORI_BACKGROUND,
     icons: [
       {
-        src: "/favicon.ico",
+        src: "/icon.svg",
         sizes: "any",
-        type: "image/x-icon",
+        type: "image/svg+xml",
       },
     ],
   };
