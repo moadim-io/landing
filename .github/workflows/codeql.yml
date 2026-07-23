@@ -8,6 +8,10 @@ on:
   schedule:
     # Weekly sweep to catch newly-published query rules against unchanged code.
     - cron: "17 3 * * 1"
+  # Lets a maintainer kick off an ad hoc scan (e.g. right after adding a new
+  # query pack) instead of waiting for the next push or the weekly schedule.
+  # Mirrors the pattern already used by deploy.yml and link-check.yml.
+  workflow_dispatch:
 
 # Cancel a stale analysis when a PR gets a new push, mirroring ci.yml.
 concurrency:
@@ -24,7 +28,7 @@ jobs:
       security-events: write
 
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@dd903d2e4f5405488e5ef1422510ee31c8b32357 # v3.36.2

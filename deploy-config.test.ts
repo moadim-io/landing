@@ -68,6 +68,17 @@ describe("public/_headers", () => {
     );
   });
 
+  it("locks the Content-Security-Policy to same-origin, with no unsafe-inline/eval allowance", () => {
+    const csp = headerRules["/*"]?.find((line) =>
+      line.startsWith("Content-Security-Policy:"),
+    );
+    expect(csp).toBeDefined();
+    expect(csp).toContain("default-src 'self'");
+    expect(csp).toContain("object-src 'none'");
+    expect(csp).toContain("frame-ancestors 'none'");
+    expect(csp).not.toMatch(/unsafe-inline|unsafe-eval/);
+  });
+
   it("caches content-hashed assets and metadata images forever", () => {
     for (const path of ["/_next/static/*", "/icon.svg"]) {
       expect(headerRules[path]).toEqual([
