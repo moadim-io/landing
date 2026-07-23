@@ -1,7 +1,7 @@
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
 import { LoopAnimation } from "./LoopAnimation";
-import { CRATE_NAME, CRATE_URL, REPO_URL } from "./site";
+import { CRATE_NAME, CRATE_URL, REPO_SLUG, REPO_URL } from "./site";
 
 const features = [
   {
@@ -58,7 +58,13 @@ const faqs = [
   },
   {
     q: "Which agents does it support?",
-    a: "Claude, Codex, Hermes, and Pi today. Each loop names the agent it runs, and Moadim launches it for you on every tick.",
+    // The built-in Claude agent's python3 requirement is easy to miss: the
+    // daemon's own README documents it as a silent-failure trap (setup step
+    // no-ops without an error if python3 isn't on PATH) surfaced only via a
+    // startup log line and GET /api/v1/health's dependencies.python3 flag —
+    // this on-page answer says so up front instead of leaving visitors to
+    // debug a routine that never runs.
+    a: "Claude, Codex, Hermes, and Pi today. Each loop names the agent it runs, and Moadim launches it for you on every tick. The built-in Claude agent additionally needs python3 on your PATH — its unattended setup step uses it to pre-seed trust and MCP-approval state, and without it Claude runs silently no-op.",
   },
   {
     q: "Which operating systems are supported?",
@@ -193,6 +199,27 @@ export default function Home() {
             Star on GitHub
           </ExternalLink>
           <ExternalLink
+            className="flex items-center justify-center border-4 border-black bg-white p-2 shadow-brutal"
+            href={REPO_URL}
+            aria-label="moadim GitHub star count"
+          >
+            {/* Live star count as social proof next to the "Star on GitHub" CTA
+                (#162) — a shields.io badge, same deliberate exception as the
+                crates.io version badge below: it renders the current count at
+                request time (no build-time fetch, no token, no client JS, and
+                it can't go stale between deploys the way a build-time-baked
+                count would), and next/image needs a configured remote loader
+                for arbitrary external hosts, which isn't worth wiring up for
+                one badge image. See #183 for the identical precedent. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`https://img.shields.io/github/stars/${REPO_SLUG}?style=flat&label=stars`}
+              alt="moadim GitHub star count"
+              width={104}
+              height={20}
+            />
+          </ExternalLink>
+          <ExternalLink
             className={`${ctaButton} gap-2 bg-white`}
             href={CRATE_URL}
             aria-label="crates.io"
@@ -245,6 +272,52 @@ export default function Home() {
             The loop
           </h2>
           <LoopAnimation />
+        </section>
+
+        {/* The page sold "MCP-native" / "REST + OpenAPI" as feature bullets with no
+            code to back them up — a visitor couldn't see what scheduling or listing
+            a loop over either interface actually looks like without leaving for the
+            daemon's own README (#67). Both snippets are verified against the
+            daemon's real surface: `GET /api/v1/routines` (src/commands.rs) and the
+            `list_routines` MCP tool (src/routes/mcp.rs). */}
+        <section className={panel} aria-labelledby="quickstart-heading">
+          <h2
+            id="quickstart-heading"
+            className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent"
+          >
+            Quickstart
+          </h2>
+          <div className="grid gap-0 sm:grid-cols-2">
+            <div className="flex flex-col gap-2 border-b-4 border-black p-6 sm:border-b-0 sm:border-r-4">
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-black/70">
+                REST — list loops
+              </span>
+              <pre className="overflow-x-auto rounded border-2 border-black bg-black p-3 font-mono text-sm text-white">
+                <code>
+                  <span aria-hidden="true" className="select-none text-accent">
+                    ${" "}
+                  </span>
+                  curl http://localhost:5784/api/v1/routines
+                </code>
+              </pre>
+              <p className="text-sm font-medium leading-6">
+                Every loop is also a documented HTTP endpoint, with an OpenAPI
+                schema and Swagger UI baked into the daemon.
+              </p>
+            </div>
+            <div className="flex flex-col gap-2 p-6">
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-black/70">
+                MCP — list loops
+              </span>
+              <pre className="overflow-x-auto rounded border-2 border-black bg-black p-3 font-mono text-sm text-white">
+                <code>{`{ "name": "list_routines", "arguments": {} }`}</code>
+              </pre>
+              <p className="text-sm font-medium leading-6">
+                The same call as an MCP tool, for any MCP-compatible agent
+                connected to <code className="font-mono">/mcp</code>.
+              </p>
+            </div>
+          </div>
         </section>
 
         {/* Unlike the reading-list and FAQ sections below, this grid has no
