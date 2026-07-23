@@ -45,8 +45,17 @@ export const viewport: Viewport = {
   themeColor: "#f4f1e8",
 };
 
+// Build provenance: the commit this static export was built from. GITHUB_SHA is
+// set automatically by GitHub Actions; locally it is absent, so we fall back to
+// "dev". Surfaced as <meta name="build-commit"> in <head> (and mirrored in
+// /version.json) so a deploy's live commit is verifiable without auth.
+const buildCommit = process.env.GITHUB_SHA || "dev";
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  other: {
+    "build-commit": buildCommit,
+  },
   title: {
     default: SITE_TITLE,
     template: "%s — Moadim",
