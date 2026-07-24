@@ -63,6 +63,9 @@
     "vitest": "^4.1.10"
   },
   "overrides": {
-    "postcss": "^8.5.10"
+    "postcss": "^8.5.10",
+    "eslint-config-developit": {
+      "semver": "^7.7.4"
+    }
   }
 }
