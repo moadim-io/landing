@@ -240,4 +240,20 @@ describe("root layout render", () => {
 
     expect(screen.getByText("page content")).toBeInTheDocument();
   });
+
+  it("stamps the footer copyright with the current year, not a frozen literal", () => {
+    render(
+      <RootLayout>
+        <p>page content</p>
+      </RootLayout>,
+    );
+
+    // A hardcoded year (e.g. "© 2026") would silently go stale every January;
+    // deriving it from the build-time clock (mirroring sitemap.ts's
+    // `lastModified`) keeps it correct on every future redeploy.
+    const currentYear = new Date().getFullYear();
+    expect(
+      screen.getByRole("contentinfo"),
+    ).toHaveTextContent(`© ${currentYear} Moadim`);
+  });
 });
