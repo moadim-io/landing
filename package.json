@@ -29,7 +29,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:visual": "playwright test",
-    "verify:export": "node scripts/verify-export.mjs"
+    "verify:export": "node scripts/verify-export.mjs",
+    "prepare": "husky"
   },
   "dependencies": {
     "next": "16.2.10",
@@ -54,7 +55,9 @@
     "eslint-import-resolver-typescript": "^4.4.5",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "html-validate": "^11.5.5",
+    "husky": "9.1.7",
     "jsdom": "^29.1.1",
+    "lint-staged": "17.1.1",
     "markdownlint-cli2": "^0.23.0",
     "stylelint": "^17.14.1",
     "stylelint-config-standard": "^40.0.0",
@@ -64,5 +67,10 @@
   },
   "overrides": {
     "postcss": "^8.5.10"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,mjs}": "eslint --fix",
+    "*.css": "stylelint --fix",
+    "*.md": "markdownlint-cli2 --fix"
   }
 }
