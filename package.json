@@ -29,7 +29,9 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:visual": "playwright test",
-    "verify:export": "node scripts/verify-export.mjs"
+    "verify:export": "node scripts/verify-export.mjs",
+    "changeset": "changeset",
+    "version": "changeset version"
   },
   "dependencies": {
     "next": "16.2.10",
@@ -37,6 +39,7 @@
     "react-dom": "19.2.8"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.0",
     "@commitlint/cli": "^21.2.1",
     "@commitlint/config-conventional": "^21.2.0",
     "@next/eslint-plugin-next": "^16.2.10",
