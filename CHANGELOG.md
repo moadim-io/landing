@@ -78,6 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `next` (and the matching `eslint-config-next`) bumped from `16.2.9` to `16.2.10`.
 - `.github/PULL_REQUEST_TEMPLATE.md`'s checklist now references `npm run test:coverage` instead of plain `npm test`, matching what `ci.yml` actually runs (#612).
 - `error.tsx`/`not-found.tsx`'s remaining hand-copied status-card class strings deduped into shared `page.tsx` tokens (#610).
 - `README.md`/`CONTRIBUTING.md`'s `npm run test:visual` description now mentions the 404-page baseline alongside the homepage one (#605).
