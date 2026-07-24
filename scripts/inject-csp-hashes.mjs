@@ -38,7 +38,10 @@ function htmlFiles(dir) {
 // blocks like the JSON-LD (type="application/ld+json").
 function executableInlineScripts(html) {
   const scripts = [];
-  const scriptTag = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
+  // `\s*` before the closing `>`: the HTML spec permits whitespace in an end
+  // tag (`</script >`), and a missed end tag here would swallow the following
+  // markup into the hashed "script" and emit a hash the browser never matches.
+  const scriptTag = /<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi;
   for (const [, attrs, body] of html.matchAll(scriptTag)) {
     if (/\bsrc\s*=/i.test(attrs)) continue;
     const type = /\btype\s*=\s*["']?([^"'\s>]+)/i.exec(attrs)?.[1];
