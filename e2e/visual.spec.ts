@@ -8,7 +8,19 @@ import { expect, test } from "@playwright/test";
 // resting-state capture like this one is deterministic without extra setup.
 test("homepage matches its visual baseline", async ({ page }) => {
   await page.goto("/");
-  await expect(page).toHaveScreenshot("homepage.png", { fullPage: true });
+  // The GitHub star count and crates.io version badges (app/page.tsx) are
+  // deliberately live img.shields.io images rendered at request time (#162,
+  // #183) — their pixel content (star count, cache state) changes between
+  // captures, which made this test flaky independent of any real visual
+  // regression. Mask them out rather than pinning product code to a fetched
+  // image just to satisfy a screenshot diff.
+  await expect(page).toHaveScreenshot("homepage.png", {
+    fullPage: true,
+    mask: [
+      page.getByAltText("moadim GitHub star count"),
+      page.getByAltText("moadim version on crates.io"),
+    ],
+  });
 });
 
 // The 404 page reuses homepage panel/CTA styles specifically so it can't
