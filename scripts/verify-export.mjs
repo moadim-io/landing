@@ -4,7 +4,7 @@
 // build and before deploy so that failure is a red CI run instead of a broken page in prod.
 // See #244.
 
-import { statSync } from "node:fs";
+import { readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 
 const OUT_DIR = "out";
@@ -70,6 +70,22 @@ for (const file of REQUIRED_FILES) {
   if (stats.size === 0) {
     missing.push(`${path} (empty)`);
   }
+}
+
+// The built _headers must carry the inline-script hash allowances that
+// scripts/inject-csp-hashes.mjs appends after `next build` — without them the
+// CSP blocks Next's inline bootstrap scripts and hydration dies in production.
+// A build pipeline change that skips the injection (e.g. calling `next build`
+// directly) would otherwise ship that regression with no red CI run.
+try {
+  const headers = readFileSync(join(OUT_DIR, "_headers"), "utf8");
+  if (!/script-src [^;]*'sha256-/.test(headers)) {
+    missing.push(
+      "out/_headers (script-src carries no 'sha256-...' inline-script allowances — did scripts/inject-csp-hashes.mjs run after next build?)",
+    );
+  }
+} catch {
+  // Absence of the file itself is already reported by REQUIRED_FILES above.
 }
 
 if (missing.length > 0) {
