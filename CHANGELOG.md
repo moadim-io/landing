@@ -112,6 +112,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sitemap `lastModified` bumped to 2026-06-25 and `changeFrequency` set to `weekly` (#306).
 - Generated metadata routes (OG/Twitter images, favicon) given a real, long-lived cache window instead of an implicit no-cache default (#228, #278).
 - `cloudflare/wrangler-action` bumped from v3 to v4 (#114).
+- `@types/node` bumped from 26.1.0 to 26.1.1 to keep the installed type definitions current with Node's published types within the existing `^26` range.
 - CI and deploy installs switched to `npm ci` against a regenerated, in-sync lockfile, instead of a re-resolving `npm install` (#328).
 - Production deploys now skip for docs-only pushes (README, CHANGELOG, other workflow files) that can't affect the exported static site (#326).
 - README and `CONTRIBUTING.md` now document the test scripts (`npm test`, `npm run test:watch`) (#333).

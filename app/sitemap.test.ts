@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import sitemap from "./sitemap";
+import sitemap, { dynamic } from "./sitemap";
 import { SITE_URL } from "./site";
 
 describe("sitemap", () => {
@@ -23,5 +23,15 @@ describe("sitemap", () => {
 
     expect(entry.lastModified).toBeInstanceOf(Date);
     expect(Number.isNaN((entry.lastModified as Date).getTime())).toBe(false);
+  });
+
+  // Every other metadata route (manifest.test.ts, apple-icon.test.tsx,
+  // opengraph-image.test.tsx, twitter-image.test.tsx) already asserts this;
+  // sitemap.ts had the identical gap. Metadata routes must opt into static
+  // generation under the static export (see AGENTS.md) — if this regresses
+  // to the Next.js default, `next build` fails, and this test catches that
+  // without a full build.
+  it("is force-static so it survives `output: export`", () => {
+    expect(dynamic).toBe("force-static");
   });
 });
