@@ -10,6 +10,7 @@ import {
   SITE_TITLE,
   SITE_DESCRIPTION,
 } from "./site";
+import { SATORI_BACKGROUND } from "./brand-colors";
 import { ExternalLink } from "./ExternalLink";
 import { JsonLdScript } from "./JsonLdScript";
 import { SkipLink } from "./SkipLink";
@@ -42,7 +43,7 @@ export const viewport: Viewport = {
   // pre-paint canvas — in light too, instead of inverting them against the
   // cream `--background`.
   colorScheme: "light",
-  themeColor: "#f4f1e8",
+  themeColor: SATORI_BACKGROUND,
 };
 
 export const metadata: Metadata = {
