@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import AppleIcon, { contentType, dynamic, size } from "./apple-icon";
 
@@ -29,5 +30,23 @@ describe("AppleIcon render", () => {
 
     expect(response).toBeInstanceOf(Response);
     expect(response.headers.get("content-type")).toBe(contentType);
+  });
+});
+
+describe("AppleIcon font", () => {
+  // Regression test, same idea as brand-colors.test.ts: `next/font` doesn't reach a
+  // metadata route's `ImageResponse`, so without explicitly vendoring Satori-compatible
+  // font bytes this route silently falls back to Satori's built-in font (Noto Sans)
+  // instead of the brand's Geist, unlike opengraph-image.tsx's identical Satori setup
+  // which already does this. Parsing the source (rather than mocking `next/og`) mirrors
+  // how this repo already tests other Satori-only concerns.
+  const source = readFileSync("app/apple-icon.tsx", "utf8");
+
+  it("vendors the Geist Bold font file", () => {
+    expect(source).toMatch(/geist-bold\.ttf/);
+  });
+
+  it("passes the vendored font into ImageResponse's fonts option", () => {
+    expect(source).toMatch(/fonts:\s*\[\{\s*name:\s*"Geist"/);
   });
 });

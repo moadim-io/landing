@@ -68,6 +68,34 @@ describe("public/_headers", () => {
     );
   });
 
+  it("locks the Content-Security-Policy to same-origin, with no unsafe-inline/eval allowance", () => {
+    const csp = headerRules["/*"]?.find((line) =>
+      line.startsWith("Content-Security-Policy:"),
+    );
+    expect(csp).toBeDefined();
+    expect(csp).toContain("default-src 'self'");
+    expect(csp).toContain("object-src 'none'");
+    expect(csp).toContain("frame-ancestors 'none'");
+    expect(csp).not.toMatch(/unsafe-inline|unsafe-eval/);
+  });
+
+  it("carves out the exact third-party allowances the page needs", () => {
+    // These shipped broken once (#unblock-csp): img-src 'self' rendered the
+    // two shields.io status badges as broken images, and script-src/connect-src
+    // 'self' blocked the Cloudflare Web Analytics beacon Pages auto-injects.
+    // Inline-script 'sha256-...' allowances are NOT asserted here — they change
+    // every build, so scripts/inject-csp-hashes.mjs appends them to out/_headers
+    // after `next build` (verify-export.mjs checks they made it into the export).
+    const csp = headerRules["/*"]?.find((line) =>
+      line.startsWith("Content-Security-Policy:"),
+    );
+    expect(csp).toContain("img-src 'self' https://img.shields.io");
+    expect(csp).toContain(
+      "script-src 'self' https://static.cloudflareinsights.com",
+    );
+    expect(csp).toContain("connect-src 'self' https://cloudflareinsights.com");
+  });
+
   it("caches content-hashed assets and metadata images forever", () => {
     for (const path of ["/_next/static/*", "/icon.svg"]) {
       expect(headerRules[path]).toEqual([

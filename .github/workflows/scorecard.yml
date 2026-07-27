@@ -12,6 +12,14 @@ on:
     - cron: "23 4 * * 1"
   push:
     branches: [main]
+  # Lets a maintainer re-run the Scorecard analysis on demand (e.g. right
+  # after enabling a new check, or to confirm a flaky run was a fluke)
+  # instead of waiting for the weekly schedule or a push to main. Mirrors
+  # the pattern already applied to ci.yml, codeql.yml, lighthouse.yml,
+  # visual-regression.yml, and actionlint.yml — this workflow, unlike
+  # dependency-review.yml, needs no pull_request base/head diff, so it has
+  # no reason to be the odd one out.
+  workflow_dispatch:
 
 # Least-privilege default; the job below elevates only what publishing/SARIF upload needs.
 permissions: read-all
@@ -35,7 +43,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 

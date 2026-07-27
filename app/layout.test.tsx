@@ -1,7 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import RootLayout, { jsonLd, metadata, viewport } from "./layout";
-import { ORG_URL, REPO_URL, SITE_URL } from "./site";
+import { ORG_URL, REPO_URL, CRATE_URL, SITE_URL } from "./site";
 
 describe("root layout metadata", () => {
   it("declares the expected title and description", () => {
@@ -149,6 +149,15 @@ describe("root layout JSON-LD", () => {
     expect(organization.sameAs).toEqual([ORG_URL]);
   });
 
+  it("points the SoftwareApplication node at the product's real distribution channels", () => {
+    // Regression guard: these must come from site.ts's REPO_URL/CRATE_URL, not hardcoded
+    // literals — a repo move or crate rename would otherwise silently leave stale URLs
+    // here with no test failure to catch it.
+    expect(softwareApplication.sameAs).toEqual([REPO_URL, CRATE_URL]);
+    expect(softwareApplication.codeRepository).toBe(REPO_URL);
+    expect(softwareApplication.downloadUrl).toBe(CRATE_URL);
+  });
+
   it("declares a WebSite node with the site name and canonical URL", () => {
     expect(website["@type"]).toBe("WebSite");
     expect(website.name).toBe("Moadim");
@@ -194,12 +203,18 @@ describe("root layout render", () => {
       </RootLayout>,
     );
 
-    const docsLink = screen.getByRole("link", { name: /docs/i });
+    // Scoped to the header nav: the footer also links to GitHub (see
+    // layout.tsx's footer), so an unscoped getByRole("link", { name:
+    // /^github/i }) matches both and throws. This test only cares about
+    // the header nav's Docs/GitHub links.
+    const nav = within(screen.getByRole("navigation", { name: "Site navigation" }));
+
+    const docsLink = nav.getByRole("link", { name: /docs/i });
     expect(docsLink).toHaveAttribute("href", `${REPO_URL}#readme`);
     expect(docsLink).toHaveAttribute("target", "_blank");
     expect(docsLink).toHaveAttribute("rel", "noopener noreferrer");
 
-    const githubLink = screen.getByRole("link", { name: /^github/i });
+    const githubLink = nav.getByRole("link", { name: /^github/i });
     expect(githubLink).toHaveAttribute("href", REPO_URL);
     expect(githubLink).toHaveAttribute("target", "_blank");
   });

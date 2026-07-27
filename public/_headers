@@ -15,10 +15,30 @@
 # Baseline security headers, applied site-wide. More specific rules below only
 # detach/reset Cache-Control (`! Cache-Control`), so these keep applying to
 # every path — including hashed assets and metadata routes — without repeating
-# them per rule. No CSP here: the JSON-LD <script> (JsonLdScript.tsx) is inline
-# and static-exported with no per-request nonce, so a strict CSP would need
-# 'unsafe-inline' anyway; adding one is a separate, larger effort left for later.
+# them per rule.
 #
+# - Content-Security-Policy: no 'unsafe-inline' allowance for script-src, but
+#   the static export DOES ship executable inline scripts — Next.js emits its
+#   bootstrap/flight-data as inline `<script>self.__next_f.push(...)</script>`
+#   blocks, so a bare `script-src 'self'` blocks them all and kills hydration
+#   in production (every client component goes dead). Instead of loosening to
+#   'unsafe-inline', scripts/inject-csp-hashes.mjs runs after `next build`,
+#   hashes every executable inline script in out/**/*.html, and appends the
+#   matching 'sha256-...' sources to the script-src directive in out/_headers.
+#   This file keeps only the static sources; the hashes exist only in the
+#   built copy because they change with every build's flight data.
+#   The JSON-LD <script> (JsonLdScript.tsx) needs no hash — it's typed
+#   `application/ld+json`, an inert data block CSP's script-src never gates.
+#   script-src also allows static.cloudflareinsights.com (and connect-src
+#   allows cloudflareinsights.com) for the Web Analytics beacon Cloudflare
+#   Pages auto-injects into served HTML — without these the beacon script and
+#   its POSTs are blocked, filling the console with CSP violations.
+#   img-src allows img.shields.io for the two live status badges on the
+#   landing page (GitHub stars, crates.io version — see app/page.tsx); with
+#   'self' only they render as broken-image placeholders. Styles and fonts
+#   stay self-hosted under content-hashed /_next/static/* URLs (next/font
+#   resolves Geist at build time, no runtime Google Fonts request), and there
+#   are no <form>s, so the remaining directives stay locked to 'self'/'none'.
 # - X-Content-Type-Options: stops a browser from MIME-sniffing a response into
 #   an executable type against the served Content-Type.
 # - Referrer-Policy: sends the full referrer to same-origin requests but only
@@ -56,6 +76,7 @@
 # picked up immediately instead of serving a stale page.
 /*
   Cache-Control: public, max-age=0, must-revalidate
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self' https://img.shields.io; font-src 'self'; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY

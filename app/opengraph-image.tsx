@@ -6,7 +6,6 @@ import {
   SATORI_BACKGROUND as BACKGROUND,
   SATORI_FOREGROUND as FOREGROUND,
 } from "./brand-colors";
-import { SITE_TITLE } from "./site";
 
 // `next/font` (used by the rest of the site, see layout.tsx) doesn't reach a metadata
 // route's `ImageResponse` — Satori needs raw font bytes handed to it directly, so without
@@ -25,7 +24,7 @@ export const contentType = "image/png";
 // Twitter/X's card (twitter-image.tsx) re-exports this alt as-is, so a rebrand only
 // needs to change SITE_TITLE once. See site.ts's SITE_TITLE doc comment for the same
 // single-source rationale applied to layout.tsx and manifest.ts.
-export const alt = SITE_TITLE;
+export { SITE_TITLE as alt } from "./site";
 
 export default function OpenGraphImage() {
   return new ImageResponse(

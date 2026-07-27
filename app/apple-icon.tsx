@@ -1,5 +1,13 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { SATORI_ACCENT as ACCENT, SATORI_FOREGROUND as FOREGROUND } from "./brand-colors";
+
+// `next/font` (used by the rest of the site, see layout.tsx) doesn't reach a metadata
+// route's `ImageResponse` — Satori needs raw font bytes handed to it directly, so without
+// this the icon rendered in Satori's built-in fallback (Noto Sans), not the site's brand
+// font, unlike opengraph-image.tsx's identical Satori setup which already vendors this.
+const geistBold = readFileSync(join(process.cwd(), "app/fonts/geist-bold.ttf"));
 
 // Apple touch icon for iOS "Add to Home Screen", Safari bookmarks, and the
 // link-preview tools that request `apple-touch-icon`. Generated at build time
@@ -32,12 +40,13 @@ export default function AppleIcon() {
             fontWeight: 800,
             lineHeight: 1,
             color: ACCENT,
+            fontFamily: "Geist",
           }}
         >
           M
         </div>
       </div>
     ),
-    size,
+    { ...size, fonts: [{ name: "Geist", data: geistBold, weight: 800, style: "normal" }] },
   );
 }

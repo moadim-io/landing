@@ -27,14 +27,14 @@ This version has breaking changes — APIs, conventions, and file structure may 
 | `npm run typecheck` | `tsc --noEmit` over the whole project — catches errors in files `next build`'s own TypeScript pass skips, e.g. `*.test.ts`. |
 | `npm run test` | Vitest unit/component tests (`*.test.ts`/`*.test.tsx` next to the code they cover). |
 | `npm run test:watch` | Vitest in watch mode. |
-| `npm run test:coverage` | Vitest with a `text`/`html`/`json-summary` coverage report over `app/**` (HTML report at `coverage/index.html`). |
+| `npm run test:coverage` | Vitest with a `text`/`html`/`json-summary` coverage report over `app/**` (HTML report at `coverage/index.html`). Enforces the coverage thresholds in `vitest.config.ts` — this is what CI runs, not plain `test`. |
 | `npm run verify:export` | Check that the built `out/` directory actually contains the routes/files a static export must ship. Requires `npm run build` first. |
 | `npm run lint:html` | Validate `out/**/*.html` with `html-validate` (config: `.htmlvalidate.json`). Requires `npm run build` first. |
 | `npm run lint:css` | Lint `app/**/*.css` with Stylelint (config: `.stylelintrc.json`). |
-| `npm run test:visual` | Playwright visual-regression suite against the built `out/` export: compares mobile/desktop screenshots against the committed baselines in `e2e/visual.spec.ts-snapshots/`. Requires `npm run build` first; update baselines with `npm run test:visual -- --update-snapshots`. |
+| `npm run test:visual` | Playwright visual-regression suite against the built `out/` export: compares mobile/desktop screenshots against the committed baselines in `e2e/visual.spec.ts-snapshots/`. Requires `npm run build` first; update baselines with `npm run test:visual -- --update-snapshots`. Only the `-linux` baselines are committed (matching CI's `ubuntu-latest` runner) — running this on macOS or Windows fails on the very first run with "A snapshot doesn't exist", not a real regression, since no `-darwin`/`-win32` baseline exists yet; generate one locally with the same `--update-snapshots` flag (safe to leave uncommitted). |
 
 Before opening a PR, make sure `npm run lint`, `npm run lint:md`, `npm run lint:css`,
-`npm run typecheck`, `npm run test`, `npm run build`, `npm run verify:export`,
+`npm run typecheck`, `npm run test:coverage`, `npm run build`, `npm run verify:export`,
 `npm run lint:html`, **and** `npm run test:visual` all pass — the build is the real gate,
 since static export surfaces errors `dev` tolerates.
 

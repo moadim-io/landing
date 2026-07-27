@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import NotFound, { metadata } from "./not-found";
-import { panel } from "./page";
+import { eyebrowPill, statusBody, statusCard, statusCardWrapper } from "./page";
 
 describe("not-found metadata", () => {
   it("declares a page-specific title", () => {
@@ -42,6 +42,19 @@ describe("NotFound", () => {
   it("reuses the shared panel surface style instead of a duplicated copy", () => {
     const { container } = render(<NotFound />);
 
-    expect(container.querySelector("main")?.className).toContain(panel);
+    expect(container.querySelector("main")?.className).toBe(statusCard);
+  });
+
+  // Same drift risk as the `panel` guard above, for the rest of the "status
+  // off-ramp" chrome this page shares with error.tsx: the outer centering
+  // wrapper, the eyebrow tag, and the body copy.
+  it("reuses the shared status-card wrapper, eyebrow, and body tokens", () => {
+    const { container } = render(<NotFound />);
+
+    expect(container.firstElementChild?.className).toBe(statusCardWrapper);
+    expect(screen.getByText("Error 404").className).toBe(eyebrowPill);
+    expect(
+      screen.getByText(/it may have moved/i).className,
+    ).toBe(statusBody);
   });
 });
