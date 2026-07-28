@@ -46,7 +46,14 @@ function makeOutDir({
       mkdirSync(join(outDir, file), { recursive: true });
       continue;
     }
-    writeFileSync(join(outDir, file), empty.includes(file) ? "" : "content");
+    // _headers gets real-shaped content: verify-export additionally checks its
+    // script-src carries the 'sha256-...' allowances inject-csp-hashes.mjs
+    // appends after `next build`, and a bare "content" placeholder fails that.
+    const content =
+      file === "_headers"
+        ? "/*\n  Content-Security-Policy: script-src 'self' 'sha256-abc123='\n"
+        : "content";
+    writeFileSync(join(outDir, file), empty.includes(file) ? "" : content);
   }
   return workDir;
 }
@@ -66,6 +73,20 @@ describe("verify-export", () => {
 
     expect(stdout).toContain(
       `verify-export: all ${REQUIRED_FILES.length} required export files present.`,
+    );
+  });
+
+  it("exits non-zero when _headers lacks the injected inline-script CSP hashes", () => {
+    // Guards the inject-csp-hashes.mjs build step: a pipeline change that runs
+    // `next build` without it would redeploy the hydration-killing CSP.
+    const cwd = makeOutDir();
+    writeFileSync(
+      join(cwd, "out", "_headers"),
+      "/*\n  Content-Security-Policy: script-src 'self'\n",
+    );
+
+    expect(() => execFileSync("node", [SCRIPT_PATH], { cwd, encoding: "utf8" })).toThrow(
+      /sha256/,
     );
   });
 

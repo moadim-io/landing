@@ -104,6 +104,13 @@ describe("Home", () => {
       `https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`,
     );
     expect(badgeImg).toHaveAttribute("alt", "moadim version on crates.io");
+    expect(badgeImg).toHaveAttribute("height", "20");
+    // No `width`: shields.io badge width varies with the version string's
+    // length, so a hardcoded pixel width goes stale (and distorts the
+    // badge) the moment the crate version changes digit count. Letting the
+    // browser derive width from the image's natural aspect ratio keeps it
+    // correct regardless of version string length.
+    expect(badgeImg).not.toHaveAttribute("width");
     // Without this, React DOM auto-hoists a `<link rel="preload" as="image">`
     // for this third-party badge into <head> at "high" priority — spending
     // the page's earliest network slot on a decorative img.shields.io fetch
