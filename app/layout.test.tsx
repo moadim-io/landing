@@ -2,6 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import RootLayout, { jsonLd, metadata, viewport } from "./layout";
 import { ORG_URL, REPO_URL, CRATE_URL, SITE_URL } from "./site";
+import { SATORI_BACKGROUND } from "./brand-colors";
 
 describe("root layout metadata", () => {
   it("declares the expected title and description", () => {
@@ -111,7 +112,7 @@ describe("root layout viewport", () => {
   });
 
   it("paints mobile browser chrome in the brand background color", () => {
-    expect(viewport.themeColor).toBe("#f4f1e8");
+    expect(viewport.themeColor).toBe(SATORI_BACKGROUND);
   });
 });
 
