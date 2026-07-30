@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/tupe12334/linecheck/main/schema/linecheck.schema.json
+#
+# Error thresholds for .tsx start above app/page.tsx's current line count
+# (446) so adopting linecheck doesn't fail CI on day one. Tighten once
+# page.tsx gets split up.
+
+rules:
+  - pattern: "**/*.tsx"
+    warn: 200
+    warn_message: "Getting long — consider splitting into smaller components"
+    error: 460
+    error_message: "Too large to review easily; split this component now"
+  - pattern: "**/*.ts"
+    warn: 200
+    warn_message: "Getting long — consider splitting into smaller modules"
+    error: 400
+    error_message: "Too large to review easily; split this module now"
+  - pattern: "**/*.mjs"
+    warn: 200
+    error: 400
+
+exclude:
+  - "**/node_modules/**"
+  - "**/.next/**"
+  - "out/**"
+  - "coverage/**"
+  - "package-lock.json"
