@@ -286,39 +286,41 @@ export default function Home() {
             daemon's own README (#67). Both snippets are verified against the
             daemon's real surface: `GET /api/v1/routines` (src/commands.rs) and the
             `list_routines` MCP tool (src/routes/mcp.rs). */}
-        <section className={panel} aria-labelledby="quickstart-heading">
+        <section className={`${panel} overflow-hidden`} aria-labelledby="quickstart-heading">
           <h2
             id="quickstart-heading"
             className="border-b-4 border-black bg-black px-6 py-3 text-sm font-black uppercase tracking-[0.2em] text-accent"
           >
             Quickstart
           </h2>
-          <div className="grid gap-0 sm:grid-cols-2">
-            <div className="flex flex-col gap-2 border-b-4 border-black p-6 sm:border-b-0 sm:border-r-4">
+          <div className="grid min-w-0 gap-0 sm:grid-cols-2">
+            <div className="flex min-w-0 flex-col gap-2 border-b-4 border-black p-6 sm:border-b-0 sm:border-r-4">
               <span className="text-xs font-bold uppercase tracking-[0.2em] text-black/70">
                 REST — list loops
               </span>
-              <pre className="overflow-x-auto rounded border-2 border-black bg-black p-3 font-mono text-sm text-white">
-                <code>
+              <pre className="max-w-full overflow-x-auto rounded border-2 border-black bg-black p-3 font-mono text-sm text-white">
+                <code className="whitespace-pre-wrap break-all sm:whitespace-pre sm:break-normal">
                   <span aria-hidden="true" className="select-none text-accent">
                     ${" "}
                   </span>
                   curl http://localhost:5784/api/v1/routines
                 </code>
               </pre>
-              <p className="text-sm font-medium leading-6">
+              <p className="break-words text-sm font-medium leading-6">
                 Every loop is also a documented HTTP endpoint, with an OpenAPI
                 schema and Swagger UI baked into the daemon.
               </p>
             </div>
-            <div className="flex flex-col gap-2 p-6">
+            <div className="flex min-w-0 flex-col gap-2 p-6">
               <span className="text-xs font-bold uppercase tracking-[0.2em] text-black/70">
                 MCP — list loops
               </span>
-              <pre className="overflow-x-auto rounded border-2 border-black bg-black p-3 font-mono text-sm text-white">
-                <code>{`{ "name": "list_routines", "arguments": {} }`}</code>
+              <pre className="max-w-full overflow-x-auto rounded border-2 border-black bg-black p-3 font-mono text-sm text-white">
+                <code className="whitespace-pre-wrap break-all sm:whitespace-pre sm:break-normal">
+                  {`{ "name": "list_routines", "arguments": {} }`}
+                </code>
               </pre>
-              <p className="text-sm font-medium leading-6">
+              <p className="break-words text-sm font-medium leading-6">
                 The same call as an MCP tool, for any MCP-compatible agent
                 connected to <code className="font-mono">/mcp</code>.
               </p>

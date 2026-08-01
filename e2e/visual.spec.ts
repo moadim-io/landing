@@ -8,6 +8,9 @@ import { expect, test } from "@playwright/test";
 // resting-state capture like this one is deterministic without extra setup.
 test("homepage matches its visual baseline", async ({ page }) => {
   await page.goto("/");
+  await expect
+    .poll(async () => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1))
+    .toBe(true);
   // The GitHub star count and crates.io version badges (app/page.tsx) are
   // deliberately live img.shields.io images rendered at request time (#162,
   // #183) — their pixel content (star count, cache state) changes between

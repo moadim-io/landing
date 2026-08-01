@@ -17,15 +17,10 @@
 
 export function LoopAnimation() {
   return (
-    // `min-w-140` on the <img> below (560px) forces this diagram wider than
-    // its container below the sm breakpoint, so `overflow-x-auto` makes it a
-    // horizontally scrollable region on every phone-width viewport (as low
-    // as 335px of visible content out of 592px total at 375px wide — the
-    // ROUTINES/EXTERNAL half of the diagram is cropped off by default). A
-    // plain scrollable <div> is only in the *pointer* tab order — without an
-    // explicit `tabIndex`, a keyboard-only visitor can never focus it to
-    // scroll with the arrow keys and see the cropped half at all (axe-core's
-    // "scrollable-region-focusable" check / WCAG 2.1.1 Keyboard).
+    // The diagram scales down on phone-width viewports so the ROUTINES / EXTERNAL
+    // half is visible without a mandatory sideways scroll. From the `sm` breakpoint
+    // up, `sm:min-w-140` preserves the original wide diagram and `overflow-x-auto`
+    // remains as a keyboard-focusable escape hatch for intermediate widths.
     <div
       // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- this non-interactive <div> is the one thing on the page with scrollable overflow, so it needs to be the keyboard focus target per the axe-core scrollable-region-focusable fix.
       tabIndex={0}
@@ -38,9 +33,9 @@ export function LoopAnimation() {
         alt="Animated diagram: an agent reads goals from a goals repository and travels to a routines repository where it creates, edits, and removes routines — each routine itself a small, always-running loop with its own pace. The routines act on external repositories and tasks, and the resulting progress flows back into the goals."
         width={800}
         height={220}
-        loading="lazy"
+        loading="eager"
         decoding="async"
-        className="block h-auto w-full min-w-140"
+        className="block h-auto w-full min-w-0 sm:min-w-140"
       />
     </div>
   );

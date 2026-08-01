@@ -33,6 +33,19 @@
 }
 
 /*
+ * Mobile keeps the same hard-edged neobrutalist language, but uses shorter
+ * offsets so panel/CTA shadows do not visually chew through the tiny gutters or
+ * imply a wider-than-screen layout.
+ */
+@media (width < 640px) {
+  :root {
+    --shadow-brutal: 4px 4px 0 0 var(--color-foreground);
+    --shadow-brutal-hover: 5px 5px 0 0 var(--color-foreground);
+    --shadow-brutal-lg: 6px 6px 0 0 var(--color-foreground);
+  }
+}
+
+/*
  * Faint grid texture. The line color is mixed down to 6% foreground over the
  * page background up front -- color-mix(in srgb, --foreground 6%, --background)
  * is exactly the pixel a full-contrast --foreground line used to yield under
