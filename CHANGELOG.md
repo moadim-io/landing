@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- An automated `axe-core` accessibility scan of the homepage (`e2e/a11y.spec.ts`, via `@axe-core/playwright`), catching rendered-DOM a11y issues (contrast, landmark structure, ARIA state) that `eslint-plugin-jsx-a11y`'s static check can't see (#589).
 - CI: `test:coverage`'s coverage thresholds (`vitest.config.ts`) are now actually enforced in `ci.yml` — a PR that drops below them fails the "Test" step instead of the thresholds only being reported (#607).
 - `Cross-Origin-Opener-Policy: same-origin` added to `public/_headers`' baseline security headers, isolating the page's top-level browsing context from any cross-origin window it opens (#584).
 - CI: `workflow_dispatch` added to `ci.yml`, `codeql.yml`, `lighthouse.yml`, `visual-regression.yml`, and `actionlint.yml` so a maintainer can trigger lint/test/build, an ad hoc CodeQL scan, a Lighthouse budget check, a visual-regression diff, or a workflow-YAML lint on demand instead of needing an empty commit or waiting for the next real trigger — `deploy.yml` and `link-check.yml` already supported this (#604).
