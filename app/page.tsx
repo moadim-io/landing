@@ -131,147 +131,144 @@ export default function Home() {
   return (
     <div className="flex flex-1 flex-col items-center px-4 py-10 sm:px-8 sm:py-16">
       <main id="main" className="flex w-full max-w-4xl flex-1 flex-col gap-10">
-        <section className={`${panel} overflow-hidden`} aria-labelledby="hero-heading">
-          <div className="grid gap-0 lg:grid-cols-[1fr_0.9fr]">
-            <header className="flex flex-col justify-between gap-8 p-6 sm:p-10">
-              <div>
-                <p className={`${eyebrowPill} mb-6`}>
-                  Open source · Agent loop engine
-                </p>
-                <h1
-                  id="hero-heading"
-                  className="text-4xl font-black uppercase leading-[0.95] tracking-tight sm:text-6xl"
-                >
-                  <span className="sr-only">
-                    Run your first loop in minutes.
-                  </span>
-                  <span aria-hidden="true">
-                    Run your first
-                    <span className="bg-accent box-decoration-clone px-1">
-                      {" loop "}
-                    </span>
-                    in minutes.
-                  </span>
-                </h1>
-                <p className="mt-6 max-w-2xl text-lg font-medium leading-7 sm:text-xl">
-                  Define a prompt, schedule an agent, and let Moadim run it in a
-                  fresh workbench every tick — with evidence you can review
-                  instead of another silent cron job.
-                </p>
-              </div>
-              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <a className={`${ctaButton} bg-accent`} href="#quickstart-heading">
-                  Copy install command
-                </a>
-                <a className={`${ctaButton} bg-white`} href="#proof-heading">
-                  See example loop ↗
-                </a>
-                <ExternalLink
-                  className={`${ctaButton} group gap-3 bg-white`}
-                  href={REPO_URL}
-                  aria-label="Star moadim on GitHub"
-                >
-                  <span aria-hidden="true" className="text-lg leading-none">
-                    ★
-                  </span>
-                  Star on GitHub
-                </ExternalLink>
-              </div>
-            </header>
+        <header className={`${panel} p-6 sm:p-10`}>
+          <p className={`${eyebrowPill} mb-6`}>
+            Open source · Loop engine
+          </p>
+          <h1 className="text-4xl font-black uppercase leading-[0.95] tracking-tight sm:text-6xl">
+            Put your
+            <br />
+            <span className="bg-accent box-decoration-clone px-1">agents</span>{" "}
+            on a loop.
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg font-medium leading-7 sm:text-xl">
+            Moadim is a loop engine for AI agents. Define a loop — a prompt, a
+            schedule, an agent — and it runs Claude, Codex, Hermes, or Pi
+            against your repo on every tick, in an isolated workbench, with a watchdog on
+            every run. Loop engineering, not prompting by hand.
+          </p>
+        </header>
 
-            <div className="flex flex-col gap-4 border-t-4 border-black bg-black p-5 text-white lg:border-l-4 lg:border-t-0">
-              <div className="flex items-center justify-between gap-3 text-xs font-black uppercase tracking-[0.2em] text-accent">
-                <span>Quickstart path</span>
-                <span>Tracked CTA</span>
-              </div>
-              <div className="flex flex-col gap-2 border-2 border-white/30 bg-[#111] p-4">
-                <code className="block font-mono text-sm text-white sm:text-base">
-                  <span aria-hidden="true" className="select-none text-accent">
-                    ${" "}
-                  </span>
-                  {`cargo install --locked ${CRATE_NAME}`}
-                </code>
-                <code className="block font-mono text-sm text-white sm:text-base">
-                  <span aria-hidden="true" className="select-none text-accent">
-                    ${" "}
-                  </span>
-                  moadim install
-                </code>
-                <code className="block font-mono text-sm text-white sm:text-base">
-                  <span aria-hidden="true" className="select-none text-accent">
-                    ${" "}
-                  </span>
-                  moadim loop new daily-repo-check
-                </code>
-              </div>
-              <p className="text-xs font-medium leading-snug text-white">
-                Requires a Unix-like OS with{" "}
-                <code className="font-mono text-accent">tmux</code> and a cron
-                daemon. Moadim runs at{" "}
-                <code className="font-mono text-accent">
-                  http://localhost:5784/
-                </code>
-                .
-              </p>
-              <div className="grid gap-2 border-2 border-white/70 bg-[#171717] p-4">
-                <h2
-                  id="proof-heading"
-                  className="text-lg font-black uppercase text-accent"
-                >
-                  What the visitor sees next
-                </h2>
-                {[
-                  ["Agent launched in isolated workbench", "00:02"],
-                  ["Changes inspected against repo", "01:14"],
-                  ["Evidence summary delivered", "02:31"],
-                ].map(([label, time]) => (
-                  <div
-                    className="grid grid-cols-[1.5rem_1fr_auto] items-center gap-3 border-2 border-white/25 p-2 text-sm font-bold"
-                    key={label}
-                  >
-                    <span className="grid h-5 w-5 place-items-center border-2 border-white bg-green-400 text-xs font-black text-black">
-                      ✓
-                    </span>
-                    <span>{label}</span>
-                    <span className="font-mono text-xs text-white/60">{time}</span>
-                  </div>
-                ))}
-              </div>
-              <p className="border-2 border-white/30 bg-[#111] p-3 text-sm font-bold leading-6">
-                Result: “3 stale PRs found, 1 safe dependency update merged, 2
-                blocked with reasons.”
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <ExternalLink
-                  className="flex items-center justify-center border-2 border-white bg-white p-1 shadow-brutal"
-                  href={REPO_URL}
-                  aria-label="moadim GitHub star count"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`https://img.shields.io/github/stars/${REPO_SLUG}?style=flat&label=stars`}
-                    alt="moadim GitHub star count"
-                    width={104}
-                    height={20}
-                  />
-                </ExternalLink>
-                <ExternalLink
-                  className="flex items-center justify-center border-2 border-white bg-white p-1 shadow-brutal"
-                  href={CRATE_URL}
-                  aria-label="Latest published moadim release"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`}
-                    alt="moadim version on crates.io"
-                    height={20}
-                    fetchPriority="low"
-                  />
-                </ExternalLink>
-              </div>
-            </div>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-stretch">
+          <div className="flex flex-1 flex-col gap-2 border-4 border-black bg-black p-5 shadow-brutal">
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
+              Install
+            </span>
+            <code className="block font-mono text-base text-white sm:text-lg">
+              {/* The shell prompt is decoration: hide it from screen readers and
+                  exclude it from text selection so copying the line yields a
+                  runnable `cargo install --locked moadim`, not
+                  `$ cargo install --locked moadim`. `--locked` installs the
+                  crate's tested Cargo.lock dependency set instead of
+                  re-resolving to the newest semver-compatible versions. */}
+              <span aria-hidden="true" className="select-none text-accent">
+                ${" "}
+              </span>
+              {`cargo install --locked ${CRATE_NAME}`}
+            </code>
+            <code className="block font-mono text-base text-white sm:text-lg">
+              {/* `cargo install` only compiles and installs the binary — nothing
+                  runs until `moadim` itself is invoked, so the snippet stopped
+                  one command short of a working daemon (#206). Same
+                  aria-hidden/select-none prompt trick as the install line above. */}
+              <span aria-hidden="true" className="select-none text-accent">
+                ${" "}
+              </span>
+              moadim
+            </code>
+            <p className="mt-1 text-xs font-medium leading-snug text-white">
+              Starts the server in the background at{" "}
+              <code className="font-mono text-accent">
+                http://localhost:5784/
+              </code>
+              . Requires a Unix-like OS with{" "}
+              <code className="font-mono text-accent">tmux</code> and a cron
+              daemon (cron / launchd / systemd) — loops fire from your OS crontab
+              inside a tmux session, so without them the install succeeds but
+              nothing runs.
+            </p>
           </div>
-        </section>
+          <ExternalLink
+            className={`${ctaButton} group gap-3 bg-accent`}
+            href={REPO_URL}
+            aria-label="Star moadim on GitHub"
+          >
+            <span aria-hidden="true" className="text-lg leading-none">
+              ★
+            </span>
+            Star on GitHub
+          </ExternalLink>
+          <ExternalLink
+            className="flex items-center justify-center border-4 border-black bg-white p-2 shadow-brutal"
+            href={REPO_URL}
+            aria-label="moadim GitHub star count"
+          >
+            {/* Live star count as social proof next to the "Star on GitHub" CTA
+                (#162) — a shields.io badge, same deliberate exception as the
+                crates.io version badge below: it renders the current count at
+                request time (no build-time fetch, no token, no client JS, and
+                it can't go stale between deploys the way a build-time-baked
+                count would), and next/image needs a configured remote loader
+                for arbitrary external hosts, which isn't worth wiring up for
+                one badge image. See #183 for the identical precedent. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`https://img.shields.io/github/stars/${REPO_SLUG}?style=flat&label=stars`}
+              alt="moadim GitHub star count"
+              width={104}
+              height={20}
+            />
+          </ExternalLink>
+          <ExternalLink
+            className={`${ctaButton} gap-2 bg-white`}
+            href={CRATE_URL}
+            aria-label="crates.io"
+          >
+            crates.io
+            <span aria-hidden="true">↗</span>
+          </ExternalLink>
+          <ExternalLink
+            className="flex items-center justify-center border-4 border-black bg-white p-2 shadow-brutal"
+            href={CRATE_URL}
+            aria-label="Latest published moadim release"
+          >
+            {/* A static shields.io badge — it renders the current crates.io
+                version at request time, so it never needs a build-time fetch
+                (and never breaks the build if crates.io is unreachable at
+                build time). next/image needs a configured remote loader for
+                arbitrary external hosts, which isn't worth wiring up for one
+                badge image, so this is a deliberate exception to the
+                next/no-img-element rule. See #183.
+
+                `fetchPriority="low"` opts this <img> out of React DOM's
+                automatic image preloading (any eager <img> without it gets a
+                `<link rel="preload" as="image" fetchpriority="high">` hoisted
+                into <head> - see react-dom's `pushImg` in
+                react-dom-server.edge.development.js). That auto-preload spends
+                the page's earliest, highest-priority network slot on a
+                decorative third-party (img.shields.io) badge - a fresh
+                DNS+TLS negotiation racing the self-hosted Geist fonts and
+                critical CSS for bandwidth - for an image that isn't the LCP
+                candidate (the hero heading text is). Marking it low-priority
+                keeps it eager (no loading="lazy" layout-shift risk, since it's
+                in the initial viewport) while telling the browser/React it
+                can wait behind what actually matters for first paint. */}
+            {/* No `width` attribute: shields.io badges are variable-width
+                (the rendered width depends on the version string's length,
+                currently 96px for "v1.3.0" but it drifts with every crate
+                release), so a hardcoded pixel width goes stale and distorts
+                the badge's aspect ratio. Only `height` is fixed — the
+                browser derives width from the image's natural aspect ratio,
+                which stays correct regardless of version-string length. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`}
+              alt="moadim version on crates.io"
+              height={20}
+              fetchPriority="low"
+            />
+          </ExternalLink>
+        </div>
 
         <section className={panel} aria-labelledby="loop-heading">
           <h2
