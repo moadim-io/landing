@@ -8,7 +8,7 @@ describe("Home", () => {
     render(<Home />);
 
     expect(
-      screen.getByRole("heading", { level: 1, name: /agents on a loop\.?/i }),
+      screen.getByRole("heading", { level: 1, name: /run your first loop/i }),
     ).toBeInTheDocument();
   });
 
@@ -26,13 +26,13 @@ describe("Home", () => {
     // CTA leaves visitors installed but with no daemon running.
     render(<Home />);
 
-    expect(screen.getByText("moadim", { selector: "code" })).toBeInTheDocument();
+    expect(screen.getByText(/moadim install/i, { selector: "code" })).toBeInTheDocument();
 
     // Scoped to the install card: the quickstart section below also mentions
     // `localhost:5784` (in its REST example), so an unscoped query is ambiguous.
     const installCard = screen
-      .getByText("moadim", { selector: "code" })
-      .closest("div");
+      .getByText(`cargo install --locked ${CRATE_NAME}`)
+      .closest("section");
     expect(installCard?.textContent).toMatch(/localhost:5784/i);
   });
 
@@ -64,7 +64,7 @@ describe("Home", () => {
     const installLine = screen.getByText(
       `cargo install --locked ${CRATE_NAME}`,
     );
-    const installCard = installLine.closest("div");
+    const installCard = installLine.closest("section");
 
     if (!installCard) {
       throw new Error("expected the install command to sit inside a card");
@@ -81,7 +81,9 @@ describe("Home", () => {
     expect(
       screen.getByRole("link", { name: /star moadim on github/i }),
     ).toHaveAttribute("href", REPO_URL);
-    expect(screen.getByRole("link", { name: /crates\.io/i })).toHaveAttribute(
+    expect(
+      screen.getByRole("link", { name: /latest published moadim release/i }),
+    ).toHaveAttribute(
       "href",
       CRATE_URL,
     );
