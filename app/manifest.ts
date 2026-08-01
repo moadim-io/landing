@@ -19,6 +19,16 @@ export default function manifest(): MetadataRoute.Manifest {
         src: "/icon.svg",
         sizes: "any",
         type: "image/svg+xml",
+        purpose: "any",
+      },
+      // Android adaptive icons need an explicit maskable entry; the existing
+      // centered SVG glyph stays inside the maskable safe zone, so the same
+      // asset can be reused instead of adding a second padded icon.
+      {
+        src: "/icon.svg",
+        sizes: "any",
+        type: "image/svg+xml",
+        purpose: "maskable",
       },
     ],
   };

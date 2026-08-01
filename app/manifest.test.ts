@@ -70,4 +70,14 @@ describe("manifest", () => {
     expect(icon.src).toBe("/icon.svg");
     expect(icon.type).toBe("image/svg+xml");
   });
+
+  it("declares a maskable icon so Android can crop it as an adaptive icon", () => {
+    const icons = manifest().icons ?? [];
+
+    const anyIcon = icons.find((icon) => icon.purpose === "any");
+    const maskableIcon = icons.find((icon) => icon.purpose === "maskable");
+
+    expect(anyIcon?.src).toBe("/icon.svg");
+    expect(maskableIcon?.src).toBe("/icon.svg");
+  });
 });
