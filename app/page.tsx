@@ -12,7 +12,7 @@ const features = [
   {
     tag: "02",
     title: "Runs locally, survives reboot",
-    body: "Loops fire from your own OS crontab — no hidden queue, no cloud. Run moadim install to register a launchd / systemd service so the daemon keeps running across logins and reboots.",
+    body: "Loops fire from Moadim's portable in-process scheduler — no hidden queue, no cloud. Run moadim install to register a launchd / systemd service so the daemon keeps running across logins and reboots.",
   },
   {
     tag: "03",
@@ -54,7 +54,7 @@ const faqs = [
   },
   {
     q: "Is it self-hosted or a cloud service?",
-    a: "It runs entirely on your own machine. Loops fire from your OS crontab — no hidden queue, no cloud, no sign-up. Run moadim install to register a launchd (macOS) or systemd (Linux) service so the daemon survives logins and reboots.",
+    a: "It runs entirely on your own machine. Loops fire from Moadim's portable in-process scheduler — no hidden queue, no cloud, no sign-up. Run moadim install to register a launchd (macOS) or systemd (Linux) service so the daemon survives logins and reboots.",
   },
   {
     q: "Which agents does it support?",
@@ -68,7 +68,7 @@ const faqs = [
   },
   {
     q: "Which operating systems are supported?",
-    a: "macOS and Linux. Loops are scheduled through the OS crontab and run inside tmux; running moadim install registers a launchd (macOS) or systemd (Linux) service that keeps the daemon alive across reboots. Both crontab and tmux need to be on your PATH, or the install succeeds but nothing runs.",
+    a: "macOS and Linux. Moadim schedules loops inside its daemon and runs agents inside tmux; running moadim install registers a launchd (macOS) or systemd (Linux) service that keeps the daemon alive across reboots. tmux needs to be on your PATH, but no host cron daemon is required.",
   },
   {
     q: "How is each run isolated?",
@@ -182,10 +182,9 @@ export default function Home() {
                 http://localhost:5784/
               </code>
               . Requires a Unix-like OS with{" "}
-              <code className="font-mono text-accent">tmux</code> and a cron
-              daemon (cron / launchd / systemd) — loops fire from your OS crontab
-              inside a tmux session, so without them the install succeeds but
-              nothing runs.
+              <code className="font-mono text-accent">tmux</code> — Moadim's
+              portable in-process scheduler dispatches loops, then launches each
+              agent inside a tmux session. No host cron daemon is required.
             </p>
           </div>
           <ExternalLink
