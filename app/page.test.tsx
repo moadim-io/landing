@@ -54,13 +54,13 @@ describe("Home", () => {
     expect(prompt?.textContent.trim()).toBe("$");
   });
 
-  it("surfaces the Unix/tmux/cron-daemon runtime prerequisite next to the install command", () => {
+  it("surfaces the Unix/tmux runtime prerequisite next to the install command", () => {
     render(<Home />);
 
-    // Loops fire from the OS crontab inside a tmux session — without a
-    // Unix-like OS, tmux, and a cron daemon, `cargo install` succeeds but the
-    // daemon never actually runs a loop (#208). This caveat had no test
-    // coverage, so a future edit to the install card could drop it silently.
+    // Moadim's internal scheduler dispatches loops, then tmux launches the
+    // agent — without a Unix-like OS and tmux, `cargo install` succeeds but
+    // the daemon cannot actually run a loop. This caveat had no test coverage,
+    // so a future edit to the install card could drop it silently.
     const installLine = screen.getByText(
       `cargo install --locked ${CRATE_NAME}`,
     );
@@ -72,7 +72,8 @@ describe("Home", () => {
 
     expect(installCard.textContent).toMatch(/unix-like os/i);
     expect(installCard.textContent).toMatch(/\btmux\b/i);
-    expect(installCard.textContent).toMatch(/cron daemon/i);
+    expect(installCard.textContent).toMatch(/in-process scheduler/i);
+    expect(installCard.textContent).toMatch(/no host cron daemon is required/i);
   });
 
   it("points the GitHub and crates.io CTAs at the canonical URLs", () => {

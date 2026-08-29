@@ -149,11 +149,11 @@ const softwareApplication = {
   name: "Moadim",
   url: SITE_URL,
   applicationCategory: "DeveloperApplication",
-  // macOS and Linux only: loops fire from the OS crontab inside a tmux
-  // session and are kept alive by launchd / systemd — all Unix-only. The
-  // hero install card ("Unix-like OS with tmux and a cron daemon") and the
-  // FAQ ("macOS and Linux") say the same; advertising Windows here would let
-  // search engines surface the app for an unsupported platform.
+  // macOS and Linux only: Moadim's portable in-process scheduler dispatches
+  // loops and tmux launches agents, while launchd / systemd keep the daemon
+  // alive — all Unix-only. The hero install card and FAQ say the same;
+  // advertising Windows here would let search engines surface the app for an
+  // unsupported platform.
   operatingSystem: "macOS, Linux",
   description: SITE_DESCRIPTION,
   sameAs: [REPO_URL, CRATE_URL],
