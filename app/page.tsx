@@ -147,9 +147,47 @@ export default function Home() {
             against your repo on every tick, in an isolated workbench, with a watchdog on
             every run. Loop engineering, not prompting by hand.
           </p>
+          <div
+            className="mt-6 flex flex-wrap items-center gap-2"
+            role="group"
+            aria-label="Moadim project metadata"
+          >
+            <ExternalLink
+              className="flex items-center justify-center border-2 border-black bg-white p-1 shadow-brutal"
+              href={REPO_URL}
+              aria-label="moadim GitHub star count"
+            >
+              {/* Live star count as social proof in the hero, separate from the
+                  install path below. It renders at request time (no build-time
+                  fetch, token, or client JS) so it stays current between static
+                  site deployments. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`https://img.shields.io/github/stars/${REPO_SLUG}?style=flat&label=stars`}
+                alt="moadim GitHub star count"
+                width={104}
+                height={20}
+              />
+            </ExternalLink>
+            <ExternalLink
+              className="flex items-center justify-center border-2 border-black bg-white p-1 shadow-brutal"
+              href={CRATE_URL}
+              aria-label="Latest published moadim release"
+            >
+              {/* A live crates.io version badge keeps release metadata current
+                  without making the static build depend on crates.io. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`}
+                alt="moadim version on crates.io"
+                height={20}
+                fetchPriority="low"
+              />
+            </ExternalLink>
+          </div>
         </header>
 
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-stretch">
+        <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-stretch">
           <div className="flex flex-1 flex-col gap-2 border-4 border-black bg-black p-5 shadow-brutal">
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
               Install
@@ -198,74 +236,12 @@ export default function Home() {
             Star on GitHub
           </ExternalLink>
           <ExternalLink
-            className="flex items-center justify-center border-4 border-black bg-white p-2 shadow-brutal"
-            href={REPO_URL}
-            aria-label="moadim GitHub star count"
-          >
-            {/* Live star count as social proof next to the "Star on GitHub" CTA
-                (#162) — a shields.io badge, same deliberate exception as the
-                crates.io version badge below: it renders the current count at
-                request time (no build-time fetch, no token, no client JS, and
-                it can't go stale between deploys the way a build-time-baked
-                count would), and next/image needs a configured remote loader
-                for arbitrary external hosts, which isn't worth wiring up for
-                one badge image. See #183 for the identical precedent. */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={`https://img.shields.io/github/stars/${REPO_SLUG}?style=flat&label=stars`}
-              alt="moadim GitHub star count"
-              width={104}
-              height={20}
-            />
-          </ExternalLink>
-          <ExternalLink
             className={`${ctaButton} gap-2 bg-white`}
             href={CRATE_URL}
             aria-label="crates.io"
           >
             crates.io
             <span aria-hidden="true">↗</span>
-          </ExternalLink>
-          <ExternalLink
-            className="flex items-center justify-center border-4 border-black bg-white p-2 shadow-brutal"
-            href={CRATE_URL}
-            aria-label="Latest published moadim release"
-          >
-            {/* A static shields.io badge — it renders the current crates.io
-                version at request time, so it never needs a build-time fetch
-                (and never breaks the build if crates.io is unreachable at
-                build time). next/image needs a configured remote loader for
-                arbitrary external hosts, which isn't worth wiring up for one
-                badge image, so this is a deliberate exception to the
-                next/no-img-element rule. See #183.
-
-                `fetchPriority="low"` opts this <img> out of React DOM's
-                automatic image preloading (any eager <img> without it gets a
-                `<link rel="preload" as="image" fetchpriority="high">` hoisted
-                into <head> - see react-dom's `pushImg` in
-                react-dom-server.edge.development.js). That auto-preload spends
-                the page's earliest, highest-priority network slot on a
-                decorative third-party (img.shields.io) badge - a fresh
-                DNS+TLS negotiation racing the self-hosted Geist fonts and
-                critical CSS for bandwidth - for an image that isn't the LCP
-                candidate (the hero heading text is). Marking it low-priority
-                keeps it eager (no loading="lazy" layout-shift risk, since it's
-                in the initial viewport) while telling the browser/React it
-                can wait behind what actually matters for first paint. */}
-            {/* No `width` attribute: shields.io badges are variable-width
-                (the rendered width depends on the version string's length,
-                currently 96px for "v1.3.0" but it drifts with every crate
-                release), so a hardcoded pixel width goes stale and distorts
-                the badge's aspect ratio. Only `height` is fixed — the
-                browser derives width from the image's natural aspect ratio,
-                which stays correct regardless of version-string length. */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={`https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`}
-              alt="moadim version on crates.io"
-              height={20}
-              fetchPriority="low"
-            />
           </ExternalLink>
         </div>
 
