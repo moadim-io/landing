@@ -34,9 +34,9 @@ const loopEngineeringReads = [
     href: "https://www.mindstudio.ai/blog/what-is-loop-engineering-ai-coding-agents",
   },
   {
-    source: "Shaam",
-    title: "Why the Best AI Agents in 2026 Are Built as Loops, Not Prompts",
-    href: "https://shaam.blog/articles/loop-engineering-ai-agents",
+    source: "eesel AI",
+    title: "Loop engineering: the skill that quietly replaced prompt engineering",
+    href: "https://www.eesel.ai/blog/loop-engineering",
   },
   {
     source: "explainx.ai",

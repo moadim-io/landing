@@ -248,7 +248,7 @@ describe("Home", () => {
         "mindstudio",
         "https://www.mindstudio.ai/blog/what-is-loop-engineering-ai-coding-agents",
       ],
-      ["shaam", "https://shaam.blog/articles/loop-engineering-ai-agents"],
+      ["eesel ai", "https://www.eesel.ai/blog/loop-engineering"],
       [
         "explainx.ai",
         "https://explainx.ai/blog/what-is-loop-engineering-ai-agents-2026",
