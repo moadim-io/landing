@@ -91,11 +91,16 @@ describe("Home", () => {
   it("links the crates.io version badge at the published crate and uses the shared shadow token", () => {
     render(<Home />);
 
+    const metadata = screen.getByRole("group", {
+      name: /moadim project metadata/i,
+    });
     const badgeLink = screen.getByRole("link", {
       name: /latest published moadim release/i,
     });
 
+    expect(metadata).toContainElement(badgeLink);
     expect(badgeLink).toHaveAttribute("href", CRATE_URL);
+    expect(badgeLink.className).toContain("w-30");
     expect(badgeLink.className).toContain("shadow-brutal");
     expect(badgeLink.className).not.toMatch(/shadow-\[/);
 
@@ -122,11 +127,16 @@ describe("Home", () => {
   it("shows a live GitHub star count badge next to the Star on GitHub CTA (#162)", () => {
     render(<Home />);
 
+    const metadata = screen.getByRole("group", {
+      name: /moadim project metadata/i,
+    });
     const badgeLink = screen.getByRole("link", {
       name: /moadim github star count/i,
     });
 
+    expect(metadata).toContainElement(badgeLink);
     expect(badgeLink).toHaveAttribute("href", REPO_URL);
+    expect(badgeLink.className).toContain("w-30");
     expect(badgeLink.className).toContain("shadow-brutal");
 
     const badgeImg = badgeLink.querySelector("img");
