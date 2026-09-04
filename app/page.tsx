@@ -153,7 +153,7 @@ export default function Home() {
             aria-label="Moadim project metadata"
           >
             <ExternalLink
-              className="flex items-center justify-center border-2 border-black bg-white p-1 shadow-brutal"
+              className="flex w-30 items-center justify-center border-2 border-black bg-white p-1 shadow-brutal"
               href={REPO_URL}
               aria-label="moadim GitHub star count"
             >
@@ -170,7 +170,7 @@ export default function Home() {
               />
             </ExternalLink>
             <ExternalLink
-              className="flex items-center justify-center border-2 border-black bg-white p-1 shadow-brutal"
+              className="flex w-30 items-center justify-center border-2 border-black bg-white p-1 shadow-brutal"
               href={CRATE_URL}
               aria-label="Latest published moadim release"
             >

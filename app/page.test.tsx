@@ -100,6 +100,7 @@ describe("Home", () => {
 
     expect(metadata).toContainElement(badgeLink);
     expect(badgeLink).toHaveAttribute("href", CRATE_URL);
+    expect(badgeLink.className).toContain("w-30");
     expect(badgeLink.className).toContain("shadow-brutal");
     expect(badgeLink.className).not.toMatch(/shadow-\[/);
 
@@ -135,6 +136,7 @@ describe("Home", () => {
 
     expect(metadata).toContainElement(badgeLink);
     expect(badgeLink).toHaveAttribute("href", REPO_URL);
+    expect(badgeLink.className).toContain("w-30");
     expect(badgeLink.className).toContain("shadow-brutal");
 
     const badgeImg = badgeLink.querySelector("img");
