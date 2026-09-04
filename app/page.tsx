@@ -7,7 +7,7 @@ const features = [
   {
     tag: "01",
     title: "A loop runs an agent",
-    body: "A loop pairs a prompt, a schedule, and an agent — Claude, Codex, Hermes, or Pi. Each tick launches it in a fresh, isolated workbench, kills hung runs, and reaps the session when it's done.",
+    body: "A loop pairs a prompt, a schedule, and an agent — Claude, Codex, Hermes, NanoClaw, or Pi. Each tick launches it in a fresh, isolated workbench, kills hung runs, and reaps the session when it's done.",
   },
   {
     tag: "02",
@@ -58,13 +58,10 @@ const faqs = [
   },
   {
     q: "Which agents does it support?",
-    // The built-in Claude agent's python3 requirement is easy to miss: the
-    // daemon's own README documents it as a silent-failure trap (setup step
-    // no-ops without an error if python3 isn't on PATH) surfaced only via a
-    // startup log line and GET /api/v1/health's dependencies.python3 flag —
-    // this on-page answer says so up front instead of leaving visitors to
-    // debug a routine that never runs.
-    a: "Claude, Codex, Hermes, and Pi today. Each loop names the agent it runs, and Moadim launches it for you on every tick. The built-in Claude agent additionally needs python3 on your PATH — its unattended setup step uses it to pre-seed trust and MCP-approval state, and without it Claude runs silently no-op.",
+    // Claude's setup needs python3 to pre-seed its unattended workbench state.
+    // The daemon now surfaces a missing dependency in startup logs, /health,
+    // and the UI, but say it here before an operator reaches that failure.
+    a: "Built-in agents include Claude, Codex, Hermes, NanoClaw, and Pi. Each loop names the agent it runs; NanoClaw queues a one-shot task in its configured agent group, while the others run in Moadim's isolated workbench. The built-in Claude agent additionally needs python3 on your PATH to pre-seed unattended trust and MCP-approval state.",
   },
   {
     q: "Which operating systems are supported?",
@@ -144,8 +141,8 @@ export default function Home() {
           <p className="mt-6 max-w-2xl text-lg font-medium leading-7 sm:text-xl">
             Moadim is a loop engine for AI agents. Define a loop — a prompt, a
             schedule, an agent — and it runs Claude, Codex, Hermes, or Pi
-            against your repo on every tick, in an isolated workbench, with a watchdog on
-            every run. Loop engineering, not prompting by hand.
+            against your repo on every tick, or queues a NanoClaw task, in an
+            isolated workbench with a watchdog on every run. Loop engineering, not prompting by hand.
           </p>
           <div
             className="mt-6 flex flex-wrap items-center gap-2"
@@ -223,6 +220,11 @@ export default function Home() {
               <code className="font-mono text-accent">tmux</code> — Moadim's
               portable in-process scheduler dispatches loops, then launches each
               agent inside a tmux session. No host cron daemon is required.
+            </p>
+            <p className="text-xs font-medium leading-snug text-white">
+              Prefer a prebuilt install? Use{" "}
+              <code className="font-mono text-accent">cargo binstall moadim</code> or{" "}
+              <code className="font-mono text-accent">npm install -g moadim</code>.
             </p>
           </div>
           <ExternalLink

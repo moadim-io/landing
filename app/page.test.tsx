@@ -76,6 +76,13 @@ describe("Home", () => {
     expect(installCard.textContent).toMatch(/no host cron daemon is required/i);
   });
 
+  it("shows the current prebuilt installation options", () => {
+    render(<Home />);
+
+    expect(screen.getByText("cargo binstall moadim", { selector: "code" })).toBeInTheDocument();
+    expect(screen.getByText("npm install -g moadim", { selector: "code" })).toBeInTheDocument();
+  });
+
   it("points the GitHub and crates.io CTAs at the canonical URLs", () => {
     render(<Home />);
 
@@ -205,6 +212,12 @@ describe("Home", () => {
     ).toBeInTheDocument();
   });
 
+  it("lists NanoClaw among the built-in agent options", () => {
+    render(<Home />);
+
+    expect(screen.getAllByText(/nanoclaw/i).length).toBeGreaterThan(0);
+  });
+
   it("groups the feature cards under a labelled, level-2 section heading", () => {
     // The three card titles are demoted to <h3> precisely so a <h2> can sit
     // above them in the outline (hero <h1> -> section <h2> -> card <h3>)
@@ -258,11 +271,9 @@ describe("Home", () => {
 });
 
 describe("FAQ section", () => {
-  // The built-in Claude agent silently no-ops a run if python3 isn't on
-  // PATH (see the daemon README's "Built-in claude agent prerequisites") —
-  // easy to miss since nothing in the hero/install card mentions it. Assert
-  // the FAQ answer actually says so, so a future copy edit can't silently
-  // drop the one on-page place this trap is documented.
+  // The built-in Claude agent needs python3 to pre-seed its unattended
+  // workbench state. Keep that prerequisite on-page so it remains visible
+  // before a visitor creates their first Claude routine.
   it("flags the built-in Claude agent's python3 prerequisite", () => {
     render(<Home />);
 
