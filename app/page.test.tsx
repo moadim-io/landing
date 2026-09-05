@@ -118,6 +118,7 @@ describe("Home", () => {
     );
     expect(badgeImg).toHaveAttribute("alt", "moadim version on crates.io");
     expect(badgeImg).toHaveAttribute("height", "20");
+    expect(badgeImg).toHaveClass("h-5", "w-auto");
     // No `width`: shields.io badge width varies with the version string's
     // length, so a hardcoded pixel width goes stale (and distorts the
     // badge) the moment the crate version changes digit count. Letting the
@@ -152,6 +153,9 @@ describe("Home", () => {
       `https://img.shields.io/github/stars/${REPO_SLUG}?style=flat&label=stars`,
     );
     expect(badgeImg).toHaveAttribute("alt", "moadim GitHub star count");
+    expect(badgeImg).toHaveAttribute("height", "20");
+    expect(badgeImg).not.toHaveAttribute("width");
+    expect(badgeImg).toHaveClass("h-5", "w-auto");
   });
 
   it("renders the loop diagram panel between the CTAs and the features", () => {

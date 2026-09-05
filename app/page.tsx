@@ -160,9 +160,9 @@ export default function Home() {
                   site deployments. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
+                className="h-5 w-auto"
                 src={`https://img.shields.io/github/stars/${REPO_SLUG}?style=flat&label=stars`}
                 alt="moadim GitHub star count"
-                width={104}
                 height={20}
               />
             </ExternalLink>
@@ -175,6 +175,7 @@ export default function Home() {
                   without making the static build depend on crates.io. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
+                className="h-5 w-auto"
                 src={`https://img.shields.io/crates/v/${CRATE_NAME}.svg?label=version`}
                 alt="moadim version on crates.io"
                 height={20}
