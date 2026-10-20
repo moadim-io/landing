@@ -4,6 +4,10 @@
 // CHANGELOG generator would need to roll up history — see #181/#125.
 const config = {
   extends: ["@commitlint/config-conventional"],
+  // Dependabot writes its version table into the body, with lines past the
+  // 100-character body limit, so every Dependabot PR failed this check.
+  // Its subject is already conventional (chore(deps): …).
+  ignores: [(message) => message.includes("Signed-off-by: dependabot[bot]")],
 };
 
 export default config;

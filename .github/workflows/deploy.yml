@@ -133,7 +133,9 @@ jobs:
     # CLOUDFLARE_ACCOUNT_ID), so this only runs for same-repo branches. That's
     # acceptable for an owner-driven repo where external contributions go
     # through a fork-and-PR-from-a-branch-in-this-repo workflow anyway.
-    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    # Dependabot branches are same-repo but get only Dependabot secrets, so the
+    # Cloudflare token is empty there and the deploy always failed; skip them.
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     concurrency:
