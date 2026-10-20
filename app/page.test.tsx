@@ -76,11 +76,13 @@ describe("Home", () => {
     expect(installCard.textContent).toMatch(/no host cron daemon is required/i);
   });
 
-  it("shows the current prebuilt installation options", () => {
+  it("does not advertise prebuilt installs that are not published yet", () => {
     render(<Home />);
 
-    expect(screen.getByText("cargo binstall moadim", { selector: "code" })).toBeInTheDocument();
-    expect(screen.getByText("npm install -g moadim", { selector: "code" })).toBeInTheDocument();
+    // npm has no moadim package and releases carry no binstall archives yet; restore these
+    // once both ship.
+    expect(screen.queryByText("cargo binstall moadim")).not.toBeInTheDocument();
+    expect(screen.queryByText("npm install -g moadim")).not.toBeInTheDocument();
   });
 
   it("points the GitHub and crates.io CTAs at the canonical URLs", () => {
