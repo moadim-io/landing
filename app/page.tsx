@@ -222,11 +222,6 @@ export default function Home() {
               portable in-process scheduler dispatches loops, then launches each
               agent inside a tmux session. No host cron daemon is required.
             </p>
-            <p className="text-xs font-medium leading-snug text-white">
-              Prefer a prebuilt install? Use{" "}
-              <code className="font-mono text-accent">cargo binstall moadim</code> or{" "}
-              <code className="font-mono text-accent">npm install -g moadim</code>.
-            </p>
           </div>
           <ExternalLink
             className={`${ctaButton} group gap-3 bg-accent`}
