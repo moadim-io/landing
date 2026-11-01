@@ -9,8 +9,8 @@ CSS**, shipped as a fully static export (`output: "export"`).
 
 ## Prerequisites
 
-- **Node.js 22+** (see `.nvmrc` / `package.json` `engines`) and npm (the repo targets
-  `@types/node` v22).
+- **Node.js 26+** (see `.nvmrc` / `package.json` `engines`) and npm (the repo targets
+  `@types/node` v26).
 
 ## Setup
 
