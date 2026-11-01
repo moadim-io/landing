@@ -14,7 +14,7 @@
     "url": "https://github.com/moadim-io/landing/issues"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=26"
   },
   "scripts": {
     "dev": "next dev",
