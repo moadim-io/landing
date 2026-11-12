@@ -12,6 +12,12 @@ updates:
         update-types:
           - "minor"
           - "patch"
+      # stylelint and its shared configs have peer ranges. Bump them in one PR,
+      # or npm ci fails with ERESOLVE. No update-types, so majors group too.
+      stylelint:
+        patterns:
+          - "stylelint"
+          - "stylelint-*"
 
   # GitHub Actions used by workflows (keeps action versions current once CI lands).
   - package-ecosystem: "github-actions"
