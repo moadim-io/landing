@@ -321,7 +321,7 @@ export default function Home() {
               "redundant" role since <ul> already implies it per the ARIA
               spec — that mapping is correct, WebKit's actual behavior isn't,
               so the rule is disabled for this one, deliberate case. */}
-          {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+          {/* eslint-disable-next-line jsx-a11y-x/no-redundant-roles */}
           <ul className={`${panel} grid gap-0 sm:grid-cols-3`} role="list">
             {features.map((feature, index) => (
               <li
@@ -356,7 +356,7 @@ export default function Home() {
           </h2>
           {/* See the "Features" <ul> above for why `role="list"` (and the
               matching lint disable) is needed. */}
-          {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+          {/* eslint-disable-next-line jsx-a11y-x/no-redundant-roles */}
           <ul className="flex flex-col" role="list">
             {loopEngineeringReads.map((read, index) => (
               <li

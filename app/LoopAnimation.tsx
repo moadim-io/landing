@@ -22,7 +22,7 @@ export function LoopAnimation() {
     // up, `sm:min-w-140` preserves the original wide diagram and `overflow-x-auto`
     // remains as a keyboard-focusable escape hatch for intermediate widths.
     <div
-      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- this non-interactive <div> is the one thing on the page with scrollable overflow, so it needs to be the keyboard focus target per the axe-core scrollable-region-focusable fix.
+      // eslint-disable-next-line jsx-a11y-x/no-noninteractive-tabindex -- this non-interactive <div> is the one thing on the page with scrollable overflow, so it needs to be the keyboard focus target per the axe-core scrollable-region-focusable fix.
       tabIndex={0}
       aria-label="The loop diagram, scrollable"
       className="overflow-x-auto p-4 sm:p-6"

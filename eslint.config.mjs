@@ -1,22 +1,37 @@
 import { defineConfig, globalIgnores } from "eslint/config";
+import { fixupPluginRules } from "@eslint/compat";
 import recommendedIncremental from "eslint-config-agent/recommended-incremental";
 import nextPlugin from "@next/eslint-plugin-next";
-import jsxA11y from "eslint-plugin-jsx-a11y";
+import jsxA11y from "eslint-plugin-jsx-a11y-x";
+
+const LEGACY_CONTEXT_PLUGINS = ["react", "default"];
 
 const eslintConfig = defineConfig([
   // eslint-config-agent/recommended-incremental: the divisive strict-mode
   // rules disabled, everything else at warn. See moadim-io/landing#367 — this
   // replaces the hand-rolled no-console/eqeqeq/prefer-const/etc. block below,
   // which duplicated exactly what this shared config already centralizes.
-  ...recommendedIncremental,
+  // fixupPluginRules shims the rule-context methods ESLint 10 removed
+  // (context.getFilename etc.), which eslint-plugin-react and
+  // eslint-plugin-default inside eslint-config-agent still call. Only those
+  // two plugins are wrapped: the shim breaks ESLint-10-native plugins such as
+  // unicorn.
+  ...recommendedIncremental.map((config) => {
+    const plugins = config.plugins && { ...config.plugins };
+    for (const name of LEGACY_CONTEXT_PLUGINS) {
+      if (plugins?.[name]) plugins[name] = fixupPluginRules(plugins[name]);
+    }
+    return plugins ? { ...config, plugins } : config;
+  }),
   // @next/eslint-plugin-next directly, rather than spreading all of
   // eslint-config-next: eslint-config-next's base config registers its own
   // copies of the `react`/`react-hooks`/`import` plugins, which collide with
   // the ones eslint-config-agent already registers under the same names.
   nextPlugin.configs["core-web-vitals"],
   // eslint-config-agent doesn't bundle jsx-a11y; layer its recommended rules
-  // in directly.
-  jsxA11y.flatConfigs.recommended,
+  // in directly. Uses the eslint-plugin-jsx-a11y-x fork: upstream
+  // eslint-plugin-jsx-a11y does not support ESLint 10 yet.
+  jsxA11y.configs.recommended,
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
