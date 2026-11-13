@@ -23,7 +23,7 @@ npm install
 | Command | What it does |
 | --- | --- |
 | `npm run dev` | Start the local dev server with hot reload at <http://localhost:3000>. |
-| `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript + `jsx-a11y` recommended rules); fails on any warning (`--max-warnings 0`). |
+| `npm run lint` | Run ESLint (Next.js core-web-vitals + TypeScript + `jsx-a11y-x` recommended rules); fails on any warning (`--max-warnings 0`). |
 | `npm run lint:md` | Lint Markdown files with `markdownlint-cli2`. |
 | `npm run lint:css` | Lint `app/**/*.css` with Stylelint (config: [`.stylelintrc.json`](./.stylelintrc.json)); fails on any error. |
 | `npm run typecheck` | Type-check the whole project with `tsc --noEmit` (catches errors in files `next build`'s own TypeScript pass skips, e.g. `*.test.ts`). |

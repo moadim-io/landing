@@ -227,7 +227,7 @@ export default function RootLayout({
                   spec — that mapping is correct, WebKit's actual behavior
                   isn't, so the rule is disabled for this one, deliberate
                   case. */}
-              {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+              {/* eslint-disable-next-line jsx-a11y-x/no-redundant-roles */}
               <ul className="flex items-center gap-6" role="list">
                 <li>
                   <ExternalLink
@@ -264,7 +264,7 @@ export default function RootLayout({
             <p className="text-sm font-medium">© 2026 Moadim</p>
             {/* Same Safari/VoiceOver `role="list"` restoration as the nav
                 `<ul>` above — see the comment there for why. */}
-            {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+            {/* eslint-disable-next-line jsx-a11y-x/no-redundant-roles */}
             <ul className="flex items-center gap-6" role="list">
               <li>
                 <ExternalLink
