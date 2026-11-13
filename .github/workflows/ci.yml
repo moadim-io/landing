@@ -144,4 +144,4 @@ jobs:
         # third-party action in these workflows already is (see CHANGELOG
         # #342/#350); a mutable tag lets a compromised upstream release
         # silently change what this step runs with repo write access.
-        uses: crate-ci/typos@4c8b7f51ca60df14e3c5ca82770dfbbe6c3dae85 # v1.52.0
+        uses: crate-ci/typos@2611abd15acb0c2e317fb9e45855aabb8b35a414 # v1.52.1
