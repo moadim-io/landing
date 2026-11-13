@@ -32,7 +32,7 @@
     "verify:export": "node scripts/verify-export.mjs"
   },
   "dependencies": {
-    "next": "16.4.5",
+    "next": "16.4.6",
     "react": "19.3.1",
     "react-dom": "19.3.1"
   },
@@ -40,7 +40,7 @@
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.0",
     "@eslint/compat": "^2.1.1",
-    "@next/eslint-plugin-next": "^16.4.5",
+    "@next/eslint-plugin-next": "^16.4.6",
     "@playwright/test": "1.65.0",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^7.0.1",
