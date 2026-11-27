@@ -54,7 +54,7 @@
     "eslint-config-agent": "^3.1.0",
     "eslint-import-resolver-typescript": "^4.4.5",
     "eslint-plugin-jsx-a11y-x": "^0.2.0",
-    "html-validate": "^11.21.1",
+    "html-validate": "^11.22.1",
     "jsdom": "^31.0.1",
     "markdownlint-cli2": "^0.24.2",
     "stylelint": "^18.1.0",
